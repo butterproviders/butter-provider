@@ -1,0 +1,11 @@
+#+TITLE: Butter Provider
+
+[[https://butterproject.org][Butter Project]] is a toolkit to build VOD plateforms, this component is the
+base class for Providers.
+
+A =Provider= in the Butter terminology is an accesor for media content, it
+provides items of type 'movie' or 'show' that will be displayed in a Butter
+App.
+
+Butter will automatically load any npm package installed (listed in
+=package.json=) that matches the =/butter-provider-.*/ regex.
