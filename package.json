@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/butterproject/butter-provider/issues"
   },
-  "homepage": "https://github.com/butterproject/butter-provider#readme"
+  "homepage": "https://github.com/butterproject/butter-provider#readme",
+  "dependencies": {
+    "lodash": "^3.10.1",
+    "memoizee": "^0.3.9"
+  }
 }
