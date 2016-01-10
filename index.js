@@ -1,4 +1,5 @@
 var memoize = require('memoizee');
+var _ = require('lodash')
 
 var Provider = function () {
     var memopts = {
