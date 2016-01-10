@@ -1,0 +1,19 @@
+{
+  "name": "butter-provider",
+  "version": "0.0.1",
+  "description": "A base class for Butter providers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/butterproject/butter-provider.git"
+  },
+  "author": "Niv Sardi",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/butterproject/butter-provider/issues"
+  },
+  "homepage": "https://github.com/butterproject/butter-provider#readme"
+}
