@@ -1,6 +1,6 @@
 {
   "name": "butter-provider",
-  "version": "0.0.1",
+  "version": "0.1.0"
   "description": "A base class for Butter providers",
   "main": "index.js",
   "scripts": {
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/butterproject/butter-provider.git"
+    "url": "git+https://github.com/butterproviders/butter-provider.git"
   },
   "author": "Niv Sardi",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/butterproject/butter-provider/issues"
+    "url": "https://github.com/butterproviders/butter-provider/issues"
   },
-  "homepage": "https://github.com/butterproject/butter-provider#readme",
+  "homepage": "https://github.com/butterproviders/butter-provider#readme",
   "dependencies": {
     "lodash": "^3.10.1",
     "memoizee": "^0.3.9"
