@@ -20,7 +20,7 @@ var Provider = function () {
 
 Provider.prototype._fetch = function (filters) {
     filters.toString = this.toString;
-    var promise = this.memfetch(filters),
+    var promise = this.memfetch.bind(this)(filters),
     _this = this;
     promise.catch(function (error) {
         // Delete the cached result if we get an error so retry will work
