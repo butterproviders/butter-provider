@@ -33,4 +33,20 @@ Provider.prototype.toString = function (arg) {
     return JSON.stringify(this);
 };
 
+Provider.prototype.parseArgs = function (name) {
+    var tokenize = name.split('?');
+
+    // XXX:reimplement querystring.parse to not escape
+    var args = {}
+    tokenize[1] && tokenize[1].split('&').map(function (v){
+        var m = v.split('=')
+        args[m[0]]= m[1]
+    })
+
+    return {
+        name: tokenize[0],
+        args: args
+    }
+}
+
 module.exports = Provider
