@@ -19,6 +19,7 @@ var Provider = function () {
 };
 
 Provider.prototype._fetch = function (filters) {
+    filters = filters || {}
     filters.toString = this.toString;
     var promise = this.memfetch.bind(this)(filters),
     _this = this;
