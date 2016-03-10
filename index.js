@@ -1,8 +1,9 @@
 var memoize = require('memoizee');
 var _ = require('lodash')
 
-var Provider = function () {
-    var memopts = {
+var Provider = function (args) {
+    args = args || {};
+    var memopts = args.memops || {
         maxAge: 10 * 60 * 1000,
         /* 10 minutes */
         preFetch: 0.5,
