@@ -9,3 +9,171 @@ App.
 
 Butter will automatically load any npm package installed (listed in
 =package.json=) that matches the =/butter-provider-.*/ regex.
+
+* Documentation
+A =Butter Provider= is just a npm package that needs to export a specific
+API that we describe hereafter.
+
+note that if you want to use the autoload features in butter you should name
+your module =butter-provider-${something}=
+
+** Writting a Provider
+We provide a base provider in =butter-provider= that we recomend extending,
+it handles caching and a few other bootstrapping quirks, but formally
+speaking it's not required.
+
+Here we'll be creating a provider for the vodo.net service.
+
+*** Create a npm module
+create a directory and init an new npm module:
+
+#+BEGIN_SRC shell
+mkdir butter-provider-vodo
+cd butter-provider-vodo
+npm init
+#+END_SRC
+
+*** Depend on butter-provider
+first install the npm module and add it as a dependency
+
+#+BEGIN_SRC shell
+npm i --save butter-provider
+#+END_SRC
+
+then edit your index.js
+
+#+BEGIN_SRC javascript
+'use strict';
+
+var GenericProvider = require('butter-provider');
+var inherits = require('util').inherits;
+
+function Vodo() {
+    if (!(this instanceof Vodo)) {
+        return new Vodo();
+    }
+
+    GenericProvider.call(this);
+}
+inherits(Vodo, GenericProvider);
+#+END_SRC
+
+*** Declare a Config object
+
+#+BEGIN_SRC javascript
+Vodo.prototype.config = {
+    name: 'vodo',
+    uniqueId: 'imdb_id',
+    tabName: 'Vodo',
+    type: 'movie',
+    /* should be removed */
+    //subtitle: 'ysubs',
+    metadata: 'trakttv:movie-metadata'
+};
+#+END_SRC
+
+*** implement required methods
+You need to supply code for =fetch= =detail= and =extractIds= see the
+API documentation here after for more details
+
+** API
+*** config (Object)
+
+The config  object should be attached to the prototype (i.e. use
+the =Provider.prototype.config = {}= syntax), and it should have the
+following fields:
+
+#+BEGIN_SRC javascript
+Provider.prototype.config = {
+     name: String,     // will be used in logs to refer to your provider
+     uniqueId: String, // the name of the field we should use to unify assets
+     tabName: String,  // Will appear as the description of the tab
+     type: 'movie' | 'tvshow' | 'anime',
+     subtitle: String, // (optional) name of the subtitle provider
+     metadata: String  // (optional) name of the metadata provider
+}
+#+END_SRC
+
+*** fetch (Object: filters -> (promise) Object)
+
+The fetch method takes in a set of filters that can have the following keys:
+#+BEGIN_SRC javascript
+var filters = {
+    keywords: [String],    // keywords to search for
+    genre: String,         // limit to this genre
+    order: 'desc' | 'asc', // sort order
+    sorter: 'rating' | 'popularity' | 'name',
+    limit: Number,         // number of elements to return
+}
+#+END_SRC
+
+The fetch method returns a promise that resolves to an object of the shape:
+#+BEGIN_SRC javascript
+var fetchReturn = {
+    results: [Object],  // returned result items
+    hasMore: Boolean    // can the provider get more results ?
+}
+#+END_SRC
+
+The results items have the following shape:
+#+BEGIN_SRC javascript
+var result = {
+    [uniqueId | 'id']: String, // the unique id
+    title: String,             // title of the asset
+    year: movie.MovieYear,     // year of release
+    genre: [movie.Genre],      // a free list of genre keywords
+    rating: Number,            // a 0-100 rating value
+    image: url,                // generic image
+    cover: url,                // cover image
+    backdrop: url,             // backdrop image
+    torrents: [Object],        // torrents object
+    subtitle: {String: url},   // language -> url subs mapping
+    trailer: url,              // url of the trailer, formated for butter-streamers
+    synopsis: String,          // a short description of the asset
+    type: 'movie' | 'tvshow'   // used by the browser to decide how to show the item
+}
+#+END_SRC
+
+each torrent object has the following shape:
+note: the 'torrent' name is a bit confusing and really a legacy name, it
+should be called 'ressources'
+
+#+BEGIN_SRC javascript
+var torrent = {
+   url: String,      // The resource's url, formated for butter-streamers
+   size: Number,     // The resource's descriptor size (magnet/torrent/hls playlist)
+   filesize: Number, // The resource's main video filesize
+   seed: Number,     // (optional) number of seeds
+   peer: Number      // (optional) number of peers
+}
+#+END_SRC
+
+*** detail (String: id, Object old_data -> (promise) Object)
+The detail method allows you to fetch more details from your API when
+presenting a specific asset, it returns a result object as described in
+=fetch=, and takes the id and the data returned by previous =fetch= calls as
+an argument.
+
+usually it's no more than:
+#+BEGIN_SRC javascript
+Provider.prototype.detail = function (torrent_id, old_data) {
+    return Q(old_data);
+};
+#+END_SRC
+
+*** extractIds ([Object]: items -> [String])
+This method is used to keep a cache of the content in a Butter app. The
+generic implementation is:
+
+#+BEGIN_SRC javascript
+Provider.prototype.extractIds = function (items) {
+    return _.pluck(items.results, this.config.uniqueId);
+};
+#+END_SRC
+
+*** (optional) random (void -> (promise) Object)
+return a random =result item= as described in =fetch=
+
+*** (optional) update (void -> (promise) [Object])
+allows Butter to notify the Provider it can update it's internal cache
+(not used)
