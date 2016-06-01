@@ -14,24 +14,25 @@ var Provider = function (args) {
     var config  = this.config || {}
     config.args = config.args || {}
     args = args || []
+    this.args = {}
 
     Object.keys(config.args).map(k => {
         switch (config.args[k]) {
         case Provider.Types.NUMBER:
-            this[k] = Number(args[k])
+            this.args[k] = Number(args[k])
             break;
         case Provider.Types.ARRAY:
-            this[k] = args[k].split(',');
+            this.args[k] = args[k].split(',');
             break;
         case Provider.Types.OBJECT:
-            this[k] = JSON.Parse(args[k]);
+            this.args[k] = JSON.Parse(args[k]);
             break;
         case Provider.Types.BOOLEAN:
-            this[k] = !!args[k];
+            this.args[k] = !!args[k];
             break;
         case Provider.Types.STRING:
         default:
-            this[k] = args[k]
+            this.args[k] = args[k]
             break;
 
         }
