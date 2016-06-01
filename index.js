@@ -2,8 +2,43 @@ var assign = Object.assign || require('es6-object-assign').assign;
 var memoize = require('memoizee');
 var _ = require('lodash')
 
+var processArgs = function (config, args) {
+    var newArgs = {}
+    Object.keys(config.args).map(k => {
+        if (! args || ! args[k]) {
+            console.error ('value', k, 'was not provided')
+            return;
+        }
+
+        console.log ('processing', k)
+        switch (config.args[k]) {
+        case Provider.Types.NUMBER:
+            newArgs[k] = Number(args[k])
+            break;
+        case Provider.Types.ARRAY:
+            newArgs[k] = args[k].split(',');
+            break;
+        case Provider.Types.OBJECT:
+            newArgs[k] = JSON.Parse(args[k]);
+            break;
+        case Provider.Types.BOOLEAN:
+            newArgs[k] = !!args[k];
+            break;
+        case Provider.Types.STRING:
+        default:
+            newArgs[k] = args[k]
+            break;
+        }
+    })
+
+    return newArgs
+}
+
 var Provider = function (args) {
     args = args || {};
+    var config  = this.config || {}
+    config.args = config.args || {}
+
     var memopts = args.memops || {
         maxAge: 10 * 60 * 1000,
         /* 10 minutes */
@@ -12,32 +47,7 @@ var Provider = function (args) {
         primitive: true
     };
 
-    var config  = this.config || {}
-    config.args = config.args || {}
-    args = args || []
-    this.args = {}
-
-    Object.keys(config.args).map(k => {
-        switch (config.args[k]) {
-        case Provider.Types.NUMBER:
-            this.args[k] = Number(args[k])
-            break;
-        case Provider.Types.ARRAY:
-            this.args[k] = args[k].split(',');
-            break;
-        case Provider.Types.OBJECT:
-            this.args[k] = JSON.Parse(args[k]);
-            break;
-        case Provider.Types.BOOLEAN:
-            this.args[k] = !!args[k];
-            break;
-        case Provider.Types.STRING:
-        default:
-            this.args[k] = args[k]
-            break;
-
-        }
-    })
+    this.args = assign({}, this.args, processArgs(config, args))
 
     this.memfetch = memoize(this.fetch.bind(this), memopts);
     this.fetch = this._fetch.bind(this);
