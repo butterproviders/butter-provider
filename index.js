@@ -19,6 +19,14 @@ var Provider = function (args) {
     }));
 };
 
+Provider.Types = {
+    ARRAY:   'BUTTER_PROVIDER_TYPE_ARRAY',
+    OBJECT:  'BUTTER_PROVIDER_TYPE_OBJECT',
+    STRING:  'BUTTER_PROVIDER_TYPE_STRING',
+    BOOLEAN: 'BUTTER_PROVIDER_TYPE_BOOLEAN',
+    NUMBER:  'BUTTER_PROVIDER_TYPE_NUMBER'
+}
+
 Provider.prototype._fetch = function (filters) {
     filters = filters || {}
     filters.toString = this.toString;
