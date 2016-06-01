@@ -11,6 +11,32 @@ var Provider = function (args) {
         primitive: true
     };
 
+    var config  = this.config || {}
+    config.args = config.args || {}
+    args = args || []
+
+    Object.keys(config.args).map(k => {
+        switch (config.args[k]) {
+        case Provider.Types.NUMBER:
+            this[k] = Number(args[k])
+            break;
+        case Provider.Types.ARRAY:
+            this[k] = args[k].split(',');
+            break;
+        case Provider.Types.OBJECT:
+            this[k] = JSON.Parse(args[k]);
+            break;
+        case Provider.Types.BOOLEAN:
+            this[k] = !!args[k];
+            break;
+        case Provider.Types.STRING:
+        default:
+            this[k] = args[k]
+            break;
+
+        }
+    })
+
     this.memfetch = memoize(this.fetch.bind(this), memopts);
     this.fetch = this._fetch.bind(this);
 
