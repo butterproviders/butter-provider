@@ -195,6 +195,26 @@ Provider.prototype.extractIds = function (items) {
 };
 #+END_SRC
 
+*** (optional) resolveStream (src, filters, data -> (promise) String)
+This method is used to let the provider decide what the end url should be
+acording to some filters passed by the apps. It's main purpose is to allow
+the selection of different languages, but in the future it may allow for
+deeper customizations (as for instance choosing a streaming technology).
+
+the default handler will just return =src= that is the legacy value
+providers are required to return in =fetch= and =details= for torrent data.
+
+currently =filters= will have this shape:
+#+BEGIN_SRC javascript
+{
+   audio: String,
+}
+#+END_SRC
+
+=data= will be whatever data was returned from the latest =fetch= or
+=details= for the current media, it is given raw so that you can control
+where to 'hide' the urls you will want to switch on languages switches.
+
 *** (optional) random (void -> (promise) Object)
 return a random =result item= as described in =fetch=
 

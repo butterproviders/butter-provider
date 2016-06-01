@@ -54,6 +54,12 @@ Provider.Types = {
     NUMBER:  'BUTTER_PROVIDER_TYPE_NUMBER'
 }
 
+Provider.prototype.resolveStream = function (src, filters, data) {
+    console.warn ('you are using the default resolveStream implementation,')
+    console.warn ('you will probably want to use your own to support different langages.')
+    return src;
+}
+
 Provider.prototype._fetch = function (filters) {
     filters = filters || {}
     filters.toString = this.toString;
