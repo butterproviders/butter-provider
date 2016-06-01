@@ -1,3 +1,4 @@
+var assign = Object.assign || require('es6-object-assign').assign;
 var memoize = require('memoizee');
 var _ = require('lodash')
 
