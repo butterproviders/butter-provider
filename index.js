@@ -4,7 +4,7 @@ var _ = require('lodash')
 
 var processArgs = function (config, args) {
     var newArgs = {}
-    Object.keys(config.args).map(k => {
+    Object.keys(config.args).map(function(k) {
         if (! args || ! args[k]) {
             console.error ('value', k, 'was not provided')
             return;
