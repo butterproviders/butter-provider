@@ -65,6 +65,12 @@ Provider.ArgType = {
     NUMBER:  'BUTTER_PROVIDER_ARG_TYPE_NUMBER'
 }
 
+Provider.TabType = {
+    MOVIE:   'movie',
+    TVSHOW:  'tvshow',
+    ANIME:   'anime'
+}
+
 Provider.prototype.resolveStream = function (src, config, data) {
     console.warn ('you are using the default resolveStream implementation,')
     console.warn ('you will probably want to use your own to support different langages.')
