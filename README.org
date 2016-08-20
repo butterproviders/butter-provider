@@ -195,16 +195,16 @@ Provider.prototype.extractIds = function (items) {
 };
 #+END_SRC
 
-*** (optional) resolveStream (src, filters, data -> (promise) String)
+*** (optional) resolveStream (src, config, data -> (promise) String)
 This method is used to let the provider decide what the end url should be
-acording to some filters passed by the apps. It's main purpose is to allow
+acording to some config passed by the apps. It's main purpose is to allow
 the selection of different languages, but in the future it may allow for
 deeper customizations (as for instance choosing a streaming technology).
 
 the default handler will just return =src= that is the legacy value
 providers are required to return in =fetch= and =details= for torrent data.
 
-currently =filters= will have this shape:
+currently =config= will have this shape:
 #+BEGIN_SRC javascript
 {
    audio: String,

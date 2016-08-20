@@ -65,7 +65,7 @@ Provider.Types = {
     NUMBER:  'BUTTER_PROVIDER_TYPE_NUMBER'
 }
 
-Provider.prototype.resolveStream = function (src, filters, data) {
+Provider.prototype.resolveStream = function (src, config, data) {
     console.warn ('you are using the default resolveStream implementation,')
     console.warn ('you will probably want to use your own to support different langages.')
     return src;
