@@ -67,7 +67,7 @@ Vodo.prototype.config = {
     tabName: 'Vodo',
     type: 'movie',
     args: {
-       urlList: Generic.Types.ARRAY
+       urlList: Generic.ArgTypes.ARRAY
     }
     /* legacy: should be removed */
     // subtitle: 'ysubs',
@@ -99,15 +99,15 @@ Provider.prototype.config = {
 }
 #+END_SRC
 
-the args object is a mapping between arg names and =Generic.Types= types,
+the args object is a mapping between arg names and =Generic.ArgTypes= types,
 currently these are the supported values:
 
 #+BEGIN_SRC javascript
-    Generic.Types.ARRAY,   // expects a string of values separated by ','
-    Generic.Types.OBJECT,  // expects a string of json (JSON.parse)
-    Generic.Types.BOOLEAN, // expects a string that evaluates to a boolean
-    Generic.Types.NUMBER,  // expects a string that can be passed to Number()
-    Generic.Types.STRING,  // expects a string
+    Generic.ArgType.ARRAY,   // expects a string of values separated by ','
+    Generic.ArgType.OBJECT,  // expects a string of json (JSON.parse)
+    Generic.ArgType.BOOLEAN, // expects a string that evaluates to a boolean
+    Generic.ArgType.NUMBER,  // expects a string that can be passed to Number()
+    Generic.ArgType.STRING,  // expects a string
 #+END_SRC
 
 these types will be automatically instanciated into the =args= property of

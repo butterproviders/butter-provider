@@ -12,19 +12,19 @@ var processArgs = function (config, args) {
 
         console.log ('processing', k)
         switch (config.args[k]) {
-        case Provider.Types.NUMBER:
+        case Provider.ArgType.NUMBER:
             newArgs[k] = Number(args[k])
             break;
-        case Provider.Types.ARRAY:
+        case Provider.ArgType.ARRAY:
             newArgs[k] = args[k].split(',');
             break;
-        case Provider.Types.OBJECT:
+        case Provider.ArgType.OBJECT:
             newArgs[k] = JSON.Parse(args[k]);
             break;
-        case Provider.Types.BOOLEAN:
+        case Provider.ArgType.BOOLEAN:
             newArgs[k] = !!args[k];
             break;
-        case Provider.Types.STRING:
+        case Provider.ArgType.STRING:
         default:
             newArgs[k] = args[k]
             break;
@@ -57,12 +57,12 @@ var Provider = function (args) {
     }));
 };
 
-Provider.Types = {
-    ARRAY:   'BUTTER_PROVIDER_TYPE_ARRAY',
-    OBJECT:  'BUTTER_PROVIDER_TYPE_OBJECT',
-    STRING:  'BUTTER_PROVIDER_TYPE_STRING',
-    BOOLEAN: 'BUTTER_PROVIDER_TYPE_BOOLEAN',
-    NUMBER:  'BUTTER_PROVIDER_TYPE_NUMBER'
+Provider.ArgType = {
+    ARRAY:   'BUTTER_PROVIDER_ARG_TYPE_ARRAY',
+    OBJECT:  'BUTTER_PROVIDER_ARG_TYPE_OBJECT',
+    STRING:  'BUTTER_PROVIDER_ARG_TYPE_STRING',
+    BOOLEAN: 'BUTTER_PROVIDER_ARG_TYPE_BOOLEAN',
+    NUMBER:  'BUTTER_PROVIDER_ARG_TYPE_NUMBER'
 }
 
 Provider.prototype.resolveStream = function (src, config, data) {
