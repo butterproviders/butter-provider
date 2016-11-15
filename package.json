@@ -1,6 +1,6 @@
 {
   "name": "butter-provider",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "A base class for Butter providers",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,7 @@
   "homepage": "https://github.com/butterproviders/butter-provider#readme",
   "dependencies": {
     "es6-object-assign": "^1.0.1",
-    "lodash": "^3.10.1",
-    "memoizee": "^0.3.9"
+    "lodash": "^4.17.1",
+    "memoizee": "^0.4.1"
   }
 }
