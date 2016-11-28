@@ -76,9 +76,22 @@ function warnDefault(fn, support) {
     if (support)
         console.warn ('you will probably want to use your own to support:' + support + '.')
 }
+
+function randomArray(a) {
+    return a[Math.ceil(Math.random(a.length))]
+}
+
 Provider.prototype.resolveStream = function (src, config, data) {
     warnDefault('resolveStream', 'multiple languages');
     return src;
+}
+
+Provider.prototype.random = function () {
+    warnDefault('random', 'faster random');
+    return this.fetch()
+        .then(function(data) {
+            return randomArray(data.results)
+        })
 }
 
 Provider.prototype._fetch = function (filters) {
