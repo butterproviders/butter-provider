@@ -94,6 +94,11 @@ Provider.prototype.random = function () {
         })
 }
 
+Provider.prototype.extractIds = function (items) {
+    warnDefault('extractIds');
+    return _.map(items.results, this.config.uniqueId)
+}
+
 Provider.prototype._fetch = function (filters) {
     filters = filters || {}
     filters.toString = this.toString;
