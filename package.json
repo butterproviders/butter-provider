@@ -1,6 +1,6 @@
 {
   "name": "butter-provider",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "A base class for Butter providers",
   "main": "index.js",
   "scripts": {
