@@ -71,9 +71,13 @@ Provider.TabType = {
     ANIME:   'anime'
 }
 
+function warnDefault(fn, support) {
+    console.warn ('you are using the default ' + fn + ' implementation,')
+    if (support)
+        console.warn ('you will probably want to use your own to support:' + support + '.')
+}
 Provider.prototype.resolveStream = function (src, config, data) {
-    console.warn ('you are using the default resolveStream implementation,')
-    console.warn ('you will probably want to use your own to support different langages.')
+    warnDefault('resolveStream', 'multiple languages');
     return src;
 }
 
