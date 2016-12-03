@@ -157,8 +157,7 @@ var result = {
     year: movie.MovieYear,     // year of release
     genre: [movie.Genre],      // a free list of genre keywords
     rating: Number,            // a 0-100 rating value
-    image: url,                // generic image
-    cover: url,                // cover image
+    poster: url,               // poster image
     backdrop: url,             // backdrop image
     torrents: [Object],        // torrents object
     subtitle: {String: url},   // language -> url subs mapping
