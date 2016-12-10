@@ -44,7 +44,8 @@ var Provider = function (args) {
         /* 10 minutes */
         preFetch: 0.5,
         /* recache every 5 minutes */
-        primitive: true
+        primitive: true,
+        promise: true
     };
 
     this.args = assign({}, this.args, processArgs(config, args))
