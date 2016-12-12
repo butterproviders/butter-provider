@@ -53,9 +53,7 @@ var Provider = function (args) {
     this.memfetch = memoize(this.fetch.bind(this), memopts);
     this.fetch = this._fetch.bind(this);
 
-    this.detail = memoize(this.detail.bind(this), _.extend(memopts, {
-        async: true
-    }));
+    this.detail = memoize(this.detail.bind(this), memopts);
 };
 
 Provider.ArgType = {
