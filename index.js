@@ -87,10 +87,8 @@ Provider.prototype.resolveStream = function (src, config, data) {
 
 Provider.prototype.random = function () {
     warnDefault('random', 'faster random');
-    return this.fetch.bind(this)()
-        .then(function(data) {
-            return randomArray(data.results)
-        })
+    return this.fetch.apply(this)
+        .then(function (data) {return randomArray(data.results)})
 }
 
 Provider.prototype.extractIds = function (items) {
