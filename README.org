@@ -103,9 +103,9 @@ Provider.prototype.config = {
 the type element should be one of Generic.TabType, currently:
 
 #+BEGIN_SRC javascript
-    Generic.ArgType.MOVIE,   // provider has elements of type 'movie'
-    Generic.ArgType.TVSHOW,  // provider has elements of type 'tvshow'
-    Generic.ArgType.ANIME,   // will show a mix between 'movies' and 'tvshows'
+    Generic.TabType.MOVIE,   // provider has elements of type 'movie'
+    Generic.TabType.TVSHOW,  // provider has elements of type 'tvshow'
+    Generic.TabType.ANIME,   // will show a mix between 'movies' and 'tvshows'
 #+END_SRC
 
 **** args
