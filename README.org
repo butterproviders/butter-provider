@@ -91,7 +91,8 @@ Provider.prototype.config = {
      name: String,     // will be used in logs to refer to your provider
      uniqueId: String, // the name of the field we should use to unify assets
      tabName: String,  // Will appear as the description of the tab
-     type: Provider.TabType,
+     type: Provider.TabType, // can be one of (MOVIE, TVSHOW, ANIME), see
+                             // type documentation for more info.
      args: Object      // (optional) the args this provider supports
      /* legacy: should be removed */
      subtitle: String, // (optional) name of the subtitle provider
