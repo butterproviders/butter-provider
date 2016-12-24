@@ -70,6 +70,24 @@ Provider.TabType = {
     ANIME:   'anime'
 }
 
+Provider.ItemType = {
+    MOVIE: 'movie',
+    TVSHOW: 'tvshow'
+}
+
+Provider.OrderType = {
+    ASC: 'asc',
+    DESC: 'desc',
+    NULL: null
+}
+
+Provider.SorterType = {
+    NAME: 'name',
+    RATING: 'rating',
+    POPULARITY: 'popularity',
+    NULL: null
+}
+
 function warnDefault(fn, support) {
     console.warn ('you are using the default ' + fn + ' implementation,')
     if (support)

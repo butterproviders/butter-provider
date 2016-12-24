@@ -103,9 +103,11 @@ Provider.prototype.config = {
 the type element should be one of Generic.TabType, currently:
 
 #+BEGIN_SRC javascript
-    Generic.TabType.MOVIE,   // provider has elements of type 'movie'
-    Generic.TabType.TVSHOW,  // provider has elements of type 'tvshow'
-    Generic.TabType.ANIME,   // will show a mix between 'movies' and 'tvshows'
+    Generic.TabType.MOVIE,   // provider has elements of type 'Generic.ItemType.MOVIE'
+    Generic.TabType.TVSHOW,  // provider has elements of type 'Generic.Itemtype.TVSHOW'
+    Generic.TabType.ANIME,   // will show a mix between:
+                             //  - 'Generic.ItemType.MOVIE' and
+                             //  - 'Generic.ItemType.TVSHOW'
 #+END_SRC
 
 **** args
@@ -135,10 +137,25 @@ The fetch method takes in a set of filters that can have the following keys:
 var filters = {
     keywords: [String],    // keywords to search for
     genre: String,         // limit to this genre
-    order: 'desc' | 'asc', // sort order
-    sorter: 'rating' | 'popularity' | 'name',
+    order: Generic.OrderType,   // sort order (ASC, DESC)
+    sorter: Generic.SorterType, // sorter type (NAME, RATING, POPULARITY)
     limit: Number,         // number of elements to return
 }
+#+END_SRC
+
+with Generic.OrderType being:
+#+BEGIN_SRC javascript
+    Generic.Ordertype.ASC,    // items are sorted in ascending order
+    Generic.Ordertype.DESC,   // items are sorted in descending order
+    Generic.OrderType.NULL    // items are not sorted
+#+END_SRC
+
+with Generic.SorterType being:
+#+BEGIN_SRC javascript
+    Generic.Sortertype.NAME,        // items are sorted by name
+    Generic.Sortertype.RATING,      // items are sorted by rating
+    Generic.Sortertype.POPULARITY,  // items are sorted by popularity
+    Generic.SorterType.NULL         // items are not sorted
 #+END_SRC
 
 The fetch method returns a promise that resolves to an object of the shape:
@@ -149,7 +166,7 @@ var fetchReturn = {
 }
 #+END_SRC
 
-The results items have the following shape:
+The results items can have any shape but are required to have at least:
 #+BEGIN_SRC javascript
 var result = {
     [uniqueId | 'id']: String, // the unique id
@@ -158,13 +175,16 @@ var result = {
     genre: [movie.Genre],      // a free list of genre keywords
     rating: Number,            // a 0-100 rating value
     poster: url,               // poster image
-    backdrop: url,             // backdrop image
-    torrents: [Object],        // torrents object
-    subtitle: {String: url},   // language -> url subs mapping
-    trailer: url,              // url of the trailer, formated for butter-streamers
-    synopsis: String,          // a short description of the asset
-    type: 'movie' | 'tvshow'   // used by the browser to decide how to show the item
+    type: Generic.ItemType     // used by the browser to decide how to show the item
+                               // (MOVIE, TVSHOW)
 }
+#+END_SRC
+
+Generic.ItemType can be one of:
+#+BEGIN_SRC javascript
+    Generic.ItemType.MOVIE,  // item is a Movie, it has only 1 item
+    Generic.ItemType.TVSHOW  // item is a TvShow, it has many elements,
+                             // list of seasons that have a list of episodes.
 #+END_SRC
 
 each torrent object has the following shape:
@@ -187,7 +207,27 @@ presenting a specific asset, it returns a result object as described in
 =fetch=, and takes the id and the data returned by previous =fetch= calls as
 an argument.
 
-usually it's no more than:
+The required info is:
+#+BEGIN_SRC javascript
+var detail = {
+    [uniqueId | 'id']: String, // the unique id
+    title: String,             // title of the asset
+    year: movie.MovieYear,     // year of release
+    genre: [movie.Genre],      // a free list of genre keywords
+    rating: Number,            // a 0-100 rating value
+    poster: url,               // poster image
+    type: Generic.ItemType     // used by the browser to decide how to show the item
+                               // (MOVIE, TVSHOW)
+//--- all of the above is already required by fetch(), new stuff here: ---
+    backdrop: url,             // backdrop image
+    torrents: [Object],        // torrents object
+    subtitle: {String: url},   // language -> url subs mapping
+    trailer: url,              // url of the trailer, formated for butter-streamers
+    synopsis: String,          // a short description of the asset
+}
+#+END_SRC
+
+note that usually it's no more than:
 #+BEGIN_SRC javascript
 Provider.prototype.detail = function (torrent_id, old_data) {
     return Q(old_data);
