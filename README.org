@@ -45,7 +45,7 @@ then edit your index.js
 #+BEGIN_SRC javascript
 'use strict';
 
-var GenericProvider = require('butter-provider');
+var ProviderProvider = require('butter-provider');
 var inherits = require('util').inherits;
 
 function Vodo() {
@@ -53,9 +53,9 @@ function Vodo() {
         return new Vodo();
     }
 
-    GenericProvider.call(this);
+    ProviderProvider.call(this);
 }
-inherits(Vodo, GenericProvider);
+inherits(Vodo, ProviderProvider);
 #+END_SRC
 
 *** Declare a Config object
@@ -67,7 +67,7 @@ Vodo.prototype.config = {
     tabName: 'Vodo',
     type: 'movie',
     args: {
-       urlList: Generic.ArgTypes.ARRAY
+       urlList: Provider.ArgTypes.ARRAY
     }
     /* legacy: should be removed */
     // subtitle: 'ysubs',
@@ -91,7 +91,7 @@ Provider.prototype.config = {
      name: String,     // will be used in logs to refer to your provider
      uniqueId: String, // the name of the field we should use to unify assets
      tabName: String,  // Will appear as the description of the tab
-     type: Generic.TabType,
+     type: Provider.TabType,
      args: Object      // (optional) the args this provider supports
      /* legacy: should be removed */
      subtitle: String, // (optional) name of the subtitle provider
@@ -100,26 +100,26 @@ Provider.prototype.config = {
 #+END_SRC
 
 **** type
-the type element should be one of Generic.TabType, currently:
+the type element should be one of Provider.TabType, currently:
 
 #+BEGIN_SRC javascript
-    Generic.TabType.MOVIE,   // provider has elements of type 'Generic.ItemType.MOVIE'
-    Generic.TabType.TVSHOW,  // provider has elements of type 'Generic.Itemtype.TVSHOW'
-    Generic.TabType.ANIME,   // will show a mix between:
-                             //  - 'Generic.ItemType.MOVIE' and
-                             //  - 'Generic.ItemType.TVSHOW'
+    Provider.TabType.MOVIE,   // provider has elements of type 'Provider.ItemType.MOVIE'
+    Provider.TabType.TVSHOW,  // provider has elements of type 'Provider.Itemtype.TVSHOW'
+    Provider.TabType.ANIME,   // will show a mix between:
+                              //  - 'Provider.ItemType.MOVIE' and
+                              //  - 'Provider.ItemType.TVSHOW'
 #+END_SRC
 
 **** args
-the args object is a mapping between arg names and =Generic.ArgType= types,
+the args object is a mapping between arg names and =Provider.ArgType= types,
 currently these are the supported values:
 
 #+BEGIN_SRC javascript
-    Generic.ArgType.ARRAY,   // expects a string of values separated by ','
-    Generic.ArgType.OBJECT,  // expects a string of json (JSON.parse)
-    Generic.ArgType.BOOLEAN, // expects a string that evaluates to a boolean
-    Generic.ArgType.NUMBER,  // expects a string that can be passed to Number()
-    Generic.ArgType.STRING,  // expects a string
+    Provider.ArgType.ARRAY,   // expects a string of values separated by ','
+    Provider.ArgType.OBJECT,  // expects a string of json (JSON.parse)
+    Provider.ArgType.BOOLEAN, // expects a string that evaluates to a boolean
+    Provider.ArgType.NUMBER,  // expects a string that can be passed to Number()
+    Provider.ArgType.STRING,  // expects a string
 #+END_SRC
 
 these types will be automatically instanciated into the =args= property of
@@ -137,25 +137,25 @@ The fetch method takes in a set of filters that can have the following keys:
 var filters = {
     keywords: [String],    // keywords to search for
     genre: String,         // limit to this genre
-    order: Generic.OrderType,   // sort order (ASC, DESC)
-    sorter: Generic.SorterType, // sorter type (NAME, RATING, POPULARITY)
+    order: Provider.OrderType,   // sort order (ASC, DESC)
+    sorter: Provider.SorterType, // sorter type (NAME, RATING, POPULARITY)
     limit: Number,         // number of elements to return
 }
 #+END_SRC
 
-with Generic.OrderType being:
+with Provider.OrderType being:
 #+BEGIN_SRC javascript
-    Generic.Ordertype.ASC,    // items are sorted in ascending order
-    Generic.Ordertype.DESC,   // items are sorted in descending order
-    Generic.OrderType.NULL    // items are not sorted
+    Provider.Ordertype.ASC,    // items are sorted in ascending order
+    Provider.Ordertype.DESC,   // items are sorted in descending order
+    Provider.OrderType.NULL    // items are not sorted
 #+END_SRC
 
-with Generic.SorterType being:
+with Provider.SorterType being:
 #+BEGIN_SRC javascript
-    Generic.Sortertype.NAME,        // items are sorted by name
-    Generic.Sortertype.RATING,      // items are sorted by rating
-    Generic.Sortertype.POPULARITY,  // items are sorted by popularity
-    Generic.SorterType.NULL         // items are not sorted
+    Provider.Sortertype.NAME,        // items are sorted by name
+    Provider.Sortertype.RATING,      // items are sorted by rating
+    Provider.Sortertype.POPULARITY,  // items are sorted by popularity
+    Provider.SorterType.NULL         // items are not sorted
 #+END_SRC
 
 The fetch method returns a promise that resolves to an object of the shape:
@@ -175,16 +175,16 @@ var result = {
     genre: [movie.Genre],      // a free list of genre keywords
     rating: Number,            // a 0-100 rating value
     poster: url,               // poster image
-    type: Generic.ItemType     // used by the browser to decide how to show the item
+    type: Provider.ItemType    // used by the browser to decide how to show the item
                                // (MOVIE, TVSHOW)
 }
 #+END_SRC
 
-Generic.ItemType can be one of:
+Provider.ItemType can be one of:
 #+BEGIN_SRC javascript
-    Generic.ItemType.MOVIE,  // item is a Movie, it has only 1 item
-    Generic.ItemType.TVSHOW  // item is a TvShow, it has many elements,
-                             // list of seasons that have a list of episodes.
+    Provider.ItemType.MOVIE,  // item is a Movie, it has only 1 item
+    Provider.ItemType.TVSHOW  // item is a TvShow, it has many elements,
+                              // list of seasons that have a list of episodes.
 #+END_SRC
 
 each torrent object has the following shape:
@@ -216,7 +216,7 @@ var detail = {
     genre: [movie.Genre],      // a free list of genre keywords
     rating: Number,            // a 0-100 rating value
     poster: url,               // poster image
-    type: Generic.ItemType     // used by the browser to decide how to show the item
+    type: Provider.ItemType    // used by the browser to decide how to show the item
                                // (MOVIE, TVSHOW)
 //--- all of the above is already required by fetch(), new stuff here: ---
     backdrop: url,             // backdrop image
