@@ -64,12 +64,6 @@ Provider.ArgType = {
     NUMBER:  'BUTTER_PROVIDER_ARG_TYPE_NUMBER'
 }
 
-Provider.TabType = {
-    MOVIE:   'movie',
-    TVSHOW:  'tvshow',
-    ANIME:   'anime'
-}
-
 Provider.ItemType = {
     MOVIE: 'movie',
     TVSHOW: 'tvshow'
