@@ -74,11 +74,15 @@ Vodo.prototype.config = {
 };
 #+END_SRC
 
-*** implement required methods
-You need to supply code for =fetch= =detail= and =extractIds= see the
-API documentation here after for more details
+*** Implement required Methods
+You need to supply code for at least =fetch=, other methods like =detail=,
+=extractIds= and =resolveStream= have default implementations that should
+work in most cases. That said you probably want to implement those too to be
+smarter than us.
 
-*** tests
+see the API documentation here after for more details
+
+*** Use our generic Tests
 We have tests for you, to get them runing you need to do 2 things,
 
 first add a devDependency on tape so that you can run the tests:
@@ -137,6 +141,11 @@ as you please in your butter-provider) but it will sure save you some
 headaches.
 
 *** fetch (Object: filters -> (promise) Object)
+The fetch method is the first called of your provider, it's used to show the
+content when users open the App. Keep it small, keep it simple, keep it
+fast, as load time will depend on performance of fetch. Grab the bare
+minimum of data you need, you'll have other opportunities to enrich that
+data in subsequent calls (like =detail= or =resolveStream=).
 
 The fetch method takes in a set of filters that can have the following keys:
 #+BEGIN_SRC javascript
