@@ -222,6 +222,12 @@ presenting a specific asset, it returns a result object as described in
 =fetch=, and takes the id and the data returned by previous =fetch= calls as
 an argument.
 
+It is important, to split detail and fetch data gets, as it can be heavy on
+your API endpoint to get all those details at once.
+
+Note that the expected shape of detail results are slightly different for
+=Provider.ItemType.MOVIE= and =Provider.ItemType.TVSHOW=
+
 The required info is:
 #+BEGIN_SRC javascript
 var detail = {
@@ -242,7 +248,8 @@ var detail = {
 }
 #+END_SRC
 
-note that usually it's no more than:
+note that the default implementation will just return the object untouched,
+you don't need to implement a function like:
 #+BEGIN_SRC javascript
 Provider.prototype.detail = function (torrent_id, old_data) {
     return Q(old_data);
