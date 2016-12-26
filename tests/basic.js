@@ -64,7 +64,6 @@ tape('loads', function (t) {
     t.ok(I.config.name, 'we have a name');
     t.ok(I.config.uniqueId, 'we have a uniqueId');
     t.ok(I.config.tabName, 'we have a tabName');
-    t.ok(I.config.type, 'we have a type');
 
     t.ok(I.args, 'we have an args object');
 
