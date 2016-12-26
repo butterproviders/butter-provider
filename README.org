@@ -217,7 +217,7 @@ var torrent = {
 #+END_SRC
 
 *** detail (String: id, Object old_data -> (promise) Object)
-The detail method allows you to fetch more details from your API when
+The detail method allows you to fetch more metadata from your API when
 presenting a specific asset, it returns a result object as described in
 =fetch=, and takes the id and the data returned by previous =fetch= calls as
 an argument.
