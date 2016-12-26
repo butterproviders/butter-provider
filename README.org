@@ -81,15 +81,7 @@ API documentation here after for more details
 *** tests
 We have tests for you, to get them runing you need to do 2 things,
 
-first add a devDependency on tape so that you can run the tests, you can
-either edit your =package.json= file:
-#+BEGIN_SRC javascript
-  "devDependencies": {
-    "tape": "^4.5.1"
-  }
-#+END_SRC
-
-or use npm:
+first add a devDependency on tape so that you can run the tests:
 #+BEGIN_SRC shell
 npm i --save-dev tape
 #+END_SRC
