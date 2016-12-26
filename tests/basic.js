@@ -26,10 +26,11 @@ function testDetail(t, d, uniqueId) {
   t.ok(d.genre, 'we have a genre field');
   t.ok(d.genre.length > 0, 'we have at least 1 genre');
   t.ok(d.rating, 'we have a rating');
-  t.ok(d.poster, 'we have a poster');
   t.ok(d.backdrop, 'we have a backdrop');
+  t.ok(d.poster, 'we have a poster');
   t.ok(d.subtitle, 'we have a subtitle');
   t.ok(d.synopsis, 'we have a synopsis');
+  t.ok(d.runtime, 'we have a runtime');
 
   var type = d.type;
   t.ok(type===Provider.ItemType.MOVIE || type===Provider.ItemType.TVSHOW, 'we have a type field which is an item type');
@@ -38,6 +39,8 @@ function testDetail(t, d, uniqueId) {
       t.ok(d.trailer, 'we have a trailer');
       t.ok(d.torrents, 'we have a torrents field');
   } else if (type===Provider.ItemType.TVSHOW) {
+      t.ok(d.status, 'we have a status');
+      t.ok(d.num_seasons, 'we have an num_seasons field');
       t.ok(d.episodes, 'we have an episodes field');
       t.ok(d.episodes.length > 0, 'we have at least 1 episode');
   } else {
