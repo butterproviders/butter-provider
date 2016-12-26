@@ -186,10 +186,10 @@ The results items can have any shape but are required to have at least:
 var result = {
     [uniqueId | 'id']: String, // the unique id
     title: String,             // title of the asset
-    year: movie.MovieYear,     // year of release
+    year: Number,              // year of release
     genre: [movie.Genre],      // a free list of genre keywords
     rating: Number,            // a 0-100 rating value
-    poster: url,               // poster image
+    poster: String,            // url to poster image
     type: Provider.ItemType    // used by the browser to decide how to show the item
                                // (MOVIE, TVSHOW)
 }
@@ -227,17 +227,17 @@ The required info is:
 var detail = {
     [uniqueId | 'id']: String, // the unique id
     title: String,             // title of the asset
-    year: movie.MovieYear,     // year of release
+    year: Number,              // year of release
     genre: [movie.Genre],      // a free list of genre keywords
     rating: Number,            // a 0-100 rating value
-    poster: url,               // poster image
+    poster: String,            // url to poster image
     type: Provider.ItemType    // used by the browser to decide how to show the item
                                // (MOVIE, TVSHOW)
 //--- all of the above is already required by fetch(), new stuff here: ---
-    backdrop: url,             // backdrop image
+    backdrop: String,          // url of the backdrop image
     torrents: [Object],        // torrents object
     subtitle: {String: url},   // language -> url subs mapping
-    trailer: url,              // url of the trailer, formated for butter-streamers
+    trailer: String,           // url of the trailer, formated for butter-streamers
     synopsis: String,          // a short description of the asset
 }
 #+END_SRC
