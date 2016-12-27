@@ -206,6 +206,8 @@ var detail = {
     type: Provider.ItemType    // used by the browser to decide how to show the item
                                // (MOVIE, TVSHOW)
 //--- all of the above is already required by fetch(), new stuff here: ---
+    runtime: Number,           // the runtime of the item
+    status: String,            // the status of the item
     backdrop: url,             // backdrop image
     torrents: [Object],        // torrents object
     subtitle: {String: url},   // language -> url subs mapping
