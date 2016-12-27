@@ -158,10 +158,10 @@ The results items can have any shape but are required to have at least:
 var result = {
     [uniqueId | 'id']: String, // the unique id
     title: String,             // title of the asset
-    year: movie.MovieYear,     // year of release
-    genre: [movie.Genre],      // a free list of genre keywords
+    year: Number,              // year of release
+    genre: [String],           // a free list of genre keywords
     rating: Number,            // a 0-100 rating value
-    poster: url,               // poster image
+    poster: String,            // poster image
     type: Provider.ItemType    // used by the browser to decide how to show the item
                                // (MOVIE, TVSHOW)
 }
@@ -199,16 +199,16 @@ The required info is:
 var detail = {
     [uniqueId | 'id']: String, // the unique id
     title: String,             // title of the asset
-    year: movie.MovieYear,     // year of release
-    genre: [movie.Genre],      // a free list of genre keywords
+    year: Number,              // year of release
+    genre: [String],           // a free list of genre keywords
     rating: Number,            // a 0-100 rating value
-    poster: url,               // poster image
+    poster: String,            // poster image
     type: Provider.ItemType    // used by the browser to decide how to show the item
                                // (MOVIE, TVSHOW)
 //--- all of the above is already required by fetch(), new stuff here: ---
     runtime: Number,           // the runtime of the item
-    backdrop: url,             // backdrop image
-    subtitle: {String: url},   // language -> url subs mapping
+    backdrop: String,          // backdrop image
+    subtitle: {url: String},   // language -> url subs mapping
     synopsis: String,          // a short description of the asset
 }
 #+END_SRC
@@ -218,7 +218,7 @@ The =Provider.ItemType.MOVIE= has the following additional fields:
 var detail = {
 //--- including all the fields of the generic detail object
     torrents: [Object],        // torrents object
-    trailer: url,              // url of the trailer, formated for butter-streamers
+    trailer: String,           // url of the trailer, formated for butter-streamers
 }
 #+END_SRC
 
