@@ -164,6 +164,8 @@ var result = {
     poster: String,            // poster image
     type: Provider.ItemType    // used by the browser to decide how to show the item
                                // (MOVIE, TVSHOW)
+    num_seasons: Number,       // the number of seasons available to show
+                               // only in the case of Provider.ItemType.TVSHOW
 }
 #+END_SRC
 
@@ -205,6 +207,8 @@ var detail = {
     poster: String,            // poster image
     type: Provider.ItemType    // used by the browser to decide how to show the item
                                // (MOVIE, TVSHOW)
+    num_seasons: Number,       // the number of seasons available to show
+                               // only in the case of Provider.ItemType.TVSHOW
 //--- all of the above is already required by fetch(), new stuff here: ---
     runtime: Number,           // the runtime of the item
     backdrop: String,          // backdrop image
@@ -227,7 +231,6 @@ The =Provider.ItemType.TVSHOW= also has a few additional fields to include:
 var detail = {
 //--- including all the fields of the generic detail object
     status: String,            // the status of the item
-    num_seasons: Number,       // the number of seasons available to show
     episodes: [Object],        // the episodes to display
 }
 #+END_SRC
