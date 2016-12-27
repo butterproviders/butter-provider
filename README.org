@@ -122,11 +122,11 @@ headaches.
 The fetch method takes in a set of filters that can have the following keys:
 #+BEGIN_SRC javascript
 var filters = {
-    keywords: [String],    // keywords to search for
-    genre: String,         // limit to this genre
+    keywords: [String],          // keywords to search for
+    genre: String,               // limit to this genre
     order: Provider.OrderType,   // sort order (ASC, DESC)
     sorter: Provider.SorterType, // sorter type (NAME, RATING, POPULARITY)
-    limit: Number,         // number of elements to return
+    limit: Number,               // number of elements to return
 }
 #+END_SRC
 
