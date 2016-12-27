@@ -23,8 +23,8 @@ function testDetail(t, d, uniqueId) {
     t.ok(d[uniqueId] || d.id, 'we have an unique id');
     t.ok(d.title, 'we have a title');
     t.ok(d.year, 'we have a year');
-    t.ok(d.genre, 'we have a genre field');
-    t.ok(d.genre.length > 0, 'we have at least 1 genre');
+    t.ok(d.genres, 'we have a genres field');
+    t.ok(d.genres.length > 0, 'we have at least 1 genre');
     t.ok(d.rating, 'we have a rating');
     t.ok(d.backdrop, 'we have a backdrop');
     t.ok(d.poster, 'we have a poster');
