@@ -207,12 +207,28 @@ var detail = {
                                // (MOVIE, TVSHOW)
 //--- all of the above is already required by fetch(), new stuff here: ---
     runtime: Number,           // the runtime of the item
-    status: String,            // the status of the item
     backdrop: url,             // backdrop image
-    torrents: [Object],        // torrents object
     subtitle: {String: url},   // language -> url subs mapping
-    trailer: url,              // url of the trailer, formated for butter-streamers
     synopsis: String,          // a short description of the asset
+}
+#+END_SRC
+
+The =Provider.ItemType.MOVIE= has the following additional fields:
+#+BEGIN_SRC
+var detail = {
+//--- including all the fields of the generic detail object
+    torrents: [Object],        // torrents object
+    trailer: url,              // url of the trailer, formated for butter-streamers
+}
+#+END_SRC
+
+The =Provider.ItemType.TVSHOW= also has a few additional fields to include:
+#+BEGIN_SRC
+var detail = {
+//--- including all the fields of the generic detail object
+    status: String,            // the status of the item
+    num_seasons: Number,       // the number of seasons available to show
+    episodes: [Object],        // the episodes to display
 }
 #+END_SRC
 
