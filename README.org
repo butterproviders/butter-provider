@@ -187,7 +187,7 @@ var result = {
     [uniqueId | 'id']: String, // the unique id
     title: String,             // title of the asset
     year: Number,              // year of release
-    genres: [String],           // a free list of genre keywords
+    genres: [String],          // a free list of genre keywords
     rating: Number,            // a 0-100 rating value
     poster: String,            // poster image
     type: Provider.ItemType    // used by the browser to decide how to show the item
@@ -236,7 +236,7 @@ var detail = {
     [uniqueId | 'id']: String, // the unique id
     title: String,             // title of the asset
     year: Number,              // year of release
-    genre: [String],           // a free list of genre keywords
+    genres: [String],          // a free list of genre keywords
     rating: Number,            // a 0-100 rating value
     poster: String,            // poster image
     type: Provider.ItemType    // used by the browser to decide how to show the item
