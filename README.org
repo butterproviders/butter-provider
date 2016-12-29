@@ -254,7 +254,7 @@ var detail = {
         overview: String,             // small description of the episode
         episode: Number,              // episode number of the season
         season: String,               // season number of the episode
-        tvdb_id: Number               //
+        tvdb_id: Number               // the tvdb id of the episode
     }],
 }
 #+END_SRC
