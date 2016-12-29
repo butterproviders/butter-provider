@@ -221,8 +221,16 @@ The =Provider.ItemType.MOVIE= has the following additional fields:
 #+BEGIN_SRC
 var detail = {
 //--- including all the fields of the generic detail object
-    torrents: [Object],        // torrents object
-    trailer: String,           // url of the trailer, formated for butter-streamers
+    torrents: {                       // torrents object
+        [720p,1080p]: {               // the quality of the episode
+            filesize: String,         // human readable size
+            size: Number,             // size in bytes
+            peer: Number,             // the amount of peers
+            seed: Number,             // the amount of seeds
+            url: String               // the url to the movie to download
+        }
+    },
+    trailer: String                   // url of the trailer, formated for butter-streamers
 }
 #+END_SRC
 
