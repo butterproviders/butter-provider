@@ -234,6 +234,14 @@ var detail = {
 }
 #+END_SRC
 
+With Provider.QualityType being:
+#+BEGIN_SRC javascript
+    DEFAULT                 // The default object to stream
+    LOW                     // 480p quality
+    MEDIUM                  // 720p quality
+    HIGH                    // 1080p quality
+#+END_SRC
+
 The =Provider.ItemType.TVSHOW= also has a few additional fields to include:
 #+BEGIN_SRC
 var detail = {
