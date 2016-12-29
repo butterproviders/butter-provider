@@ -222,7 +222,7 @@ The =Provider.ItemType.MOVIE= has the following additional fields:
 var detail = {
 //--- including all the fields of the generic detail object
     torrents: {                       // torrents object
-        [720p,1080p]: {               // the quality of the episode
+        [Provider.QualityType]: {     // the quality of the episode
             filesize: String,         // (optional) human readable size
             size: Number,             // size in bytes
             peers: Number,            // the amount of peers
@@ -247,7 +247,7 @@ The =episodes= array will contain the following object:
 #+BEGIN_SRC
 {
     torrents: {                   // contains the available qualities
-        [0,480p,720p,1080p]: {    // the quality of the episode
+        [Provider.QualityType]: { // the quality of the episode
           peers: Number,          // the amount of peers
           seeds: Number,          // the amount of seeds
           url: String             // the url to the episode to download, formated for butter-streamers
