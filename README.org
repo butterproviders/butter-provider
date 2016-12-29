@@ -248,7 +248,7 @@ var detail = {
             }
         },
         watched: {
-            watched: Boolean          // indcation if an episode has been watched
+            watched: Boolean          // indication if an episode has been watched
         },
         first_aired: Number,          // epoch time when the episode was first aired
         overview: String,             // small description of the episode
