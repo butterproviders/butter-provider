@@ -227,7 +227,7 @@ var detail = {
             size: Number,             // size in bytes
             peers: Number,            // the amount of peers
             seeds: Number,            // the amount of seeds
-            url: String               // the url to the movie to download
+            url: String               // the url to the movie to download, formated for butter-streamers
         }
     },
     trailer: String                   // url of the trailer, formated for butter-streamers
@@ -244,7 +244,7 @@ var detail = {
             [0,480p,720p,1080p]: {    // the quality of the episode
               peers: Number,          // the amount of peers
               seeds: Number,          // the amount of seeds
-              url: String             // the url to the episode to download
+              url: String             // the url to the episode to download, formated for butter-streamers
             }
         },
         watched: {
