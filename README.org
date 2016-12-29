@@ -223,7 +223,7 @@ var detail = {
 //--- including all the fields of the generic detail object
     torrents: {                       // torrents object
         [720p,1080p]: {               // the quality of the episode
-            filesize: String,         // human readable size
+            filesize: String,         // (optional) human readable size
             size: Number,             // size in bytes
             peers: Number,            // the amount of peers
             seeds: Number,            // the amount of seeds
