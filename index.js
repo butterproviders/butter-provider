@@ -83,10 +83,10 @@ Provider.SorterType = {
 }
 
 Provider.QualityType = {
-    DEFAULT: '',
+    DEFAULT: '0',
     LOW: '480p',
     MEDIUM: '720p',
-    HIGH: '1080p',
+    HIGH: '1080p'
 }
 
 function warnDefault(fn, support) {
