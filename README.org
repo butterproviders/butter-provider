@@ -225,8 +225,8 @@ var detail = {
         [720p,1080p]: {               // the quality of the episode
             filesize: String,         // human readable size
             size: Number,             // size in bytes
-            peer: Number,             // the amount of peers
-            seed: Number,             // the amount of seeds
+            peers: Number,             // the amount of peers
+            seeds: Number,             // the amount of seeds
             url: String               // the url to the movie to download
         }
     },
