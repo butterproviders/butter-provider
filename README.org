@@ -74,10 +74,33 @@ Vodo.prototype.config = {
 };
 #+END_SRC
 
-*** implement required methods
-You need to supply code for =fetch= =detail= and =extractIds= see the
-API documentation here after for more details
+*** Implement required Methods
+You need to supply code for at least =fetch=, other methods like =detail=,
+=extractIds= and =resolveStream= have default implementations that should
+work in most cases. That said you probably want to implement those too to be
+smarter than us.
 
+see the API documentation here after for more details
+
+*** Use our generic Tests
+We have tests for you, to get them runing you need to do 2 things,
+
+first add a devDependency on tape so that you can run the tests:
+#+BEGIN_SRC shell
+npm i --save-dev tape
+#+END_SRC
+
+then you need to tell npm what to run on =npm test=, and tell the tests how
+to call your provider using the =butter.testArgs= key:
+#+BEGIN_SRC javascript
+  "scripts": {
+    "test": "tape ./node_modules/butter-provider/tests/*"
+  },
+  "butter": {
+    "timeout": 20000,
+    "testArgs": "vodo?urlList=http://butter.vodo.net/popcorn',https://butter.vodo.net/popcorn',http://localhost:8080/popcorn"
+  },
+#+END_SRC
 ** API
 *** config (Object)
 
@@ -118,6 +141,11 @@ as you please in your butter-provider) but it will sure save you some
 headaches.
 
 *** fetch (Object: filters -> (promise) Object)
+The fetch method is the first called of your provider, it's used to show the
+content when users open the App. Keep it small, keep it simple, keep it
+fast, as load time will depend on performance of fetch. Grab the bare
+minimum of data you need, you'll have other opportunities to enrich that
+data in subsequent calls (like =detail= or =resolveStream=).
 
 The fetch method takes in a set of filters that can have the following keys:
 #+BEGIN_SRC javascript
@@ -191,10 +219,16 @@ var torrent = {
 #+END_SRC
 
 *** detail (String: id, Object old_data -> (promise) Object)
-The detail method allows you to fetch more details from your API when
+The detail method allows you to fetch more metadata from your API when
 presenting a specific asset, it returns a result object as described in
 =fetch=, and takes the id and the data returned by previous =fetch= calls as
 an argument.
+
+It is important, to split detail and fetch data gets, as it can be heavy on
+your API endpoint to get all those details at once.
+
+Note that the expected shape of detail results are slightly different for
+=Provider.ItemType.MOVIE= and =Provider.ItemType.TVSHOW=
 
 The required info is:
 #+BEGIN_SRC javascript
@@ -235,7 +269,8 @@ var detail = {
 }
 #+END_SRC
 
-note that usually it's no more than:
+note that the default implementation will just return the object untouched,
+you don't need to implement a function like:
 #+BEGIN_SRC javascript
 Provider.prototype.detail = function (torrent_id, old_data) {
     return Q(old_data);
