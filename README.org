@@ -239,25 +239,31 @@ The =Provider.ItemType.TVSHOW= also has a few additional fields to include:
 var detail = {
 //--- including all the fields of the generic detail object
     status: String,                   // the status of the item
-    episodes: [{                      // the episodes to display
-        torrents: {                   // contains the available qualities
-            [0,480p,720p,1080p]: {    // the quality of the episode
-              peers: Number,          // the amount of peers
-              seeds: Number,          // the amount of seeds
-              url: String             // the url to the episode to download, formated for butter-streamers
-            }
-        },
-        watched: {
-            watched: Boolean          // indication if an episode has been watched
-        },
-        first_aired: Number,          // epoch time when the episode was first aired
-        overview: String,             // small description of the episode
-        episode: Number,              // episode number of the season
-        season: String,               // season number of the episode
-        tvdb_id: Number               // the tvdb id of the episode
-    }],
+    episodes: [Object],               // the episodes to display
 }
 #+END_SRC
+
+The =episodes= array will contain the following object:
+#+BEGIN_SRC
+{
+    torrents: {                   // contains the available qualities
+        [0,480p,720p,1080p]: {    // the quality of the episode
+          peers: Number,          // the amount of peers
+          seeds: Number,          // the amount of seeds
+          url: String             // the url to the episode to download, formated for butter-streamers
+        }
+    },
+    watched: {
+        watched: Boolean          // indication if an episode has been watched
+    },
+    first_aired: Number,          // epoch time when the episode was first aired
+    overview: String,             // small description of the episode
+    episode: Number,              // episode number of the season
+    season: String,               // season number of the episode
+    tvdb_id: Number               // the tvdb id of the episode
+}
+#+END_SRC
+
 
 note that usually it's no more than:
 #+BEGIN_SRC javascript
