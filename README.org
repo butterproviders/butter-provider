@@ -259,7 +259,7 @@ var detail = {
 The end goal of these methods is to return =torrents= objects that have the
 following shape:
 
-note: the 'torrent' name is a bit confusing and really a legacy name, it
+Note that the 'torrent' name is a bit confusing and really a legacy name, it
 should be called 'ressources'.
 
 #+BEGIN_SRC javascript
