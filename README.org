@@ -17,7 +17,7 @@ API that we describe hereafter.
 Note that if you want to use the autoload features in Butter you should name
 your module `butter-provider-${something}`
 
-## Writting a Provider
+## Writing a Provider
 We provide a base provider in `butter-provider` that we recommend extending,
 it handles caching and a few other bootstrapping quirks, but formally
 speaking it's not required.
@@ -252,7 +252,7 @@ The `Provider.ItemType.MOVIE` has the following additional fields:
 var detail = {
 //--- including all the fields of the generic detail object
     torrents: {Object},       // torrents object
-    trailer: String           // url of the trailer, formated for butter-streamers
+    trailer: String           // url of the trailer, formatted for butter-streamers
 }
 ```
 
@@ -289,7 +289,7 @@ should be called 'resources'.
 ``` javascript
 var torrents = {
     [Provider.QualityType]: {     // the quality of the episode
-        url: String,              // the resource's url, formated for butter-streamers
+        url: String,              // the resource's url, formatted for butter-streamers
         size: Number,             // the resource's descriptor size (magnet/torrent/hls playlist)
                                   // only for Provider.ItemType.MOVIE
         filesize: String          // (optional) the resource's main video filesize
