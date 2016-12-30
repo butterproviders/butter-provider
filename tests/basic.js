@@ -10,8 +10,12 @@ var config = {
     timeout: 1000
 };
 
-if (pkg.butter && pkg.butter.testArgs) {
+if (pkg.butter) {
+  if (pkg.butter.testArgs) {
     config.args = Object.assign({}, config.args, Provider.prototype.parseArgs(pkg.butter.testArgs).args);
+  }
+
+  config = Object.assign({}, config, pkg.butter);
 }
 
 function load() {
