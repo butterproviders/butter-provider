@@ -338,7 +338,7 @@ Currently `config` will have this shape:
 where to 'hide' the urls you will want to switch on languages switches.
 
 ### (optional) random (void -> (promise) Object)
-Returns a random `result item` as described in `fetch`.
+Returns a random `result item` as described in `detail`.
 
 ### (optional) update (void -> (promise) [Object])
 Allows to notify the Provider it can update it's internal cache
