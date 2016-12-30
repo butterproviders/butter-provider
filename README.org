@@ -205,20 +205,6 @@ Provider.ItemType can be one of:
                               // list of seasons that have a list of episodes.
 #+END_SRC
 
-each torrent object has the following shape:
-note: the 'torrent' name is a bit confusing and really a legacy name, it
-should be called 'ressources'
-
-#+BEGIN_SRC javascript
-var torrent = {
-   url: String,      // The resource's url, formated for butter-streamers
-   size: Number,     // The resource's descriptor size (magnet/torrent/hls playlist)
-   filesize: Number, // The resource's main video filesize
-   seed: Number,     // (optional) number of seeds
-   peer: Number      // (optional) number of peers
-}
-#+END_SRC
-
 *** detail (String: id, Object old_data -> (promise) Object)
 The detail method allows you to fetch more metadata from your API when
 presenting a specific asset, it returns a result object as described in
@@ -274,14 +260,17 @@ var detail = {
 The end goal of these methods is to return =torrents= objects that have the
 following shape:
 
+note: the 'torrent' name is a bit confusing and really a legacy name, it
+should be called 'ressources'.
+
 #+BEGIN_SRC javascript
 var torrents = {
     [Provider.QualityType]: {     // the quality of the episode
-        url: String,              // the url to the movie to download, formated for butter-streamers
-        size: Number,             // (optional) size in bytes
-        peers: Number,            // (optional) the amount of peers
-        seeds: Number,            // (optional) the amount of seeds
-        filesize: String          // (optional) human readable size
+        url: String,              // the resource's url, formated for butter-streamers
+        size: Number,             // (optional) the resource's descriptor size (magnet/torrent/hls playlist)
+        filesize: String          // (optional) the resource's main video filesize
+        peers: Number,            // (optional) number of seeds
+        seeds: Number,            // (optional) number of peers
     }
 }
 #+END_SRC
