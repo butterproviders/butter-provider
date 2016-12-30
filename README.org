@@ -260,6 +260,16 @@ var detail = {
 }
 #+END_SRC
 
+**** =Provider.ItemType.MOVIE=
+The =Provider.ItemType.MOVIE= has the following additional fields:
+#+BEGIN_SRC javascript
+var detail = {
+//--- including all the fields of the generic detail object
+    torrents: {Object},       // torrents object
+    trailer: String           // url of the trailer, formated for butter-streamers
+}
+#+END_SRC
+
 **** torrents Object
 The end goal of these methods is to return =torrents= objects that have the
 following shape:
@@ -282,16 +292,6 @@ With Provider.QualityType being:
     Provider.QualityType.LOW       // 480p quality
     Provider.QualityType.MEDIUM    // 720p quality
     Provider.QualityType.HIGH      // 1080p quality
-#+END_SRC
-
-**** =Provider.ItemType.MOVIE=
-The =Provider.ItemType.MOVIE= has the following additional fields:
-#+BEGIN_SRC javascript
-var detail = {
-//--- including all the fields of the generic detail object
-    torrents: {Object},       // torrents object
-    trailer: String           // url of the trailer, formated for butter-streamers
-}
 #+END_SRC
 
 **** =Provder.ItemType.TVSHOW=
