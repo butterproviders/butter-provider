@@ -18,7 +18,7 @@ Note that if you want to use the autoload features in Butter you should name
 your module =butter-provider-${something}=
 
 ** Writting a Provider
-We provide a base provider in =butter-provider= that we recomend extending,
+We provide a base provider in =butter-provider= that we recommend extending,
 it handles caching and a few other bootstrapping quirks, but formally
 speaking it's not required.
 
