@@ -85,9 +85,9 @@ See the API documentation hereafter for more details.
 ### Use our generic Tests
 We have tests for you, to get them running you need to do 2 things;
 
-First add a devDependency on tape so that you can run the tests:
+First add a devDependency on tape and debug so that you can run the tests:
 ``` shell
-npm i --save-dev tape
+npm i --save-dev tape debug
 ```
 
 Then you need to tell npm what to run on `npm test`, and tell the tests how
