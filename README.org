@@ -255,6 +255,29 @@ var detail = {
 }
 #+END_SRC
 
+**** =Provder.ItemType.TVSHOW=
+The =Provider.ItemType.TVSHOW= also has a few additional fields to include:
+#+BEGIN_SRC javascript
+var detail = {
+//--- including all the fields of the generic detail object
+    status: String,              // the status of the item
+    episodes: [Object],          // the episodes to display
+}
+#+END_SRC
+
+The =episodes= array will have the following shape:
+#+BEGIN_SRC javascript
+{
+    torrents: {Object}            // a torrents Object
+    watched: Boolean              // indication if an episode has been watched
+    first_aired: Number,          // epoch time when the episode was first aired
+    overview: String,             // small description of the episode
+    episode: Number,              // episode number of the season
+    season: String,               // season number of the episode
+    tvdb_id: Number               // the tvdb id of the episode
+}
+#+END_SRC
+
 **** torrents Object
 The end goal of these methods is to return =torrents= objects that have the
 following shape:
@@ -280,29 +303,6 @@ With Provider.QualityType being:
     Provider.QualityType.LOW       // 480p quality
     Provider.QualityType.MEDIUM    // 720p quality
     Provider.QualityType.HIGH      // 1080p quality
-#+END_SRC
-
-**** =Provder.ItemType.TVSHOW=
-The =Provider.ItemType.TVSHOW= also has a few additional fields to include:
-#+BEGIN_SRC javascript
-var detail = {
-//--- including all the fields of the generic detail object
-    status: String,              // the status of the item
-    episodes: [Object],          // the episodes to display
-}
-#+END_SRC
-
-The =episodes= array will have the following shape:
-#+BEGIN_SRC javascript
-{
-    torrents: {Object}            // a torrents Object
-    watched: Boolean              // indication if an episode has been watched
-    first_aired: Number,          // epoch time when the episode was first aired
-    overview: String,             // small description of the episode
-    episode: Number,              // episode number of the season
-    season: String,               // season number of the episode
-    tvdb_id: Number               // the tvdb id of the episode
-}
 #+END_SRC
 
 *** extractIds ([Object]: items -> [String])
