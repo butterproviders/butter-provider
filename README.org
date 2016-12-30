@@ -34,13 +34,13 @@ npm init
 ```
 
 ### Depend on butter-provider
-First install the npm module and add it as a dependency
+First install the npm module and add it as a dependency.
 
 ``` shell
 npm i --save butter-provider
 ```
 
-Then edit your index.js
+Then edit your `index.js`.
 
 ``` javascript
 'use strict';
@@ -106,7 +106,7 @@ to call your provider using the `butter.testArgs` key:
 
 ### config (Object)
 
-The config  object should be attached to the prototype (i.e. use
+The config object should be attached to the prototype (i.e. use
 the `Provider.prototype.config = {}` syntax), and it should have the
 following fields:
 
@@ -308,7 +308,7 @@ With Provider.QualityType being:
 ```
 
 ### extractIds ([Object]: items -> [String])
-This method is used to keep a cache of the content in a  app. The
+This method is used to keep a cache of the content in a Butter app. The
 generic implementation is:
 
 ``` javascript
@@ -329,7 +329,7 @@ providers are required to return in `fetch` and `details` for torrent data.
 Currently `config` will have this shape:
 ``` javascript
 {
-   audio: String,
+  audio: String,
 }
 ```
 
@@ -341,5 +341,5 @@ where to 'hide' the urls you will want to switch on languages switches.
 Returns a random `result item` as described in `fetch`.
 
 ### (optional) update (void -> (promise) [Object])
-Allows  to notify the Provider it can update it's internal cache
+Allows to notify the Provider it can update it's internal cache
 (not used).
