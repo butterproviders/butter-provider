@@ -54,10 +54,10 @@ function testDetail(t, d, uniqueId) {
         t.ok(d.torrents[quality].size, 'we have the size');
     } else if (type===Provider.ItemType.TVSHOW) {
         t.ok(d.status, 'we have a status');
-        t.ok(d.num_seasons, 'we have an num_seasons field');
+        t.ok(d.num_seasons, 'we have a num_seasons field');
         t.ok(d.episodes, 'we have an episodes field');
-
         t.ok(d.episodes.length > 0, 'we have at least 1 episode');
+
         t.ok(d.episodes.watched, 'we have a watched field');
         t.ok(d.episodes.first_aired, 'we have a first aired field');
         t.ok(d.episodes.overview, 'we have an overview');
@@ -111,7 +111,7 @@ tape('fetch', function (t) {
     I.fetch().then(function (r) {
         debug ('fetch', r);
         t.ok(r, 'we were able to fetch');
-        t.ok(r.hasMore===true || r.hasMore===false, 'we have a hasMore field that is a boolean: ');
+        t.ok(r.hasMore===true || r.hasMore===false, 'we have a hasMore field that is a boolean');
         t.ok(r.results, 'we have a results field');
         t.ok(r.results.length > 0, 'we have at least 1 result');
 
