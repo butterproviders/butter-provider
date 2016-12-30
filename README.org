@@ -14,7 +14,7 @@ Butter will automatically load any npm package installed (listed in
 A =Butter Provider= is just a npm package that needs to export a specific
 API that we describe hereafter.
 
-note that if you want to use the autoload features in butter you should name
+Note that if you want to use the autoload features in butter you should name
 your module =butter-provider-${something}=
 
 ** Writting a Provider
@@ -25,7 +25,7 @@ speaking it's not required.
 Here we'll be creating a provider for the vodo.net service.
 
 *** Create a npm module
-create a directory and init an new npm module:
+Create a directory and init an new npm module:
 
 #+BEGIN_SRC shell
 mkdir butter-provider-vodo
@@ -34,13 +34,13 @@ npm init
 #+END_SRC
 
 *** Depend on butter-provider
-first install the npm module and add it as a dependency
+First install the npm module and add it as a dependency
 
 #+BEGIN_SRC shell
 npm i --save butter-provider
 #+END_SRC
 
-then edit your index.js
+Then edit your index.js
 
 #+BEGIN_SRC javascript
 'use strict';
@@ -80,17 +80,17 @@ You need to supply code for at least =fetch=, other methods like =detail=,
 work in most cases. That said you probably want to implement those too to be
 smarter than us.
 
-see the API documentation here after for more details
+See the API documentation here after for more details.
 
 *** Use our generic Tests
 We have tests for you, to get them running you need to do 2 things,
 
-first add a devDependency on tape so that you can run the tests:
+First add a devDependency on tape so that you can run the tests:
 #+BEGIN_SRC shell
 npm i --save-dev tape
 #+END_SRC
 
-then you need to tell npm what to run on =npm test=, and tell the tests how
+Then you need to tell npm what to run on =npm test=, and tell the tests how
 to call your provider using the =butter.testArgs= key:
 #+BEGIN_SRC javascript
   "scripts": {
@@ -122,7 +122,7 @@ Provider.prototype.config = {
 #+END_SRC
 
 **** args
-the args object is a mapping between arg names and =Provider.ArgType= types,
+The args object is a mapping between arg names and =Provider.ArgType= types,
 currently these are the supported values:
 
 #+BEGIN_SRC javascript
@@ -133,7 +133,7 @@ currently these are the supported values:
     Provider.ArgType.STRING,  // expects a string
 #+END_SRC
 
-these types will be automatically instanciated into the =args= property of
+These types will be automatically instanciated into the =args= property of
 the created class, in the long run, there will be UI in butter to modify
 those declared args from the settings panels.
 
@@ -321,10 +321,10 @@ acording to some config passed by the apps. It's main purpose is to allow
 the selection of different languages, but in the future it may allow for
 deeper customizations (as for instance choosing a streaming technology).
 
-the default handler will just return =src= that is the legacy value
+The default handler will just return =src= that is the legacy value
 providers are required to return in =fetch= and =details= for torrent data.
 
-currently =config= will have this shape:
+Currently =config= will have this shape:
 #+BEGIN_SRC javascript
 {
    audio: String,
@@ -336,8 +336,8 @@ currently =config= will have this shape:
 where to 'hide' the urls you will want to switch on languages switches.
 
 *** (optional) random (void -> (promise) Object)
-return a random =result item= as described in =fetch=.
+Return a random =result item= as described in =fetch=.
 
 *** (optional) update (void -> (promise) [Object])
-allows Butter to notify the Provider it can update it's internal cache
+Allows Butter to notify the Provider it can update it's internal cache
 (not used).
