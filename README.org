@@ -14,7 +14,7 @@ Butter will automatically load any npm package installed (listed in
 A =Butter Provider= is just a npm package that needs to export a specific
 API that we describe hereafter.
 
-Note that if you want to use the autoload features in butter you should name
+Note that if you want to use the autoload features in Butter you should name
 your module =butter-provider-${something}=
 
 ** Writting a Provider
@@ -134,7 +134,7 @@ currently these are the supported values:
 #+END_SRC
 
 These types will be automatically instanciated into the =args= property of
-the created class, in the long run, there will be UI in butter to modify
+the created class, in the long run, there will be UI in Butter to modify
 those declared args from the settings panels.
 
 It is not required that you use this mechanism (i.e. you can parse your args
@@ -306,7 +306,7 @@ The =episodes= array will have the following shape:
 #+END_SRC
 
 *** extractIds ([Object]: items -> [String])
-This method is used to keep a cache of the content in a Butter app. The
+This method is used to keep a cache of the content in a  app. The
 generic implementation is:
 
 #+BEGIN_SRC javascript
@@ -339,5 +339,5 @@ where to 'hide' the urls you will want to switch on languages switches.
 Returns a random =result item= as described in =fetch=.
 
 *** (optional) update (void -> (promise) [Object])
-Allows Butter to notify the Provider it can update it's internal cache
+Allows  to notify the Provider it can update it's internal cache
 (not used).
