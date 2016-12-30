@@ -143,7 +143,7 @@ headaches.
 
 *** fetch (Object: filters -> (promise) Object)
 The fetch method is the first called of your provider, it's used to show the
-content when users open the App. Keep it small, keep it simple, keep it
+content when users opens Butter. Keep it small, keep it simple, keep it
 fast, as load time will depend on performance of fetch. Grab the bare
 minimum of data you need, you'll have other opportunities to enrich that
 data in subsequent calls (like =detail= or =resolveStream=).
