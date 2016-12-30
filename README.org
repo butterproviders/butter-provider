@@ -200,9 +200,8 @@ var result = {
 
 Provider.ItemType can be one of:
 #+BEGIN_SRC javascript
-    Provider.ItemType.MOVIE,  // item is a Movie, it has only 1 item
-    Provider.ItemType.TVSHOW  // item is a TvShow, it has many elements,
-                              // list of seasons that have a list of episodes.
+    Provider.ItemType.MOVIE,  // item is a Movie
+    Provider.ItemType.TVSHOW  // item is a TvShow
 #+END_SRC
 
 *** detail (String: id, Object old_data -> (promise) Object)
