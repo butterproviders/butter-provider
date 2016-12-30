@@ -319,7 +319,7 @@ Provider.prototype.extractIds = function (items) {
 
 ### (optional) resolveStream (src, config, data -> (promise) String)
 This method is used to let the provider decide what the end url should be
-acording to some config passed by the apps. It's main purpose is to allow
+according to some config passed by the apps. It's main purpose is to allow
 the selection of different languages, but in the future it may allow for
 deeper customizations (as for instance choosing a streaming technology).
 
