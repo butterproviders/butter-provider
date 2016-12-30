@@ -191,9 +191,9 @@ var result = {
     genres: [String],          // a free list of genre keywords
     rating: Number,            // a 0-100 rating value
     poster: String,            // url to the poster image
-    type: Provider.ItemType    // used by the browser to decide how to show the item
+    type: Provider.ItemType,   // used by the browser to decide how to show the item
                                // (MOVIE, TVSHOW)
-    num_seasons: Number,       // the number of seasons available to show
+    num_seasons: Number        // the number of seasons available to show
                                // only in the case of Provider.ItemType.TVSHOW
 }
 #+END_SRC
