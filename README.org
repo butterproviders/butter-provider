@@ -4,7 +4,7 @@
 base class for Providers.
 
 A =Provider= in the Butter terminology is an accessor for media content, it
-provides items of type 'movie' or 'show' that can be displayed in a Butter
+provides items of type 'movie' or 'tvshow' that can be displayed in a Butter
 App.
 
 Butter will automatically load any npm package installed (listed in
