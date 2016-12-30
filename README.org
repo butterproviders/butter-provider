@@ -348,8 +348,8 @@ currently =config= will have this shape:
 where to 'hide' the urls you will want to switch on languages switches.
 
 *** (optional) random (void -> (promise) Object)
-return a random =result item= as described in =fetch=
+return a random =result item= as described in =fetch=.
 
 *** (optional) update (void -> (promise) [Object])
 allows Butter to notify the Provider it can update it's internal cache
-(not used)
+(not used).
