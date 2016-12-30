@@ -101,6 +101,7 @@ to call your provider using the =butter.testArgs= key:
     "testArgs": "vodo?urlList=http://butter.vodo.net/popcorn',https://butter.vodo.net/popcorn',http://localhost:8080/popcorn"
   },
 #+END_SRC
+
 ** API
 *** config (Object)
 
@@ -150,11 +151,11 @@ data in subsequent calls (like =detail= or =resolveStream=).
 The fetch method takes in a set of filters that can have the following keys:
 #+BEGIN_SRC javascript
 var filters = {
-    keywords: [String],    // keywords to search for
-    genre: String,         // limit to this genre
+    keywords: [String],          // keywords to search for
+    genre: String,               // limit to this genre
     order: Provider.OrderType,   // sort order (ASC, DESC)
     sorter: Provider.SorterType, // sorter type (NAME, RATING, POPULARITY)
-    limit: Number,         // number of elements to return
+    limit: Number,               // number of elements to return
 }
 #+END_SRC
 
@@ -187,11 +188,13 @@ var result = {
     [uniqueId | 'id']: String, // the unique id
     title: String,             // title of the asset
     year: Number,              // year of release
-    genre: [movie.Genre],      // a free list of genre keywords
+    genres: [String],          // a free list of genre keywords
     rating: Number,            // a 0-100 rating value
-    poster: String,            // url to poster image
+    poster: String,            // url to the poster image
     type: Provider.ItemType    // used by the browser to decide how to show the item
                                // (MOVIE, TVSHOW)
+    num_seasons: Number,       // the number of seasons available to show
+                               // only in the case of Provider.ItemType.TVSHOW
 }
 #+END_SRC
 
@@ -234,17 +237,73 @@ var detail = {
     [uniqueId | 'id']: String, // the unique id
     title: String,             // title of the asset
     year: Number,              // year of release
-    genre: [movie.Genre],      // a free list of genre keywords
+    genres: [String],          // a free list of genre keywords
     rating: Number,            // a 0-100 rating value
-    poster: String,            // url to poster image
+    poster: String,            // url to the poster image
     type: Provider.ItemType    // used by the browser to decide how to show the item
                                // (MOVIE, TVSHOW)
+    num_seasons: Number,       // the number of seasons available to show
+                               // only in the case of Provider.ItemType.TVSHOW
 //--- all of the above is already required by fetch(), new stuff here: ---
-    backdrop: String,          // url of the backdrop image
-    torrents: [Object],        // torrents object
-    subtitle: {String: url},   // language -> url subs mapping
-    trailer: String,           // url of the trailer, formated for butter-streamers
+    runtime: Number,           // the runtime of the item
+    backdrop: String,          // url to the backdrop image
+    subtitle: {url: String},   // language -> url subs mapping
     synopsis: String,          // a short description of the asset
+}
+#+END_SRC
+
+The =Provider.ItemType.MOVIE= has the following additional fields:
+#+BEGIN_SRC
+var detail = {
+//--- including all the fields of the generic detail object
+    torrents: {                       // torrents object
+        [Provider.QualityType]: {     // the quality of the episode
+            filesize: String,         // (optional) human readable size
+            size: Number,             // size in bytes
+            peers: Number,            // the amount of peers
+            seeds: Number,            // the amount of seeds
+            url: String               // the url to the movie to download, formated for butter-streamers
+        }
+    },
+    trailer: String                   // url of the trailer, formated for butter-streamers
+}
+#+END_SRC
+
+With Provider.QualityType being:
+#+BEGIN_SRC javascript
+    DEFAULT                 // The default object to stream
+    LOW                     // 480p quality
+    MEDIUM                  // 720p quality
+    HIGH                    // 1080p quality
+#+END_SRC
+
+The =Provider.ItemType.TVSHOW= also has a few additional fields to include:
+#+BEGIN_SRC
+var detail = {
+//--- including all the fields of the generic detail object
+    status: String,                   // the status of the item
+    episodes: [Object],               // the episodes to display
+}
+#+END_SRC
+
+The =episodes= array will contain the following object:
+#+BEGIN_SRC
+{
+    torrents: {                   // contains the available qualities
+        [Provider.QualityType]: { // the quality of the episode
+          peers: Number,          // the amount of peers
+          seeds: Number,          // the amount of seeds
+          url: String             // the url to the episode to download, formated for butter-streamers
+        }
+    },
+    watched: {
+        watched: Boolean          // indication if an episode has been watched
+    },
+    first_aired: Number,          // epoch time when the episode was first aired
+    overview: String,             // small description of the episode
+    episode: Number,              // episode number of the season
+    season: String,               // season number of the episode
+    tvdb_id: Number               // the tvdb id of the episode
 }
 #+END_SRC
 

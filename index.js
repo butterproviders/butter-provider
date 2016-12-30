@@ -82,6 +82,13 @@ Provider.SorterType = {
     NULL: null
 }
 
+Provider.QualityType = {
+    DEFAULT: '0',
+    LOW: '480p',
+    MEDIUM: '720p',
+    HIGH: '1080p'
+}
+
 function warnDefault(fn, support) {
     console.warn ('you are using the default ' + fn + ' implementation,')
     if (support)

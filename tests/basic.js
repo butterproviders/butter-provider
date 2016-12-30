@@ -19,30 +19,33 @@ function load() {
 }
 
 function testDetail(t, d, uniqueId) {
-  t.ok(d, 'we were able to get details');
-  t.ok(d[uniqueId] || d.id, 'we have an unique id');
-  t.ok(d.title, 'we have a title');
-  t.ok(d.year, 'we have a year');
-  t.ok(d.genre, 'we have a genre field');
-  t.ok(d.genre.length > 0, 'we have at least 1 genre');
-  t.ok(d.rating, 'we have a rating');
-  t.ok(d.poster, 'we have a poster');
-  t.ok(d.backdrop, 'we have a backdrop');
-  t.ok(d.subtitle, 'we have a subtitle');
-  t.ok(d.synopsis, 'we have a synopsis');
+    t.ok(d, 'we were able to get details');
+    t.ok(d[uniqueId] || d.id, 'we have an unique id');
+    t.ok(d.title, 'we have a title');
+    t.ok(d.year, 'we have a year');
+    t.ok(d.genres, 'we have a genres field');
+    t.ok(d.genres.length > 0, 'we have at least 1 genre');
+    t.ok(d.rating, 'we have a rating');
+    t.ok(d.backdrop, 'we have a backdrop');
+    t.ok(d.poster, 'we have a poster');
+    t.ok(d.subtitle, 'we have a subtitle');
+    t.ok(d.synopsis, 'we have a synopsis');
+    t.ok(d.runtime, 'we have a runtime');
 
-  var type = d.type;
-  t.ok(type===Provider.ItemType.MOVIE || type===Provider.ItemType.TVSHOW, 'we have a type field which is an item type');
+    var type = d.type;
+    t.ok(type===Provider.ItemType.MOVIE || type===Provider.ItemType.TVSHOW, 'we have a type field which is an item type');
 
-  if (type === Provider.ItemType.MOVIE) {
-      t.ok(d.trailer, 'we have a trailer');
-      t.ok(d.torrents, 'we have a torrents field');
-  } else if (type===Provider.ItemType.TVSHOW) {
-      t.ok(d.episodes, 'we have an episodes field');
-      t.ok(d.episodes.length > 0, 'we have at least 1 episode');
-  } else {
-      t.notOk(type, 'is not a valid type');
-  }
+    if (type === Provider.ItemType.MOVIE) {
+        t.ok(d.trailer, 'we have a trailer');
+        t.ok(d.torrents, 'we have a torrents field');
+    } else if (type===Provider.ItemType.TVSHOW) {
+        t.ok(d.status, 'we have a status');
+        t.ok(d.num_seasons, 'we have an num_seasons field');
+        t.ok(d.episodes, 'we have an episodes field');
+        t.ok(d.episodes.length > 0, 'we have at least 1 episode');
+    } else {
+        t.notOk(type, 'is not a valid type');
+    }
 }
 
 tape.onFinish(function() {
@@ -61,7 +64,6 @@ tape('loads', function (t) {
     t.ok(I.config.name, 'we have a name');
     t.ok(I.config.uniqueId, 'we have a uniqueId');
     t.ok(I.config.tabName, 'we have a tabName');
-    t.ok(I.config.type, 'we have a type');
 
     t.ok(I.args, 'we have an args object');
 
