@@ -8,7 +8,7 @@ provides items of type 'movie' or 'show' that can be displayed in a Butter
 App.
 
 Butter will automatically load any npm package installed (listed in
-=package.json=) that matches the =/butter-provider-.*/ regex.
+=package.json=) that matches the =/butter-provider-.*/= regex.
 
 * Documentation
 A =Butter Provider= is just a npm package that needs to export a specific
