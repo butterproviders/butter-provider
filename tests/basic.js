@@ -67,7 +67,7 @@ function testDetail(t, d, uniqueId) {
         t.ok(d.episodes[0].tvdb_id, 'we have a tvdb id');
 
         t.ok(d.episodes[0].torrents, 'we have a torrents field');
-        var quality = Object.keys(d.episodes.torrents)[0];
+        var quality = Object.keys(d.episodes[0].torrents)[0];
         t.ok(quality===Provider.QualityType.DEFAULT
             || quality===Provider.QualityType.LOW
             || quality===Provider.QualityType.MEDIUM
