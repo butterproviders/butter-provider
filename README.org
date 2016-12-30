@@ -45,7 +45,7 @@ Then edit your index.js
 ``` javascript
 'use strict';
 
-var ProviderProvider = require('butter-provider');
+var Provider = require('butter-provider');
 var inherits = require('util').inherits;
 
 function Vodo() {
@@ -53,9 +53,9 @@ function Vodo() {
         return new Vodo();
     }
 
-    ProviderProvider.call(this);
+    Provider.call(this);
 }
-inherits(Vodo, ProviderProvider);
+inherits(Vodo, Provider);
 ```
 
 ### Declare a Config object
