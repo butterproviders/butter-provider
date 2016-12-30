@@ -284,7 +284,7 @@ The end goal of these methods is to return `torrents` objects that have the
 following shape:
 
 Note that the 'torrent' name is a bit confusing and really a legacy name, it
-should be called 'ressources'.
+should be called 'resources'.
 
 ``` javascript
 var torrents = {
