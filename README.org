@@ -83,7 +83,7 @@ smarter than us.
 see the API documentation here after for more details
 
 *** Use our generic Tests
-We have tests for you, to get them runing you need to do 2 things,
+We have tests for you, to get them running you need to do 2 things,
 
 first add a devDependency on tape so that you can run the tests:
 #+BEGIN_SRC shell
