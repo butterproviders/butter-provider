@@ -290,7 +290,8 @@ should be called 'ressources'.
 var torrents = {
     [Provider.QualityType]: {     // the quality of the episode
         url: String,              // the resource's url, formated for butter-streamers
-        size: Number,             // (optional) the resource's descriptor size (magnet/torrent/hls playlist)
+        size: Number,             // the resource's descriptor size (magnet/torrent/hls playlist)
+                                  // only for Provider.ItemType.MOVIE
         filesize: String          // (optional) the resource's main video filesize
         peers: Number,            // (optional) number of seeds
         seeds: Number,            // (optional) number of peers
