@@ -41,12 +41,39 @@ function testDetail(t, d, uniqueId) {
 
     if (type === Provider.ItemType.MOVIE) {
         t.ok(d.trailer, 'we have a trailer');
+
         t.ok(d.torrents, 'we have a torrents field');
+        var quality = Object.keys(d.torrents)[0];
+        t.ok(quality===Provider.QualityType.DEFAULT
+            || quality===Provider.QualityType.LOW
+            || quality===Provider.QualityType.MEDIUM
+            || quality===Provider.QualityType.HIGH,
+            'we have a quality which is a quality type');
+        t.ok(d.torrents[quality], 'we have a quality object');
+        t.ok(d.torrents[quality].url, 'we have an url to stream');
+        t.ok(d.torrents[quality].size, 'we have the size');
     } else if (type===Provider.ItemType.TVSHOW) {
         t.ok(d.status, 'we have a status');
         t.ok(d.num_seasons, 'we have an num_seasons field');
         t.ok(d.episodes, 'we have an episodes field');
+
         t.ok(d.episodes.length > 0, 'we have at least 1 episode');
+        t.ok(d.episodes.watched, 'we have a watched field');
+        t.ok(d.episodes.first_aired, 'we have a first aired field');
+        t.ok(d.episodes.overview, 'we have an overview');
+        t.ok(d.episodes.episode, 'we have an episode number');
+        t.ok(d.episodes.season, 'we have a season number');
+        t.ok(d.episodes.tvdb_id, 'we have a tvdb id');
+
+        t.ok(d.episodes.torrents, 'we have a torrents field');
+        var quality = Object.keys(d.episodes.torrents)[0];
+        t.ok(quality===Provider.QualityType.DEFAULT
+            || quality===Provider.QualityType.LOW
+            || quality===Provider.QualityType.MEDIUM
+            || quality===Provider.QualityType.HIGH,
+            'we have a quality which is a quality type');
+        t.ok(d.episodes.torrents[quality], 'we have a quality object');
+        t.ok(d.episodes.torrents[quality].url, 'we have an url to stream');
     } else {
         t.notOk(type, 'is not a valid type');
     }
