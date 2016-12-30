@@ -1,4 +1,4 @@
-#+TITLE: Butter Provider
+Butter Provider
 
 [Butter Project](https://butterproject.org) is a toolkit to build VOD platforms, this component is the
 base class for Providers.
