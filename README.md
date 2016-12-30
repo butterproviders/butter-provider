@@ -5,7 +5,7 @@ base class for Providers.
 
 A `Provider` in the Butter terminology is an accessor for media content, it
 provides items of type 'movie' or 'tvshow' that can be displayed in a Butter
-App.
+app.
 
 Butter will automatically load any npm package installed (listed in
 `package.json`) that matches the `/butter-provider-.*/` regex.
@@ -15,7 +15,7 @@ A `Butter Provider` is just a npm package that needs to export a specific
 API that we describe hereafter.
 
 Note that if you want to use the autoload features in Butter you should name
-your module `butter-provider-${something}`
+your module `butter-provider-${something}`.
 
 ## Writing a Provider
 We provide a base provider in `butter-provider` that we recommend extending,
@@ -25,7 +25,7 @@ speaking it's not required.
 Here we'll be creating a provider for the vodo.net service.
 
 ### Create a npm module
-Create a directory and init an new npm module:
+Create a directory and init a new npm module:
 
 ``` shell
 mkdir butter-provider-vodo
@@ -58,7 +58,7 @@ function Vodo() {
 inherits(Vodo, Provider);
 ```
 
-### Declare a Config object
+### Declare a config object
 
 ``` javascript
 Vodo.prototype.config = {
@@ -80,10 +80,10 @@ You need to supply code for at least `fetch`, other methods like `detail`,
 work in most cases. That said you probably want to implement those too to be
 smarter than us.
 
-See the API documentation here after for more details.
+See the API documentation hereafter for more details.
 
 ### Use our generic Tests
-We have tests for you, to get them running you need to do 2 things,
+We have tests for you, to get them running you need to do 2 things;
 
 First add a devDependency on tape so that you can run the tests:
 ``` shell
@@ -114,7 +114,7 @@ following fields:
 Provider.prototype.config = {
      name: String,     // will be used in logs to refer to your provider
      uniqueId: String, // the name of the field we should use to unify assets
-     tabName: String,  // Will appear as the description of the tab
+     tabName: String,  // will appear as the description of the tab
      args: Object      // (optional) the args this provider supports
      /* legacy: should be removed */
      subtitle: String, // (optional) name of the subtitle provider
@@ -144,7 +144,7 @@ headaches.
 
 ### fetch (Object: filters -> (promise) Object)
 The fetch method is the first called of your provider, it's used to show the
-content when users opens Butter. Keep it small, keep it simple, keep it
+content when users open Butter. Keep it small, keep it simple, keep it
 fast, as load time will depend on performance of fetch. Grab the bare
 minimum of data you need, you'll have other opportunities to enrich that
 data in subsequent calls (like `detail` or `resolveStream`).
@@ -194,7 +194,7 @@ var result = {
     poster: String,            // url to the poster image
     type: Provider.ItemType,   // used by the browser to decide how to show the item
                                // (MOVIE, TVSHOW)
-    num_seasons: Number        // the number of seasons available to show
+    num_seasons: Number        // the number of seasons available to display
                                // only in the case of Provider.ItemType.TVSHOW
 }
 ```
@@ -251,7 +251,7 @@ The `Provider.ItemType.MOVIE` has the following additional fields:
 ``` javascript
 var detail = {
 //--- including all the fields of the generic detail object
-    torrents: {Object},       // torrents object
+    torrents: Object,         // torrents object
     trailer: String           // url of the trailer, formatted for butter-streamers
 }
 ```
@@ -269,7 +269,7 @@ var detail = {
 The `episodes` array will have the following shape:
 ``` javascript
 {
-    torrents: {Object}            // a torrents Object
+    torrents: Object              // a torrents Object
     watched: Boolean              // indication if an episode has been watched
     first_aired: Number,          // epoch time when the episode was first aired
     overview: String,             // small description of the episode
