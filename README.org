@@ -229,7 +229,7 @@ It is important, to split detail and fetch data gets, as it can be heavy on
 your API endpoint to get all those details at once.
 
 Note that the expected shape of detail results are slightly different for
-=Provider.ItemType.MOVIE= and =Provider.ItemType.TVSHOW=
+=Provider.ItemType.MOVIE= and =Provider.ItemType.TVSHOW=.
 
 Note that the default implementation will just return the object untouched,
 you don't need to implement a function like:
