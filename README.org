@@ -267,11 +267,11 @@ following shape:
 #+BEGIN_SRC javascript
 var torrents = {
     [Provider.QualityType]: {     // the quality of the episode
-        filesize: String,         // (optional) human readable size
         size: Number,             // size in bytes
         peers: Number,            // the amount of peers
         seeds: Number,            // the amount of seeds
         url: String               // the url to the movie to download, formated for butter-streamers
+        filesize: String,         // (optional) human readable size
     }
 }
 #+END_SRC
