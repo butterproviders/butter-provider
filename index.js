@@ -58,40 +58,40 @@ var Provider = function (args) {
 };
 
 Provider.DefaultFilters = {
-    genres: [
-        'All',
-        'Action',
-        'Adventure',
-        'Animation',
-        'Biography',
-        'Comedy',
-        'Crime',
-        'Documentary',
-        'Drama',
-        'Family',
-        'Fantasy',
-        'Film-Noir',
-        'History',
-        'Horror',
-        'Music',
-        'Musical',
-        'Mystery',
-        'Romance',
-        'Sci-Fi',
-        'Short',
-        'Sport',
-        'Thriller',
-        'War',
-        'Western'
-    ],
-    sorters: [
-        'popularity',
-        'trending',
-        'last added',
-        'year',
-        'title',
-        'rating'
-    ]
+    genres: {
+        all:         'All',
+        action:      'Action',
+        adventure:   'Adventure',
+        animation:   'Animation',
+        biography:   'Biography',
+        comedy:      'Comedy',
+        crime:       'Crime',
+        documentary: 'Documentary',
+        drama:       'Drama',
+        family:      'Family',
+        fantasy:     'Fantasy',
+        filmNoir:    'Film-Noir',
+        history:     'History',
+        horror:      'Horror',
+        music:       'Music',
+        musical:     'Musical',
+        mystery:     'Mystery',
+        romance:     'Romance',
+        sciFi:       'Sci-Fi',
+        short:       'Short',
+        sport:       'Sport',
+        thriller:    'Thriller',
+        war:         'War',
+        western:     'Western'
+    },
+    sorters: {
+        popularity:  'Popularity',
+        trending:    'Trending',
+        lastAdded:   'Last Added',
+        year:        'Year',
+        title:       'Title',
+        rating:      'Rating'
+    }
 }
 
 Provider.ArgType = {
