@@ -1,51 +1,51 @@
-#+TITLE: Butter Provider
+# Butter Provider
 
-[[https://butterproject.org][Butter Project]] is a toolkit to build VOD platforms, this component is the
+[Butter Project](https://butterproject.org) is a toolkit to build VOD platforms, this component is the
 base class for Providers.
 
-A =Provider= in the Butter terminology is an accessor for media content, it
-provides items of type 'movie' or 'show' that can be displayed in a Butter
-App.
+A `Provider` in the Butter terminology is an accessor for media content, it
+provides items of type 'movie' or 'tvshow' that can be displayed in a Butter
+app.
 
 Butter will automatically load any npm package installed (listed in
-=package.json=) that matches the =/butter-provider-.*/ regex.
+`package.json`) that matches the `/butter-provider-.*/` regex.
 
-* Documentation
-A =Butter Provider= is just a npm package that needs to export a specific
+# Documentation
+A `Butter Provider` is just a npm package that needs to export a specific
 API that we describe hereafter.
 
-note that if you want to use the autoload features in butter you should name
-your module =butter-provider-${something}=
+Note that if you want to use the autoload features in Butter you should name
+your module `butter-provider-${something}`.
 
-** Writting a Provider
-We provide a base provider in =butter-provider= that we recomend extending,
+## Writing a Provider
+We provide a base provider in `butter-provider` that we recommend extending,
 it handles caching and a few other bootstrapping quirks, but formally
 speaking it's not required.
 
 Here we'll be creating a provider for the vodo.net service.
 
-*** Create a npm module
-create a directory and init an new npm module:
+### Create a npm module
+Create a directory and init a new npm module:
 
-#+BEGIN_SRC shell
+``` shell
 mkdir butter-provider-vodo
 cd butter-provider-vodo
 npm init
-#+END_SRC
+```
 
-*** Depend on butter-provider
-first install the npm module and add it as a dependency
+### Depend on butter-provider
+First install the npm module and add it as a dependency.
 
-#+BEGIN_SRC shell
+``` shell
 npm i --save butter-provider
-#+END_SRC
+```
 
-then edit your index.js
+Then edit your `index.js`.
 
-#+BEGIN_SRC javascript
+``` javascript
 'use strict';
 
-var ProviderProvider = require('butter-provider');
+var Provider = require('butter-provider');
 var inherits = require('util').inherits;
 
 function Vodo() {
@@ -53,14 +53,14 @@ function Vodo() {
         return new Vodo();
     }
 
-    ProviderProvider.call(this);
+    Provider.call(this);
 }
-inherits(Vodo, ProviderProvider);
-#+END_SRC
+inherits(Vodo, Provider);
+```
 
-*** Declare a Config object
+### Declare a config object
 
-#+BEGIN_SRC javascript
+``` javascript
 Vodo.prototype.config = {
     name: 'vodo',
     uniqueId: 'imdb_id',
@@ -72,27 +72,27 @@ Vodo.prototype.config = {
     // subtitle: 'ysubs',
     // metadata: 'trakttv:movie-metadata'
 };
-#+END_SRC
+```
 
-*** Implement required Methods
-You need to supply code for at least =fetch=, other methods like =detail=,
-=extractIds= and =resolveStream= have default implementations that should
+### Implement required Methods
+You need to supply code for at least `fetch`, other methods like `detail`,
+`extractIds` and `resolveStream` have default implementations that should
 work in most cases. That said you probably want to implement those too to be
 smarter than us.
 
-see the API documentation here after for more details
+See the API documentation hereafter for more details.
 
-*** Use our generic Tests
-We have tests for you, to get them runing you need to do 2 things,
+### Use our generic Tests
+We have tests for you, to get them running you need to do 2 things;
 
-first add a devDependency on tape so that you can run the tests:
-#+BEGIN_SRC shell
-npm i --save-dev tape
-#+END_SRC
+First add a devDependency on tape and debug so that you can run the tests:
+``` shell
+npm i --save-dev tape debug
+```
 
-then you need to tell npm what to run on =npm test=, and tell the tests how
-to call your provider using the =butter.testArgs= key:
-#+BEGIN_SRC javascript
+Then you need to tell npm what to run on `npm test`, and tell the tests how
+to call your provider using the `butter.testArgs` key:
+``` javascript
   "scripts": {
     "test": "tape ./node_modules/butter-provider/tests/*"
   },
@@ -100,56 +100,57 @@ to call your provider using the =butter.testArgs= key:
     "timeout": 20000,
     "testArgs": "vodo?urlList=http://butter.vodo.net/popcorn',https://butter.vodo.net/popcorn',http://localhost:8080/popcorn"
   },
-#+END_SRC
+```
 
-** API
-*** config (Object)
+## API
 
-The config  object should be attached to the prototype (i.e. use
-the =Provider.prototype.config = {}= syntax), and it should have the
+### config (Object)
+
+The config object should be attached to the prototype (i.e. use
+the `Provider.prototype.config = {}` syntax), and it should have the
 following fields:
 
-#+BEGIN_SRC javascript
+``` javascript
 Provider.prototype.config = {
      name: String,     // will be used in logs to refer to your provider
      uniqueId: String, // the name of the field we should use to unify assets
-     tabName: String,  // Will appear as the description of the tab
+     tabName: String,  // will appear as the description of the tab
      args: Object      // (optional) the args this provider supports
      /* legacy: should be removed */
      subtitle: String, // (optional) name of the subtitle provider
      metadata: String  // (optional) name of the metadata provider
 }
-#+END_SRC
+```
 
-**** args
-the args object is a mapping between arg names and =Provider.ArgType= types,
+#### args
+The args object is a mapping between arg names and `Provider.ArgType` types,
 currently these are the supported values:
 
-#+BEGIN_SRC javascript
+``` javascript
     Provider.ArgType.ARRAY,   // expects a string of values separated by ','
     Provider.ArgType.OBJECT,  // expects a string of json (JSON.parse)
     Provider.ArgType.BOOLEAN, // expects a string that evaluates to a boolean
     Provider.ArgType.NUMBER,  // expects a string that can be passed to Number()
     Provider.ArgType.STRING,  // expects a string
-#+END_SRC
+```
 
-these types will be automatically instanciated into the =args= property of
-the created class, in the long run, there will be UI in butter to modify
+These types will be automatically instanciated into the `args` property of
+the created class, in the long run, there will be UI in Butter to modify
 those declared args from the settings panels.
 
 It is not required that you use this mechanism (i.e. you can parse your args
 as you please in your butter-provider) but it will sure save you some
 headaches.
 
-*** fetch (Object: filters -> (promise) Object)
+### fetch (Object: filters -> (promise) Object)
 The fetch method is the first called of your provider, it's used to show the
-content when users open the App. Keep it small, keep it simple, keep it
+content when users open Butter. Keep it small, keep it simple, keep it
 fast, as load time will depend on performance of fetch. Grab the bare
 minimum of data you need, you'll have other opportunities to enrich that
-data in subsequent calls (like =detail= or =resolveStream=).
+data in subsequent calls (like `detail` or `resolveStream`).
 
 The fetch method takes in a set of filters that can have the following keys:
-#+BEGIN_SRC javascript
+``` javascript
 var filters = {
     keywords: [String],          // keywords to search for
     genre: String,               // limit to this genre
@@ -157,33 +158,33 @@ var filters = {
     sorter: Provider.SorterType, // sorter type (NAME, RATING, POPULARITY)
     limit: Number,               // number of elements to return
 }
-#+END_SRC
+```
 
 with Provider.OrderType being:
-#+BEGIN_SRC javascript
+``` javascript
     Provider.Ordertype.ASC,    // items are sorted in ascending order
     Provider.Ordertype.DESC,   // items are sorted in descending order
     Provider.OrderType.NULL    // items are not sorted
-#+END_SRC
+```
 
 with Provider.SorterType being:
-#+BEGIN_SRC javascript
+``` javascript
     Provider.Sortertype.NAME,        // items are sorted by name
     Provider.Sortertype.RATING,      // items are sorted by rating
     Provider.Sortertype.POPULARITY,  // items are sorted by popularity
     Provider.SorterType.NULL         // items are not sorted
-#+END_SRC
+```
 
 The fetch method returns a promise that resolves to an object of the shape:
-#+BEGIN_SRC javascript
+``` javascript
 var fetchReturn = {
     results: [Object],  // returned result items
     hasMore: Boolean    // can the provider get more results ?
 }
-#+END_SRC
+```
 
 The results items can have any shape but are required to have at least:
-#+BEGIN_SRC javascript
+``` javascript
 var result = {
     [uniqueId | 'id']: String, // the unique id
     title: String,             // title of the asset
@@ -191,56 +192,41 @@ var result = {
     genres: [String],          // a free list of genre keywords
     rating: Number,            // a 0-100 rating value
     poster: String,            // url to the poster image
-    type: Provider.ItemType    // used by the browser to decide how to show the item
+    type: Provider.ItemType,   // used by the browser to decide how to show the item
                                // (MOVIE, TVSHOW)
-    num_seasons: Number,       // the number of seasons available to show
+    num_seasons: Number        // the number of seasons available to display
                                // only in the case of Provider.ItemType.TVSHOW
 }
-#+END_SRC
+```
 
 Provider.ItemType can be one of:
-#+BEGIN_SRC javascript
-    Provider.ItemType.MOVIE,  // item is a Movie, it has only 1 item
-    Provider.ItemType.TVSHOW  // item is a TvShow, it has many elements,
-                              // list of seasons that have a list of episodes.
-#+END_SRC
+``` javascript
+    Provider.ItemType.MOVIE,  // item is a Movie
+    Provider.ItemType.TVSHOW  // item is a TvShow
+```
 
-each torrent object has the following shape:
-note: the 'torrent' name is a bit confusing and really a legacy name, it
-should be called 'ressources'
-
-#+BEGIN_SRC javascript
-var torrent = {
-   url: String,      // The resource's url, formated for butter-streamers
-   size: Number,     // The resource's descriptor size (magnet/torrent/hls playlist)
-   filesize: Number, // The resource's main video filesize
-   seed: Number,     // (optional) number of seeds
-   peer: Number      // (optional) number of peers
-}
-#+END_SRC
-
-*** detail (String: id, Object old_data -> (promise) Object)
+### detail (String: id, Object old_data -> (promise) Object)
 The detail method allows you to fetch more metadata from your API when
 presenting a specific asset, it returns a result object as described in
-=fetch=, and takes the id and the data returned by previous =fetch= calls as
+`fetch`, and takes the id and the data returned by previous `fetch` calls as
 an argument.
 
 It is important, to split detail and fetch data gets, as it can be heavy on
 your API endpoint to get all those details at once.
 
 Note that the expected shape of detail results are slightly different for
-=Provider.ItemType.MOVIE= and =Provider.ItemType.TVSHOW=
+`Provider.ItemType.MOVIE` and `Provider.ItemType.TVSHOW`.
 
 Note that the default implementation will just return the object untouched,
 you don't need to implement a function like:
-#+BEGIN_SRC javascript
+``` javascript
 Provider.prototype.detail = function (torrent_id, old_data) {
     return Q(old_data);
 };
-#+END_SRC
+```
 
 The required info is:
-#+BEGIN_SRC javascript
+``` javascript
 var detail = {
     [uniqueId | 'id']: String, // the unique id
     title: String,             // title of the asset
@@ -258,56 +244,32 @@ var detail = {
     subtitle: {url: String},   // language -> url subs mapping
     synopsis: String,          // a short description of the asset
 }
-#+END_SRC
+```
 
-**** torrents Object
-The end goal of these methods is to return =torrents= objects that have the
-following shape:
-
-#+BEGIN_SRC javascript
-var torrents = {
-    [Provider.QualityType]: {     // the quality of the episode
-        size: Number,             // size in bytes
-        peers: Number,            // the amount of peers
-        seeds: Number,            // the amount of seeds
-        url: String               // the url to the movie to download, formated for butter-streamers
-        filesize: String,         // (optional) human readable size
-    }
-}
-#+END_SRC
-
-With Provider.QualityType being:
-#+BEGIN_SRC javascript
-    Provider.QualityType.DEFAULT   // The default object to stream
-    Provider.QualityType.LOW       // 480p quality
-    Provider.QualityType.MEDIUM    // 720p quality
-    Provider.QualityType.HIGH      // 1080p quality
-#+END_SRC
-
-**** =Provider.ItemType.MOVIE=
-The =Provider.ItemType.MOVIE= has the following additional fields:
-#+BEGIN_SRC javascript
+#### `Provider.ItemType.MOVIE`
+The `Provider.ItemType.MOVIE` has the following additional fields:
+``` javascript
 var detail = {
 //--- including all the fields of the generic detail object
-    torrents: {Object},       // torrents object
-    trailer: String           // url of the trailer, formated for butter-streamers
+    torrents: Object,         // torrents object
+    trailer: String           // url of the trailer, formatted for butter-streamers
 }
-#+END_SRC
+```
 
-**** =Provder.ItemType.TVSHOW=
-The =Provider.ItemType.TVSHOW= also has a few additional fields to include:
-#+BEGIN_SRC javascript
+#### `Provder.ItemType.TVSHOW`
+The `Provider.ItemType.TVSHOW` also has a few additional fields to include:
+``` javascript
 var detail = {
 //--- including all the fields of the generic detail object
     status: String,              // the status of the item
     episodes: [Object],          // the episodes to display
 }
-#+END_SRC
+```
 
-The =episodes= array will have the following shape:
-#+BEGIN_SRC javascript
+The `episodes` array will have the following shape:
+``` javascript
 {
-    torrents: {Object}            // a torrents Object
+    torrents: Object              // a torrents Object
     watched: Boolean              // indication if an episode has been watched
     first_aired: Number,          // epoch time when the episode was first aired
     overview: String,             // small description of the episode
@@ -315,41 +277,69 @@ The =episodes= array will have the following shape:
     season: String,               // season number of the episode
     tvdb_id: Number               // the tvdb id of the episode
 }
-#+END_SRC
+```
 
-*** extractIds ([Object]: items -> [String])
+#### torrents Object
+The end goal of these methods is to return `torrents` objects that have the
+following shape:
+
+Note that the 'torrent' name is a bit confusing and really a legacy name, it
+should be called 'resources'.
+
+``` javascript
+var torrents = {
+    [Provider.QualityType]: {     // the quality of the episode
+        url: String,              // the resource's url, formatted for butter-streamers
+        size: Number,             // the resource's descriptor size (magnet/torrent/hls playlist)
+                                  // only for Provider.ItemType.MOVIE
+        filesize: String          // (optional) the resource's main video filesize
+        peers: Number,            // (optional) number of seeds
+        seeds: Number,            // (optional) number of peers
+    }
+}
+```
+
+With Provider.QualityType being:
+``` javascript
+    Provider.QualityType.DEFAULT   // The default object to stream
+    Provider.QualityType.LOW       // 480p quality
+    Provider.QualityType.MEDIUM    // 720p quality
+    Provider.QualityType.HIGH      // 1080p quality
+```
+
+### extractIds ([Object]: items -> [String])
 This method is used to keep a cache of the content in a Butter app. The
 generic implementation is:
 
-#+BEGIN_SRC javascript
+``` javascript
 Provider.prototype.extractIds = function (items) {
     return _.pluck(items.results, this.config.uniqueId);
 };
-#+END_SRC
+```
 
-*** (optional) resolveStream (src, config, data -> (promise) String)
+### (optional) resolveStream (src, config, data -> (promise) String)
 This method is used to let the provider decide what the end url should be
-acording to some config passed by the apps. It's main purpose is to allow
+according to some config passed by the apps. It's main purpose is to allow
 the selection of different languages, but in the future it may allow for
 deeper customizations (as for instance choosing a streaming technology).
 
-the default handler will just return =src= that is the legacy value
-providers are required to return in =fetch= and =details= for torrent data.
+The default handler will just return `src` that is the legacy value
+providers are required to return in `fetch` and `details` for torrent data.
 
-currently =config= will have this shape:
-#+BEGIN_SRC javascript
+Currently `config` will have this shape:
+``` javascript
 {
-   audio: String,
+  audio: String,
 }
-#+END_SRC
+```
 
-=data= will be whatever data was returned from the latest =fetch= or
-=details= for the current media, it is given raw so that you can control
+`data` will be whatever data was returned from the latest `fetch` or
+`details` for the current media, it is given raw so that you can control
 where to 'hide' the urls you will want to switch on languages switches.
 
-*** (optional) random (void -> (promise) Object)
-return a random =result item= as described in =fetch=
+### (optional) random (void -> (promise) Object)
+Returns a random `result item` as described in `detail`.
 
-*** (optional) update (void -> (promise) [Object])
-allows Butter to notify the Provider it can update it's internal cache
-(not used)
+### (optional) update (void -> (promise) [Object])
+Allows to notify the Provider it can update it's internal cache
+(not used).
