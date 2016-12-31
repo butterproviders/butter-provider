@@ -112,15 +112,38 @@ following fields:
 
 ``` javascript
 Provider.prototype.config = {
-     name: String,     // will be used in logs to refer to your provider
-     uniqueId: String, // the name of the field we should use to unify assets
-     tabName: String,  // will appear as the description of the tab
-     args: Object      // (optional) the args this provider supports
+     name: String,      // will be used in logs to refer to your provider
+     uniqueId: String,  // the name of the field we should use to unify assets
+     tabName: String,   // will appear as the description of the tab
+     filters: [Object], // (optional) a list of the filters supported,
+                        // see the documentation below
+     args: Object       // (optional) the args this provider supports
      /* legacy: should be removed */
-     subtitle: String, // (optional) name of the subtitle provider
-     metadata: String  // (optional) name of the metadata provider
+     subtitle: String,  // (optional) name of the subtitle provider
+     metadata: String   // (optional) name of the metadata provider
 }
 ```
+
+#### filters
+The filters object is a collection of mappings between filter-keys and their
+pretty-printed version in the app. They are used to limit the content in the
+list view and are passed back to `fetch()` when modified.
+
+the filters object is of the shape:
+``` javascript
+var filters = {
+    [filterType]: {key: name}
+}
+```
+
+We currently support 3 `filterTypes`:
+ - `genres`
+ - `sorters`
+ - `types` (optional)
+
+`Provider.DefaultFilters` has definitions for genres and sorters that will
+be used if none are provided.
+
 
 #### args
 The args object is a mapping between arg names and `Provider.ArgType` types,

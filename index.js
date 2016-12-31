@@ -49,12 +49,50 @@ var Provider = function (args) {
     };
 
     this.args = assign({}, this.args, processArgs(config, args))
+    this.filters = assign({}, Provider.DefaultFilters, config.filters)
 
     this.memfetch = memoize(this.fetch.bind(this), memopts);
     this.fetch = this._fetch.bind(this);
 
     this.detail = memoize(this.detail.bind(this), memopts);
 };
+
+Provider.DefaultFilters = {
+    genres: [
+        'All',
+        'Action',
+        'Adventure',
+        'Animation',
+        'Biography',
+        'Comedy',
+        'Crime',
+        'Documentary',
+        'Drama',
+        'Family',
+        'Fantasy',
+        'Film-Noir',
+        'History',
+        'Horror',
+        'Music',
+        'Musical',
+        'Mystery',
+        'Romance',
+        'Sci-Fi',
+        'Short',
+        'Sport',
+        'Thriller',
+        'War',
+        'Western'
+    ],
+    sorters: [
+        'popularity',
+        'trending',
+        'last added',
+        'year',
+        'title',
+        'rating'
+    ]
+}
 
 Provider.ArgType = {
     ARRAY:   'BUTTER_PROVIDER_ARG_TYPE_ARRAY',
