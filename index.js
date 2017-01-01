@@ -11,23 +11,27 @@ var processArgs = function (config, args) {
         }
 
         console.log ('processing', k)
-        switch (config.args[k]) {
-        case Provider.ArgType.NUMBER:
-            newArgs[k] = Number(args[k])
-            break;
-        case Provider.ArgType.ARRAY:
-            newArgs[k] = JSON.Parse(args[k]);
-            break;
-        case Provider.ArgType.OBJECT:
-            newArgs[k] = JSON.Parse(args[k]);
-            break;
-        case Provider.ArgType.BOOLEAN:
-            newArgs[k] = !!args[k];
-            break;
-        case Provider.ArgType.STRING:
-        default:
-            newArgs[k] = args[k]
-            break;
+        try {
+            switch (config.args[k]) {
+            case Provider.ArgType.NUMBER:
+                newArgs[k] = Number(args[k])
+                break;
+            case Provider.ArgType.ARRAY:
+                newArgs[k] = JSON.parse(args[k]);
+                break;
+            case Provider.ArgType.OBJECT:
+                newArgs[k] = JSON.parse(args[k]);
+                break;
+            case Provider.ArgType.BOOLEAN:
+                newArgs[k] = !!args[k];
+                break;
+            case Provider.ArgType.STRING:
+            default:
+                newArgs[k] = args[k]
+                break;
+            }
+        } catch(e) {
+            console.error("Error Parsing args", args, k, e)
         }
     })
 
