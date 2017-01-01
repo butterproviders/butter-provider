@@ -16,7 +16,7 @@ var processArgs = function (config, args) {
             newArgs[k] = Number(args[k])
             break;
         case Provider.ArgType.ARRAY:
-            newArgs[k] = args[k].split(',');
+            newArgs[k] = JSON.Parse(args[k]);
             break;
         case Provider.ArgType.OBJECT:
             newArgs[k] = JSON.Parse(args[k]);
