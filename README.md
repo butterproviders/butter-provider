@@ -54,6 +54,7 @@ function Vodo() {
     }
 
     Provider.call(this);
+    this.apiUrl = this.args.urlList
 }
 inherits(Vodo, Provider);
 ```
@@ -65,6 +66,9 @@ Vodo.prototype.config = {
     name: 'vodo',
     uniqueId: 'imdb_id',
     tabName: 'Vodo',
+    defaults: {
+        urlList: ['http://butter.vodo.net/popcorn']
+    },
     args: {
        urlList: Provider.ArgTypes.ARRAY
     }
@@ -118,6 +122,7 @@ Provider.prototype.config = {
      filters: [Object], // (optional) a list of the filters supported,
                         // see the documentation below
      args: Object       // (optional) the args this provider supports
+     defaults: Object   // (optional) default values for the args object
      /* legacy: should be removed */
      subtitle: String,  // (optional) name of the subtitle provider
      metadata: String   // (optional) name of the metadata provider
@@ -146,7 +151,7 @@ be used if none are provided.
 
 
 #### args
-The args object is a mapping between arg names and `Provider.ArgType` types,
+The `args` object is a mapping between arg names and `Provider.ArgType` types,
 currently these are the supported values:
 
 ``` javascript
@@ -164,6 +169,14 @@ those declared args from the settings panels.
 It is not required that you use this mechanism (i.e. you can parse your args
 as you please in your butter-provider) but it will sure save you some
 headaches.
+
+#### defaults
+You can provide default values for the `args` object. Any JavaScript Object
+will do.
+
+Note that while we currently do not do type checking on those we may very
+well start doing so in the future, so make sure the default you provide maps
+the `Provider.ArgType` for that element.
 
 ### fetch (Object: filters -> (promise) Object)
 The fetch method is the first called of your provider, it's used to show the

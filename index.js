@@ -35,7 +35,7 @@ var processArgs = function (config, args) {
         }
     })
 
-    return newArgs
+    return assign({}, config.defaults, newArgs);
 }
 
 var Provider = function (args) {
