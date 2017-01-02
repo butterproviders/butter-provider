@@ -22,6 +22,13 @@ function load() {
     return require(process.cwd());
 }
 
+function isInValues(element, set) {
+    for (var k in Object.keys(set)) {
+        if (element === set[k]) return true
+    }
+    return false;
+}
+
 function testDetail(t, d, uniqueId) {
     t.ok(d, 'we were able to get details');
     t.ok(d[uniqueId] || d.id, 'we have an unique id');
@@ -37,17 +44,14 @@ function testDetail(t, d, uniqueId) {
     t.ok(d.runtime, 'we have a runtime');
 
     var type = d.type;
-    t.ok(type===Provider.ItemType.MOVIE || type===Provider.ItemType.TVSHOW, 'we have a type field which is an item type');
+    t.ok(isInValues(type, Provider.ItemType), 'we have a type field which is an item type');
 
     if (type === Provider.ItemType.MOVIE) {
         t.ok(d.trailer, 'we have a trailer');
 
         t.ok(d.torrents, 'we have a torrents field');
         var quality = Object.keys(d.torrents)[0];
-        t.ok(quality===Provider.QualityType.DEFAULT
-            || quality===Provider.QualityType.LOW
-            || quality===Provider.QualityType.MEDIUM
-            || quality===Provider.QualityType.HIGH,
+        t.ok(isInValues(quality, Provider.QualityType),
             'we have a quality which is a quality type');
         t.ok(d.torrents[quality], 'we have a quality object');
         t.ok(d.torrents[quality].url, 'we have an url to stream');
@@ -68,10 +72,7 @@ function testDetail(t, d, uniqueId) {
 
         t.ok(d.episodes[0].torrents, 'we have a torrents field');
         var quality = Object.keys(d.episodes[0].torrents)[0];
-        t.ok(quality===Provider.QualityType.DEFAULT
-            || quality===Provider.QualityType.LOW
-            || quality===Provider.QualityType.MEDIUM
-            || quality===Provider.QualityType.HIGH,
+        t.ok(isInValues (quality, Provider.QualityType),
             'we have a quality which is a quality type');
         t.ok(d.episodes[0].torrents[quality], 'we have a quality object');
         t.ok(d.episodes[0].torrents[quality].url, 'we have an url to stream');
