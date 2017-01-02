@@ -2,40 +2,57 @@ var assign = Object.assign || require('es6-object-assign').assign;
 var memoize = require('memoizee');
 var _ = require('lodash')
 
+var parseArgForType = function (type, arg) {
+    try {
+        switch (type) {
+        case Provider.ArgType.NUMBER:
+            return Number(arg)
+            break;
+        case Provider.ArgType.ARRAY:
+            return JSON.parse(arg);
+            break;
+        case Provider.ArgType.OBJECT:
+            return JSON.parse(arg);
+            break;
+        case Provider.ArgType.BOOLEAN:
+            return !!arg;
+            break;
+        case Provider.ArgType.STRING:
+        default:
+            return arg
+            break;
+        }
+    } catch(e) {
+        console.error("Error Parsing args", args, k, e)
+    }
+}
+
+var parseArgs = function (config, uri) {
+    var tokenize = uri.split('?');
+
+    // XXX:reimplement querystring.parse to not escape
+    var args = {}
+    tokenize[1] && tokenize[1].split('&').map(function (v){
+        var m = v.split('=')
+        args[m[0]]= parseArgForType(config[m[0]], m[1])
+    })
+
+    return args;
+}
+
 var processArgs = function (config, args) {
-    var newArgs = {}
+    if (typeof(args) === 'string') { // we got a URI
+        args = parseArgs(config, args);
+    }
+
     Object.keys(config.args).map(function(k) {
         if (! args || ! args[k]) {
             console.error ('value', k, 'was not provided')
             return;
         }
-
-        console.log ('processing', k)
-        try {
-            switch (config.args[k]) {
-            case Provider.ArgType.NUMBER:
-                newArgs[k] = Number(args[k])
-                break;
-            case Provider.ArgType.ARRAY:
-                newArgs[k] = JSON.parse(args[k]);
-                break;
-            case Provider.ArgType.OBJECT:
-                newArgs[k] = JSON.parse(args[k]);
-                break;
-            case Provider.ArgType.BOOLEAN:
-                newArgs[k] = !!args[k];
-                break;
-            case Provider.ArgType.STRING:
-            default:
-                newArgs[k] = args[k]
-                break;
-            }
-        } catch(e) {
-            console.error("Error Parsing args", args, k, e)
-        }
     })
 
-    return assign({}, config.defaults, newArgs);
+    return assign({}, config.defaults, args);
 }
 
 var Provider = function (args) {
@@ -172,21 +189,5 @@ Provider.prototype._fetch = function (filters) {
 Provider.prototype.toString = function (arg) {
     return JSON.stringify(this);
 };
-
-Provider.prototype.parseArgs = function (name) {
-    var tokenize = name.split('?');
-
-    // XXX:reimplement querystring.parse to not escape
-    var args = {}
-    tokenize[1] && tokenize[1].split('&').map(function (v){
-        var m = v.split('=')
-        args[m[0]]= m[1]
-    })
-
-    return {
-        name: tokenize[0],
-        args: args
-    }
-}
 
 module.exports = Provider

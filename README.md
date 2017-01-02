@@ -102,7 +102,11 @@ to call your provider using the `butter.testArgs` key:
   },
   "butter": {
     "timeout": 20000,
-    "testArgs": "vodo?urlList=http://butter.vodo.net/popcorn',https://butter.vodo.net/popcorn',http://localhost:8080/popcorn"
+    "testArgs": "vodo?urlList=[ \
+        \"http://butter.vodo.net/popcorn\",  \
+        \"https://butter.vodo.net/popcorn\", \
+        \"http://localhost:8080/popcorn\"    \
+    ]"
   },
 ```
 
@@ -121,8 +125,8 @@ Provider.prototype.config = {
      tabName: String,   // will appear as the description of the tab
      filters: [Object], // (optional) a list of the filters supported,
                         // see the documentation below
-     args: Object       // (optional) the args this provider supports
-     defaults: Object   // (optional) default values for the args object
+     args: Object || String, // (optional) the args this provider supports
+     defaults: Object,  // (optional) default values for the args object
      /* legacy: should be removed */
      subtitle: String,  // (optional) name of the subtitle provider
      metadata: String   // (optional) name of the metadata provider
@@ -155,7 +159,7 @@ The `args` object is a mapping between arg names and `Provider.ArgType` types,
 currently these are the supported values:
 
 ``` javascript
-    Provider.ArgType.ARRAY,   // expects a string of values separated by ','
+    Provider.ArgType.ARRAY,   // expects a string of values separated by ',' (JSON.parse)
     Provider.ArgType.OBJECT,  // expects a string of json (JSON.parse)
     Provider.ArgType.BOOLEAN, // expects a string that evaluates to a boolean
     Provider.ArgType.NUMBER,  // expects a string that can be passed to Number()
@@ -169,6 +173,19 @@ those declared args from the settings panels.
 It is not required that you use this mechanism (i.e. you can parse your args
 as you please in your butter-provider) but it will sure save you some
 headaches.
+
+Note that it can be a string in the `uri` form, we will then split it with
+`querystring.parse` and convert it according to the right
+`Provider.ArgType`, this is the mechanism that is in use when you pass this
+kind of queries:
+
+``` javascript
+    vodo?urlList=[ \
+        "http://butter.vodo.net/popcorn",  \
+        "https://butter.vodo.net/popcorn", \
+        "http://localhost:8080/popcorn"    \
+    ]
+```
 
 #### defaults
 You can provide default values for the `args` object. Any JavaScript Object
