@@ -15,9 +15,14 @@ if (pkg.butter) {
 }
 
 function load() {
+    return require(process.cwd());
+}
+
+function instanciate() {
+    var P = load();
     var testArgs = pkg.butter?pkg.butter.testArgs:null;
 
-    return require(process.cwd(testArgs));
+    return new P(testArgs);
 }
 
 function isInValues(element, set) {
@@ -88,7 +93,7 @@ tape('loads', function (t) {
 
     t.ok(P, 'we were able to load');
 
-    var I = new P(config.args);
+    var I = instanciate();
 
     t.ok(I, 'we were able to instanciate');
 
@@ -105,8 +110,7 @@ tape('fetch', function (t) {
     debug('fetch, timeout', config.timeout);
     t.timeoutAfter(config.timeout);
 
-    var P = load();
-    var I = new P(config.args);
+    var I = instanciate();
 
     I.fetch().then(function (r) {
         debug ('fetch', r);
@@ -133,8 +137,7 @@ tape('random', function (t) {
     debug('random, timeout', config.timeout);
     t.timeoutAfter(config.timeout);
 
-    var P = load();
-    var I = new P(config.args);
+    var I = instanciate();
 
     I.random().then(function (r) {
         debug ('random', r);
