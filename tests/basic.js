@@ -11,15 +11,13 @@ var config = {
 };
 
 if (pkg.butter) {
-    if (pkg.butter.testArgs) {
-        config.args = Object.assign({}, config.args, Provider.prototype.parseArgs(pkg.butter.testArgs).args);
-    }
-
     config = Object.assign({}, config, pkg.butter);
 }
 
 function load() {
-    return require(process.cwd());
+    var testArgs = pkg.butter?pkg.butter.testArgs:null;
+
+    return require(process.cwd(testArgs));
 }
 
 function isInValues(element, set) {
