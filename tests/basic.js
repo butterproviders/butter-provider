@@ -24,7 +24,7 @@ function load() {
 
 function isInValues(element, set) {
     for (var k in Object.keys(set)) {
-        if (element === set[k]) return true
+        if (element === set[k]) return true;
     }
     return false;
 }
