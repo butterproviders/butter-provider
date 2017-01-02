@@ -72,7 +72,7 @@ function testDetail(t, d, uniqueId) {
 
         t.ok(d.episodes[0].torrents, 'we have a torrents field');
         var quality = Object.keys(d.episodes[0].torrents)[0];
-        t.ok(isInValues (quality, Provider.QualityType),
+        t.ok(isInValues(quality, Provider.QualityType),
             'we have a quality which is a quality type');
         t.ok(d.episodes[0].torrents[quality], 'we have a quality object');
         t.ok(d.episodes[0].torrents[quality].url, 'we have an url to stream');
