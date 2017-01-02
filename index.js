@@ -30,11 +30,14 @@ var parseArgForType = function (type, arg) {
 var parseArgs = function (config, uri) {
     var tokenize = uri.split('?');
 
+    config = config || {args: {}};
+    config.args = config.args || {};
+
     // XXX:reimplement querystring.parse to not escape
     var args = {}
     tokenize[1] && tokenize[1].split('&').map(function (v){
         var m = v.split('=')
-        args[m[0]]= parseArgForType(config[m[0]], m[1])
+        args[m[0]]= parseArgForType(config.args[m[0]], m[1])
     })
 
     return args;
