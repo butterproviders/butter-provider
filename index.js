@@ -180,6 +180,11 @@ Provider.prototype.extractIds = function (items) {
     return _.map(items.results, this.config.uniqueId)
 }
 
+Provider.prototype.detail = function (id, old_data) {
+    warnDefault('detail', 'better performing fetch and detail calls');
+    return Promise.resolve(old_data);
+}
+
 Provider.prototype._fetch = function (filters) {
     filters = filters || {}
     filters.toString = this.toString;
