@@ -26,10 +26,9 @@ function instanciate() {
 }
 
 function isInValues(element, set) {
-    for (var k in Object.keys(set)) {
-        if (element === set[k]) return true;
-    }
-    return false;
+    return Object.keys(set).reduce(function (a, c) {
+        return a || (element === set[c]);
+    });
 }
 
 function testDetail(t, d, uniqueId) {
