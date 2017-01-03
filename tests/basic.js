@@ -32,6 +32,7 @@ function isInValues(element, set) {
 }
 
 function testDetail(t, d, uniqueId) {
+    console.log('checking details for', d, uniqueId);
     t.ok(d, 'we were able to get details');
     t.ok(d[uniqueId] || d.id, 'we have an unique id');
     t.ok(d.title, 'we have a title');
