@@ -26,10 +26,14 @@ function instanciate() {
 }
 
 function isInValues(element, set) {
-    for (var k in Object.keys(set)) {
-        if (element === set[k]) return true;
-    }
-    return false;
+    var result = false;
+    Object.keys(set).map(function (k) {
+        if (element === set[k]) {
+            result = true;
+            return;
+        }
+    });
+    return result;
 }
 
 function testDetail(t, d, uniqueId) {
