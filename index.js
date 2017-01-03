@@ -168,8 +168,11 @@ Provider.prototype.resolveStream = function (src, config, data) {
 
 Provider.prototype.random = function () {
     warnDefault('random', 'faster random');
+    var uniqueId = this.config.uniqueId
+    var detail = this.detail.bind(this);
     return this.fetch.apply(this)
         .then(function (data) {return randomArray(data.results)})
+        .then(function (data) {return detail(data[uniqueId], data)});
 }
 
 Provider.prototype.extractIds = function (items) {
