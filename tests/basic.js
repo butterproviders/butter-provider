@@ -71,7 +71,7 @@ function testDetail(t, d, uniqueId) {
             'we have a watched field that is a boolean');
         t.ok(d.episodes[0].first_aired, 'we have a first aired field');
         t.ok(d.episodes[0].overview, 'we have an overview');
-        t.ok(d.episodes[0].episode, 'we have an episode number');
+        t.ok(isFinite(d.episodes[0].episode), 'we have an episode number');
         t.ok(d.episodes[0].season, 'we have a season number');
         t.ok(d.episodes[0].tvdb_id, 'we have a tvdb id');
 
