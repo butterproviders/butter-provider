@@ -2,36 +2,60 @@ var assign = Object.assign || require('es6-object-assign').assign;
 var memoize = require('memoizee');
 var _ = require('lodash')
 
+var parseArgForType = function (type, arg) {
+    try {
+        switch (type) {
+        case Provider.ArgType.NUMBER:
+            return Number(arg)
+            break;
+        case Provider.ArgType.ARRAY:
+            return JSON.parse(arg);
+            break;
+        case Provider.ArgType.OBJECT:
+            return JSON.parse(arg);
+            break;
+        case Provider.ArgType.BOOLEAN:
+            return !!arg;
+            break;
+        case Provider.ArgType.STRING:
+        default:
+            return arg
+            break;
+        }
+    } catch(e) {
+        console.error("Error Parsing args", args, k, e)
+    }
+}
+
+var parseArgs = function (config, uri) {
+    var tokenize = uri.split('?');
+
+    config = config || {args: {}};
+    config.args = config.args || {};
+
+    // XXX:reimplement querystring.parse to not escape
+    var args = {}
+    tokenize[1] && tokenize[1].split('&').map(function (v){
+        var m = v.split('=')
+        args[m[0]]= parseArgForType(config.args[m[0]], m[1])
+    })
+
+    return args;
+}
+
 var processArgs = function (config, args) {
-    var newArgs = {}
+    if (typeof(args) === 'string') { // we got a URI
+        args = parseArgs(config, args);
+    }
+
     Object.keys(config.args).map(function(k) {
         if (! args || ! args[k]) {
             console.error ('value', k, 'was not provided')
             return;
         }
-
-        console.log ('processing', k)
-        switch (config.args[k]) {
-        case Provider.ArgType.NUMBER:
-            newArgs[k] = Number(args[k])
-            break;
-        case Provider.ArgType.ARRAY:
-            newArgs[k] = args[k].split(',');
-            break;
-        case Provider.ArgType.OBJECT:
-            newArgs[k] = JSON.Parse(args[k]);
-            break;
-        case Provider.ArgType.BOOLEAN:
-            newArgs[k] = !!args[k];
-            break;
-        case Provider.ArgType.STRING:
-        default:
-            newArgs[k] = args[k]
-            break;
-        }
     })
 
-    return newArgs
+    return assign({}, config.defaults, args);
 }
 
 var Provider = function (args) {
@@ -49,12 +73,50 @@ var Provider = function (args) {
     };
 
     this.args = assign({}, this.args, processArgs(config, args))
+    this.filters = assign({}, Provider.DefaultFilters, config.filters)
 
     this.memfetch = memoize(this.fetch.bind(this), memopts);
     this.fetch = this._fetch.bind(this);
 
     this.detail = memoize(this.detail.bind(this), memopts);
 };
+
+Provider.DefaultFilters = {
+    genres: {
+        all:         'All',
+        action:      'Action',
+        adventure:   'Adventure',
+        animation:   'Animation',
+        biography:   'Biography',
+        comedy:      'Comedy',
+        crime:       'Crime',
+        documentary: 'Documentary',
+        drama:       'Drama',
+        family:      'Family',
+        fantasy:     'Fantasy',
+        filmNoir:    'Film-Noir',
+        history:     'History',
+        horror:      'Horror',
+        music:       'Music',
+        musical:     'Musical',
+        mystery:     'Mystery',
+        romance:     'Romance',
+        sciFi:       'Sci-Fi',
+        short:       'Short',
+        sport:       'Sport',
+        thriller:    'Thriller',
+        war:         'War',
+        western:     'Western'
+    },
+    sorters: {
+        popularity:  'Popularity',
+        trending:    'Trending',
+        lastAdded:   'Last Added',
+        year:        'Year',
+        title:       'Title',
+        rating:      'Rating'
+    }
+}
 
 Provider.ArgType = {
     ARRAY:   'BUTTER_PROVIDER_ARG_TYPE_ARRAY',
@@ -130,21 +192,5 @@ Provider.prototype._fetch = function (filters) {
 Provider.prototype.toString = function (arg) {
     return JSON.stringify(this);
 };
-
-Provider.prototype.parseArgs = function (name) {
-    var tokenize = name.split('?');
-
-    // XXX:reimplement querystring.parse to not escape
-    var args = {}
-    tokenize[1] && tokenize[1].split('&').map(function (v){
-        var m = v.split('=')
-        args[m[0]]= m[1]
-    })
-
-    return {
-        name: tokenize[0],
-        args: args
-    }
-}
 
 module.exports = Provider

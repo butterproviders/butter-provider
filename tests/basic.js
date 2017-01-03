@@ -11,15 +11,25 @@ var config = {
 };
 
 if (pkg.butter) {
-  if (pkg.butter.testArgs) {
-    config.args = Object.assign({}, config.args, Provider.prototype.parseArgs(pkg.butter.testArgs).args);
-  }
-
-  config = Object.assign({}, config, pkg.butter);
+    config = Object.assign({}, config, pkg.butter);
 }
 
 function load() {
     return require(process.cwd());
+}
+
+function instanciate() {
+    var P = load();
+    var testArgs = pkg.butter?pkg.butter.testArgs:null;
+
+    return new P(testArgs);
+}
+
+function isInValues(element, set) {
+    for (var k in Object.keys(set)) {
+        if (element === set[k]) return true;
+    }
+    return false;
 }
 
 function testDetail(t, d, uniqueId) {
@@ -37,16 +47,38 @@ function testDetail(t, d, uniqueId) {
     t.ok(d.runtime, 'we have a runtime');
 
     var type = d.type;
-    t.ok(type===Provider.ItemType.MOVIE || type===Provider.ItemType.TVSHOW, 'we have a type field which is an item type');
+    t.ok(isInValues(type, Provider.ItemType), 'we have a type field which is an item type');
 
     if (type === Provider.ItemType.MOVIE) {
         t.ok(d.trailer, 'we have a trailer');
+
         t.ok(d.torrents, 'we have a torrents field');
+        var quality = Object.keys(d.torrents)[0];
+        t.ok(isInValues(quality, Provider.QualityType),
+            'we have a quality which is a quality type');
+        t.ok(d.torrents[quality], 'we have a quality object');
+        t.ok(d.torrents[quality].url, 'we have an url to stream');
+        t.ok(d.torrents[quality].size, 'we have the size');
     } else if (type===Provider.ItemType.TVSHOW) {
         t.ok(d.status, 'we have a status');
-        t.ok(d.num_seasons, 'we have an num_seasons field');
+        t.ok(d.num_seasons, 'we have a num_seasons field');
         t.ok(d.episodes, 'we have an episodes field');
         t.ok(d.episodes.length > 0, 'we have at least 1 episode');
+
+        t.ok(d.episodes[0].watched===false || d.episodes[0].watched===true,
+            'we have a watched field that is a boolean');
+        t.ok(d.episodes[0].first_aired, 'we have a first aired field');
+        t.ok(d.episodes[0].overview, 'we have an overview');
+        t.ok(d.episodes[0].episode, 'we have an episode number');
+        t.ok(d.episodes[0].season, 'we have a season number');
+        t.ok(d.episodes[0].tvdb_id, 'we have a tvdb id');
+
+        t.ok(d.episodes[0].torrents, 'we have a torrents field');
+        var quality = Object.keys(d.episodes[0].torrents)[0];
+        t.ok(isInValues(quality, Provider.QualityType),
+            'we have a quality which is a quality type');
+        t.ok(d.episodes[0].torrents[quality], 'we have a quality object');
+        t.ok(d.episodes[0].torrents[quality].url, 'we have an url to stream');
     } else {
         t.notOk(type, 'is not a valid type');
     }
@@ -61,7 +93,7 @@ tape('loads', function (t) {
 
     t.ok(P, 'we were able to load');
 
-    var I = new P(config.args);
+    var I = instanciate();
 
     t.ok(I, 'we were able to instanciate');
 
@@ -78,13 +110,12 @@ tape('fetch', function (t) {
     debug('fetch, timeout', config.timeout);
     t.timeoutAfter(config.timeout);
 
-    var P = load();
-    var I = new P(config.args);
+    var I = instanciate();
 
     I.fetch().then(function (r) {
         debug ('fetch', r);
         t.ok(r, 'we were able to fetch');
-        t.ok(r.hasMore===true || r.hasMore===false, 'we have a hasMore field that is a boolean: ');
+        t.ok(r.hasMore===true || r.hasMore===false, 'we have a hasMore field that is a boolean');
         t.ok(r.results, 'we have a results field');
         t.ok(r.results.length > 0, 'we have at least 1 result');
 
@@ -106,8 +137,7 @@ tape('random', function (t) {
     debug('random, timeout', config.timeout);
     t.timeoutAfter(config.timeout);
 
-    var P = load();
-    var I = new P(config.args);
+    var I = instanciate();
 
     I.random().then(function (r) {
         debug ('random', r);
