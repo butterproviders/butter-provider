@@ -49,7 +49,7 @@ function testDetail(t, d, uniqueId) {
     t.ok(isInValues(type, Provider.ItemType), 'we have a type field which is an item type');
 
     if (type === Provider.ItemType.MOVIE) {
-        t.ok(d.trailer, 'we have a trailer');
+        t.ok(d.trailer || d.trailer === false, 'we have a trailer');
 
         t.ok(d.torrents, 'we have a torrents field');
         var quality = Object.keys(d.torrents)[0];
