@@ -43,6 +43,8 @@ function testDetail(t, d, uniqueId) {
     t.ok(d.poster, 'we have a poster');
     t.ok(d.subtitle, 'we have a subtitle');
     t.ok(d.synopsis, 'we have a synopsis');
+    t.ok(typeof (d.synopsis) === 'string', 'synopsis is a string');
+    t.ok(d.synopsis.length > 16, 'synopsis is at least 16 bytes');
     t.ok(d.runtime, 'we have a runtime');
 
     var type = d.type;
