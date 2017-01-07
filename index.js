@@ -57,6 +57,20 @@ var processArgs = function (config, args) {
     return assign({}, config.defaults, args);
 }
 
+var _make_cached = function (method, memopts) {
+    var _this = this,
+        memoized_method = memoize(method.bind(this), memopts);
+
+    return function () {
+        return memoized_method.apply(this, arguments)
+            .catch(function (error) {
+                // Delete the cached result if we get an error so retry will work
+                method.delete(filters);
+                return Promise.reject(error);
+            });
+    }
+}
+
 var Provider = function (args) {
     args = args || {};
     var config  = this.config || {}
@@ -74,10 +88,9 @@ var Provider = function (args) {
     this.args = assign({}, this.args, processArgs(config, args))
     this.filters = assign({}, Provider.DefaultFilters, config.filters)
 
-    this.memfetch = memoize(this.fetch.bind(this), memopts);
-    this.fetch = this._fetch.bind(this);
-
-    this.detail = memoize(this.detail.bind(this), memopts);
+    var cacher = _make_cached.bind(this)
+    this.fetch  = cacher(this.fetch,  memopts);
+    this.detail = cacher(this.detail, memopts);
 };
 
 Provider.DefaultFilters = {
@@ -184,18 +197,6 @@ Provider.prototype.detail = function (id, old_data) {
     warnDefault('detail', 'better performing fetch and detail calls');
     return Promise.resolve(old_data);
 }
-
-Provider.prototype._fetch = function (filters) {
-    filters = filters || {}
-    filters.toString = this.toString;
-    var promise = this.memfetch.bind(this)(filters),
-    _this = this;
-    promise.catch(function (error) {
-        // Delete the cached result if we get an error so retry will work
-        _this.memfetch.delete(filters);
-    });
-    return promise;
-};
 
 Provider.prototype.toString = function (arg) {
     return JSON.stringify(this);
