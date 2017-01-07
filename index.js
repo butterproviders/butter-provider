@@ -1,6 +1,5 @@
 var assign = Object.assign || require('es6-object-assign').assign;
 var memoize = require('memoizee');
-var _ = require('lodash')
 
 var parseArgForType = function (type, arg) {
     try {
@@ -177,7 +176,8 @@ Provider.prototype.random = function () {
 
 Provider.prototype.extractIds = function (items) {
     warnDefault('extractIds');
-    return _.map(items.results, this.config.uniqueId)
+    var id = this.config.uniqueId;
+    return items.results.map(function (r) { return r[id]})
 }
 
 Provider.prototype.detail = function (id, old_data) {

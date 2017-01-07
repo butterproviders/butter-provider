@@ -18,7 +18,6 @@
   "homepage": "https://github.com/butterproviders/butter-provider#readme",
   "dependencies": {
     "es6-object-assign": "^1.0.1",
-    "lodash": "^4.17.1",
     "memoizee": "^0.4.1"
   },
   "devDependencies": {
