@@ -1,25 +1,25 @@
-var assign = Object.assign || require('es6-object-assign').assign;
-var memoize = require('memoizee');
+var assign = Object.assign || require('es6-object-assign').assign
+var memoize = require('memoizee')
 
 var parseArgForType = function (type, arg) {
     try {
         switch (type) {
         case Provider.ArgType.NUMBER:
             return Number(arg)
-            break;
+            break
         case Provider.ArgType.ARRAY:
-            return JSON.parse(arg);
-            break;
+            return JSON.parse(arg)
+            break
         case Provider.ArgType.OBJECT:
-            return JSON.parse(arg);
-            break;
+            return JSON.parse(arg)
+            break
         case Provider.ArgType.BOOLEAN:
-            return !!arg;
-            break;
+            return !!arg
+            break
         case Provider.ArgType.STRING:
         default:
             return arg
-            break;
+            break
         }
     } catch(e) {
         console.error("Error Parsing args", args, k, e)
@@ -27,10 +27,10 @@ var parseArgForType = function (type, arg) {
 }
 
 var parseArgs = function (config, uri) {
-    var tokenize = uri.split('?');
+    var tokenize = uri.split('?')
 
-    config = config || {args: {}};
-    config.args = config.args || {};
+    config = config || {args: {}}
+    config.args = config.args || {}
 
     // XXX:reimplement querystring.parse to not escape
     var args = {}
@@ -39,40 +39,40 @@ var parseArgs = function (config, uri) {
         args[m[0]]= parseArgForType(config.args[m[0]], m[1])
     })
 
-    return args;
+    return args
 }
 
 var processArgs = function (config, args) {
     if (typeof(args) === 'string') { // we got a URI
-        args = parseArgs(config, args);
+        args = parseArgs(config, args)
     }
 
     Object.keys(config.args).map(function(k) {
         if (! args || ! args[k]) {
             console.error ('value', k, 'was not provided')
-            return;
+            return
         }
     })
 
-    return assign({}, config.defaults, args);
+    return assign({}, config.defaults, args)
 }
 
 var _make_cached = function (method, memopts) {
     var _this = this,
-        memoized_method = memoize(method.bind(this), memopts);
+        memoized_method = memoize(method.bind(this), memopts)
 
     return function () {
         return memoized_method.apply(this, arguments)
             .catch(function (error) {
                 // Delete the cached result if we get an error so retry will work
-                method.delete(filters);
-                return Promise.reject(error);
-            });
+                method.delete(filters)
+                return Promise.reject(error)
+            })
     }
 }
 
 var Provider = function (args) {
-    args = args || {};
+    args = args || {}
     var config  = this.config || {}
     config.args = config.args || {}
 
@@ -83,15 +83,15 @@ var Provider = function (args) {
         /* recache every 5 minutes */
         primitive: true,
         promise: true
-    };
+    }
 
     this.args = assign({}, this.args, processArgs(config, args))
     this.filters = assign({}, Provider.DefaultFilters, config.filters)
 
     var cacher = _make_cached.bind(this)
-    this.fetch  = cacher(this.fetch,  memopts);
-    this.detail = cacher(this.detail, memopts);
-};
+    this.fetch  = cacher(this.fetch,  memopts)
+    this.detail = cacher(this.detail, memopts)
+}
 
 Provider.DefaultFilters = {
     genres: {
@@ -174,32 +174,32 @@ function randomArray(a) {
 }
 
 Provider.prototype.resolveStream = function (src, config, data) {
-    warnDefault('resolveStream', 'multiple languages');
-    return src;
+    warnDefault('resolveStream', 'multiple languages')
+    return src
 }
 
 Provider.prototype.random = function () {
-    warnDefault('random', 'faster random');
+    warnDefault('random', 'faster random')
     var uniqueId = this.config.uniqueId
-    var detail = this.detail.bind(this);
+    var detail = this.detail.bind(this)
     return this.fetch.apply(this)
         .then(function (data) {return randomArray(data.results)})
-        .then(function (data) {return detail(data[uniqueId], data)});
+        .then(function (data) {return detail(data[uniqueId], data)})
 }
 
 Provider.prototype.extractIds = function (items) {
-    warnDefault('extractIds');
-    var id = this.config.uniqueId;
+    warnDefault('extractIds')
+    var id = this.config.uniqueId
     return items.results.map(function (r) { return r[id]})
 }
 
 Provider.prototype.detail = function (id, old_data) {
-    warnDefault('detail', 'better performing fetch and detail calls');
-    return Promise.resolve(old_data);
+    warnDefault('detail', 'better performing fetch and detail calls')
+    return Promise.resolve(old_data)
 }
 
 Provider.prototype.toString = function (arg) {
-    return JSON.stringify(this);
-};
+    return JSON.stringify(this)
+}
 
 module.exports = Provider
