@@ -31,6 +31,14 @@ function isInValues(element, set) {
     })
 }
 
+function getRandomKey(array) {
+    return ~~(Math.random()*(array.length))
+}
+
+function getRandom(array) {
+    return array[getRandomKey(array)];
+}
+
 function testDetail(t, d, uniqueId) {
     console.log('checking details for', d, uniqueId)
     t.ok(d, 'we were able to get details')
@@ -55,7 +63,7 @@ function testDetail(t, d, uniqueId) {
         t.ok(d.trailer || d.trailer === false, 'we have a trailer')
 
         t.ok(d.torrents, 'we have a torrents field')
-        var quality = Object.keys(d.torrents)[0]
+        var quality = getRandom(Object.keys(d.torrents))
         t.ok(isInValues(quality, Provider.QualityType),
             'we have a quality which is a quality type')
         t.ok(d.torrents[quality], 'we have a quality object')
@@ -67,18 +75,20 @@ function testDetail(t, d, uniqueId) {
         t.ok(d.episodes, 'we have an episodes field')
         t.ok(d.episodes.length > 0, 'we have at least 1 episode')
 
-        t.ok(d.episodes[0].first_aired, 'we have a first aired field')
-        t.ok(d.episodes[0].overview, 'we have an overview')
-        t.ok(isFinite(d.episodes[0].episode), 'we have an episode number')
-        t.ok(d.episodes[0].season, 'we have a season number')
-        t.ok(d.episodes[0].tvdb_id, 'we have a tvdb id')
+        var episode = getRandom(d.episodes);
+        if (!episode) { console.log ('now d is ', d)}
+        t.ok(episode.first_aired, 'we have a first aired field')
+        t.ok(episode.overview, 'we have an overview')
+        t.ok(isFinite(episode.episode), 'we have an episode number')
+        t.ok(episode.season, 'we have a season number')
+        t.ok(episode.tvdb_id, 'we have a tvdb id')
 
-        t.ok(d.episodes[0].torrents, 'we have a torrents field')
-        var quality = Object.keys(d.episodes[0].torrents)[0]
+        t.ok(episode.torrents, 'we have a torrents field')
+        var quality = getRandom(Object.keys(d.torrents))
         t.ok(isInValues(quality, Provider.QualityType),
             'we have a quality which is a quality type')
-        t.ok(d.episodes[0].torrents[quality], 'we have a quality object')
-        t.ok(d.episodes[0].torrents[quality].url, 'we have an url to stream')
+        t.ok(episode.torrents[quality], 'we have a quality object')
+        t.ok(episode.torrents[quality].url, 'we have an url to stream')
     } else {
         t.notOk(type, 'is not a valid type')
     }
@@ -120,15 +130,19 @@ tape('fetch', function (t) {
         t.ok(r.results.length > 0, 'we have at least 1 result')
 
         var uniqueIds = I.extractIds(r)
+        var key = getRandomKey(uniqueIds)
+        console.log('will try to get details for key', key)
         t.ok(uniqueIds, 'extractIds')
-        I.detail(uniqueIds[0], r.results[0]).then(function (d) {
+        I.detail(uniqueIds[key], r.results[key]).then(function (d) {
             debug ('detail', d)
             testDetail(t, d, I.config.uniqueId)
             t.end()
         }).catch(function (e) {
+            console.log('ERROR in details', e)
             t.notOk(e, 'failed detail')
         })
     }).catch(function (e) {
+        console.log('ERROR in fetch', e)
         t.notOk(e, 'failed fetch')
     })
 })
