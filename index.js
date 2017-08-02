@@ -71,9 +71,9 @@ var _make_cached = function (method, memopts) {
     }
 }
 
-var Provider = function (args) {
-    args = args || {}
-    var config  = this.config || {}
+var Provider = function (args, defaultConfig) {
+    args = args || {};
+    var config  = this.config || defaultConfig || {}
     config.args = config.args || {}
 
     var memopts = args.memops || {
