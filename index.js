@@ -75,6 +75,7 @@ var Provider = function (args, defaultConfig) {
     args = args || {};
     var config  = this.config || defaultConfig || {}
     config.args = config.args || {}
+    this.config = config
 
     var memopts = args.memops || {
         maxAge: 10 * 60 * 1000,
