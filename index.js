@@ -28,7 +28,7 @@ class Provider {
 
     this.args = Object.assign(
       this.args,
-      this._processArgs(this.config, this.args)
+      this._processArgs(this.args)
     )
     this.filters = Object.assign(
       {},
@@ -41,6 +41,7 @@ class Provider {
   }
 
   _makeCached(method, memopts) {
+    const self = this
     const memoizedMethod = memoize(method, memopts)
 
     return function() {
@@ -48,7 +49,7 @@ class Provider {
       return memoizedMethod.apply(this, arguments)
         .catch(error => {
           // Delete the cached result if we get an error so retry will work
-          method.delete(this.filters)
+          method.delete(self.filters)
           return Promise.reject(error)
         })
     }
@@ -70,58 +71,57 @@ class Provider {
           return args
       }
     } catch (e) {
-      console.error('Error Parsing args', args, e)
+      console.error(`Error Parsing args: ${args}, error: ${e}`)
     }
   }
 
-  _parseArgs(config, uri) {
+  _parseArgs(uri) {
     const tokenize = uri.split('?')
-
-    config = config || {args: {}}
-    config.args = config.args || {}
 
     // XXX: Reimplement querystring.parse to not escape
     const args = {}
 
     // XXX: This really isn't readable code.
     tokenize[1] && tokenize[1].split('&').map(v => {
-      const m = v.split('=')
-      args[m[0]] = this._parseArgForType(config.args[m[0]], m[1])
+      const pair = v.split('=')
+      const [ key, value ] = pair
+
+      args[key] = this._parseArgForType(this.config.args[key], value)
     })
 
     return args
   }
 
-  _processArgs(config, args) {
+  _processArgs(args) {
     if (typeof args === 'string') {
       // We got a URI
-      args = this._parseArgs(config, args)
+      args = this._parseArgs(args)
     }
 
-    Object.keys(config.args).map(k => {
+    Object.keys(this.config.args).map(k => {
       if (!args || !args[k]) {
-        console.error(`value ${k} was not provided`)
+        console.error(`Value ${k} was not provided`)
       }
     })
 
-    return Object.assign({}, config.defaults, args)
+    return Object.assign({}, this.config.defaults, args)
   }
 
   _warnDefault(fn, support) {
-    console.warn('you are using the default ' + fn + ' implementation,')
+    let msg = `You are using the default ${fn} implementation`
 
     if (support) {
-      console.warn(
-        `you will probably want to use your own to support: ${support}.`
-      )
+      msg += `, you will probably want to use your own to support: ${support}.`
     }
+
+    console.warn(msg)
   }
 
   _randomArray(a) {
     return a[Math.floor(Math.random() * a.length)]
   }
 
-  resolveStream (src, config, data) {
+  resolveStream(src) {
     this._warnDefault('resolveStream', 'multiple languages')
 
     return src
@@ -132,7 +132,7 @@ class Provider {
 
     const uniqueId = this.config.uniqueId
     return this.fetch()
-      .then(data => this._randomArray(data.results))
+      .then(({ results }) => this._randomArray(results))
       .then(data => this.detail(data[uniqueId], data))
   }
 
@@ -143,7 +143,10 @@ class Provider {
   }
 
   detail(id, oldData) {
-    this._warnDefault('detail', 'better performing fetch and detail calls')
+    this._warnDefault(
+      `detail: ${id}`, 'better performing fetch and detail calls'
+    )
+
     return Promise.resolve(oldData)
   }
 

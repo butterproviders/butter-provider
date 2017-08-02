@@ -17,12 +17,11 @@
   },
   "homepage": "https://github.com/butterproviders/butter-provider#readme",
   "dependencies": {
-    "debug": "^2.6.0",
-    "es6-object-assign": "^1.0.1",
-    "memoizee": "^0.4.1"
+    "debug": "^2.6.8",
+    "memoizee": "^0.4.5"
   },
   "devDependencies": {
-    "debug": "^2.6.0",
-    "tape": "^4.4.0"
+    "debug": "^2.6.8",
+    "tape": "^4.8.0"
   }
 }

@@ -53,7 +53,7 @@ function runAllTests (loadFunction) {
   }
 
   function testDetail (t, d, uniqueId) {
-    // console.log('checking details for', d, uniqueId)
+    console.log(`Checking details for: ${uniqueId}`)
     t.ok(d, 'we were able to get details')
     t.ok(d[uniqueId] || d.id, 'we have an unique id')
     t.ok(d.title, 'we have a title')
@@ -114,7 +114,6 @@ function runAllTests (loadFunction) {
   tape.onFinish(() => process.exit(0))
 
   tape('loads', t => {
-    console.log(loadFunction)
     const P = loadFunction()
 
     t.ok(P, 'we were able to load')
@@ -133,13 +132,13 @@ function runAllTests (loadFunction) {
   })
 
   tape('fetch', t => {
-    debug('fetch, timeout', config.timeout)
+    debug(`fetch timeout: ${config.timeout}`)
     t.timeoutAfter(config.timeout)
 
     const I = instanciate(loadFunction)
 
     I.fetch().then(r => {
-      debug('fetch', r)
+      debug(`fetch: ${r}`)
       t.ok(r, 'we were able to fetch')
       t.ok(r.hasMore === true || r.hasMore === false,
         'we have a hasMore field that is a boolean')
@@ -148,30 +147,32 @@ function runAllTests (loadFunction) {
 
       const uniqueIds = I.extractIds(r)
       const key = getRandomKey(uniqueIds)
-      console.log('will try to get details for key', key)
+
+      console.log(`Will try to get details for key: ${key}`)
+
       t.ok(uniqueIds, 'extractIds')
       I.detail(uniqueIds[key], r.results[key]).then(d => {
-        debug('detail', d)
+        debug(`detail: ${d}`)
         testDetail(t, d, I.config.uniqueId)
         t.end()
       }).catch(e => {
-        console.log('ERROR in details', e)
+        console.error(`Error in details: ${e}`)
         t.notOk(e, 'failed detail')
       })
     }).catch(e => {
-      console.log('ERROR in fetch', e)
+      console.error(`Error in fetch: ${e}`)
       t.notOk(e, 'failed fetch')
     })
   })
 
   tape('random', t => {
-    debug('random, timeout', config.timeout)
+    debug(`random timeout: ${config.timeout}`)
     t.timeoutAfter(config.timeout)
 
     var I = instanciate(loadFunction)
 
     I.random().then(r => {
-      debug('random', r)
+      debug(`random: ${r}`)
       testDetail(t, r, I.config.uniqueId)
       t.end()
     }).catch(e => t.notOk(e, 'failed random'))
