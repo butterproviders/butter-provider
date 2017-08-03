@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "./node_modules/.bin/eslint tests/** index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/nyc --reporter=lcov --reporter=text ./node_modules/.bin/mocha test/**"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
     "memoizee": "^0.4.5"
   },
   "devDependencies": {
+    "chai": "^4.1.0",
     "debug": "^2.6.8",
     "eslint": "^4.3.0",
     "eslint-config-standard": "^10.2.1",
@@ -28,6 +29,8 @@
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
+    "mocha": "^3.5.0",
+    "nyc": "^11.1.0",
     "tape": "^4.8.0"
   }
 }
