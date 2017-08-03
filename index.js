@@ -146,7 +146,7 @@ class Provider {
 
   fetch(filters) {
     this._warnDefault(
-      `fetch: ${JSON.strigify(filters)}`, 'fetching of the data'
+      `fetch: ${JSON.stringify(filters)}`, 'fetching of the data'
     )
 
     const err = new Error('Implement your own version of the \'fetch\' method')
