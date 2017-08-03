@@ -51,14 +51,14 @@ class Provider {
     }
   }
 
-  _processArgs(args) {
-    const parsed = typeof args === 'string'
-      ? this._parseArgs(args)
+  _processArgs(argString) {
+    const parsed = typeof argString === 'string'
+      ? this._parseArgs(argString)
       : undefined
 
-    const { argTypes, defaults } = this.config
-    Object.keys(argTypes).map(k => {
-      if (!argTypes || !argTypes[k]) {
+    const { args, defaults } = this.config
+    Object.keys(args).map(k => {
+      if (!args || !args[k]) {
         console.error(`Value ${k} was not provided`)
       }
     })
@@ -75,8 +75,7 @@ class Provider {
       tokenize[1].split('&').map(v => {
         const [ key, value ] = v.split('=')
 
-        const type = this.config.argTypes[key]
-        args[key] = this._parseArgForType(type, value)
+        args[key] = this._parseArgForType(key, value)
       })
     }
 
