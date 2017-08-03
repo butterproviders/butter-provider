@@ -2,40 +2,36 @@
 
 const memoize = require('memoizee')
 
+const defaultMemopts = {
+  maxAge: 10 * 60 * 1000,
+  /* 10 minutes */
+  preFetch: 0.5,
+  /* recache every 5 minutes */
+  primitive: true,
+  promise: true
+}
+
 const defaultArgs = {
-  memops: {
-    maxAge: 10 * 60 * 1000,
-    /* 10 minutes */
-    preFetch: 0.5,
-    /* recache every 5 minutes */
-    primitive: true,
-    promise: true
-  }
+  memopts: defaultMemopts
 }
 
 const defaultConfig = {
-  args: {},
+  argTypes: {},
   filters: {}
 }
 
 class Provider {
-
+ 
   constructor(args = defaultArgs, config = defaultConfig) {
-    this.args = args
     this.config = config
-
-    const memopts = args.memops
-
-    this.args = Object.assign(
-      this.args,
-      this._processArgs(this.args)
-    )
+    this.args = Object.assign({}, args, this._processArgs(args))
     this.filters = Object.assign(
       {},
       Provider.DefaultFilters,
       this.config.filters
     )
 
+    const { memopts } = this.args
     this.fetch = this._makeCached(this.fetch, memopts)
     this.detail = this._makeCached(this.detail, memopts)
   }
@@ -47,64 +43,63 @@ class Provider {
     return function() {
       // XXX: Should be replaced with spread operator if possible.
       return memoizedMethod.apply(this, arguments)
-        .catch(error => {
+        .catch(err => {
           // Delete the cached result if we get an error so retry will work
           method.delete(self.filters)
-          return Promise.reject(error)
+          return err
         })
     }
   }
 
-  _parseArgForType(type, args) {
-    try {
-      switch (type) {
-        case Provider.ArgType.NUMBER:
-          return Number(args)
-        case Provider.ArgType.ARRAY:
-          return JSON.parse(args)
-        case Provider.ArgType.OBJECT:
-          return JSON.parse(args)
-        case Provider.ArgType.BOOLEAN:
-          return !!args
-        case Provider.ArgType.STRING:
-        default:
-          return args
-      }
-    } catch (e) {
-      console.error(`Error Parsing args: ${args}, error: ${e}`)
-    }
-  }
-
-  _parseArgs(uri) {
-    const tokenize = uri.split('?')
-
-    // XXX: Reimplement querystring.parse to not escape
-    const args = {}
-
-    // XXX: This really isn't readable code.
-    tokenize[1] && tokenize[1].split('&').map(v => {
-      const pair = v.split('=')
-      const [ key, value ] = pair
-
-      args[key] = this._parseArgForType(this.config.args[key], value)
-    })
-
-    return args
-  }
-
   _processArgs(args) {
-    if (typeof args === 'string') {
-      // We got a URI
-      args = this._parseArgs(args)
-    }
+    const parsed = typeof args === 'string'
+      ? this._parseArgs(args)
+      : undefined
 
-    Object.keys(this.config.args).map(k => {
-      if (!args || !args[k]) {
+    const { argTypes, defaults } = this.config
+    Object.keys(argTypes).map(k => {
+      if (!argTypes || !argTypes[k]) {
         console.error(`Value ${k} was not provided`)
       }
     })
 
-    return Object.assign({}, this.config.defaults, args)
+    return Object.assign({}, defaults, parsed)
+  }
+
+  _parseArgs(uri) {
+    // XXX: Reimplement querystring.parse to not escape
+    const args = {}
+    const tokenize = uri.split('?')
+
+    if (tokenize[1]) {
+      tokenize[1].split('&').map(v => {
+        const [ key, value ] = v.split('=')
+
+        const type = this.config.argTypes[key]
+        args[key] = this._parseArgForType(type, value)
+      })
+    }
+
+    return args
+  }
+
+  _parseArgForType(type, arg) {
+    try {
+      switch (type) {
+        case Provider.ArgType.NUMBER:
+          return Number(arg)
+        case Provider.ArgType.ARRAY:
+        case Provider.ArgType.OBJECT:
+          return JSON.parse(arg)
+        case Provider.ArgType.BOOLEAN:
+          return !!arg
+        case Provider.ArgType.STRING:
+        default:
+          return arg
+      }
+    } catch (err) {
+      console.error(`Error parsing argument: ${arg}, error: ${err}`)
+    }
   }
 
   _warnDefault(fn, support) {
@@ -115,10 +110,6 @@ class Provider {
     }
 
     console.warn(msg)
-  }
-
-  _randomArray(a) {
-    return a[Math.floor(Math.random() * a.length)]
   }
 
   resolveStream(src) {
@@ -132,7 +123,10 @@ class Provider {
 
     const uniqueId = this.config.uniqueId
     return this.fetch()
-      .then(({ results }) => this._randomArray(results))
+      .then(({ results }) => {
+        const random = Math.floor(Math.random() * results.length)
+        return results[random]
+      })
       .then(data => this.detail(data[uniqueId], data))
   }
 
@@ -223,7 +217,11 @@ Provider.QualityType = {
   DEFAULT: '0',
   LOW: '480p',
   MEDIUM: '720p',
-  HIGH: '1080p'
+  HIGH: '1080p',
+  NULL: null
 }
+
+const provider = new Provider()
+console.log(provider.toString())
 
 module.exports = Provider

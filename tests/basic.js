@@ -36,7 +36,7 @@ function instanciate (loadFunction) {
 }
 
 function isInValues (element, set) {
-  return Object.keys(set).reduce((a, c) => a || (element === set[c]))
+  return Object.keys(set).reduce((a, c) => (a || (element === set[c])))
 }
 
 function getRandomKey (array) {

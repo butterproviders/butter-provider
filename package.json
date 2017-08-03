@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/butterproviders/butter-provider#readme",
   "dependencies": {
-    "debug": "^2.6.8",
     "memoizee": "^0.4.5"
   },
   "devDependencies": {
