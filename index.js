@@ -45,7 +45,7 @@ class Provider {
       return memoizedMethod.apply(this, arguments)
         .catch(err => {
           // Delete the cached result if we get an error so retry will work
-          method.delete(self.filters)
+          memoizedMethod.delete(self.filters)
           return err
         })
     }
