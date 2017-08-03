@@ -17,7 +17,8 @@ const defaultArgs = {
 
 const defaultConfig = {
   argTypes: {},
-  filters: {}
+  filters: {},
+  uniqueId: 'id'
 }
 
 class Provider {
@@ -46,7 +47,7 @@ class Provider {
         .catch(err => {
           // Delete the cached result if we get an error so retry will work
           memoizedMethod.delete(self.filters)
-          return err
+          return Promise.reject(err)
         })
     }
   }
@@ -58,7 +59,7 @@ class Provider {
 
     const { argTypes, defaults } = this.config
     Object.keys(argTypes).map(k => {
-      if (!argTypes || !argTypes[k]) {
+      if (!parsed || !parsed[k]) {
         console.error(`Value ${k} was not provided`)
       }
     })
@@ -74,8 +75,8 @@ class Provider {
     if (tokenize[1]) {
       tokenize[1].split('&').map(v => {
         const [ key, value ] = v.split('=')
-
         const type = this.config.argTypes[key]
+
         args[key] = this._parseArgForType(type, value)
       })
     }
