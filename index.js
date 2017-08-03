@@ -144,7 +144,16 @@ class Provider {
     return Promise.resolve(oldData)
   }
 
-  toString(arg) {
+  fetch(filters) {
+    this._warnDefault(
+      `fetch: ${JSON.strigify(filters)}`, 'fetching of the data'
+    )
+
+    const err = new Error('Implement your own version of the \'fetch\' method')
+    return Promise.reject(err)
+  }
+
+  toString() {
     return JSON.stringify(this)
   }
 
@@ -220,8 +229,5 @@ Provider.QualityType = {
   HIGH: '1080p',
   NULL: null
 }
-
-const provider = new Provider()
-console.log(provider.toString())
 
 module.exports = Provider
