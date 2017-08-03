@@ -1,6 +1,6 @@
 'use strict'
 
-const memoize = require('memoizee')
+import memoize from 'memoizee'
 
 const defaultMemopts = {
   maxAge: 10 * 60 * 1000,
@@ -20,8 +20,79 @@ const defaultConfig = {
   filters: {}
 }
 
-class Provider {
- 
+module.exports = class Provider {
+
+  static DefaultFilters = {
+    genres: {
+      all: 'All',
+      action: 'Action',
+      adventure: 'Adventure',
+      animation: 'Animation',
+      biography: 'Biography',
+      comedy: 'Comedy',
+      crime: 'Crime',
+      documentary: 'Documentary',
+      drama: 'Drama',
+      family: 'Family',
+      fantasy: 'Fantasy',
+      filmNoir: 'Film-Noir',
+      history: 'History',
+      horror: 'Horror',
+      music: 'Music',
+      musical: 'Musical',
+      mystery: 'Mystery',
+      romance: 'Romance',
+      sciFi: 'Sci-Fi',
+      short: 'Short',
+      sport: 'Sport',
+      thriller: 'Thriller',
+      war: 'War',
+      western: 'Western'
+    },
+    sorters: {
+      popularity: 'Popularity',
+      trending: 'Trending',
+      lastAdded: 'Last Added',
+      year: 'Year',
+      title: 'Title',
+      rating: 'Rating'
+    }
+  }
+
+  static ArgType = {
+    ARRAY: 'BUTTER_PROVIDER_ARG_TYPE_ARRAY',
+    OBJECT: 'BUTTER_PROVIDER_ARG_TYPE_OBJECT',
+    STRING: 'BUTTER_PROVIDER_ARG_TYPE_STRING',
+    BOOLEAN: 'BUTTER_PROVIDER_ARG_TYPE_BOOLEAN',
+    NUMBER: 'BUTTER_PROVIDER_ARG_TYPE_NUMBER'
+  }
+
+  static ItemType = {
+    MOVIE: 'movie',
+    TVSHOW: 'tvshow'
+  }
+
+  static OrderType = {
+    ASC: 'asc',
+    DESC: 'desc',
+    NULL: null
+  }
+
+  static SorterType = {
+    NAME: 'name',
+    RATING: 'rating',
+    POPULARITY: 'popularity',
+    NULL: null
+  }
+
+  static QualityType = {
+    DEFAULT: '0',
+    LOW: '480p',
+    MEDIUM: '720p',
+    HIGH: '1080p',
+    NULL: null
+  }
+
   constructor(args = defaultArgs, config = defaultConfig) {
     this.config = config
     this.args = Object.assign({}, args, this._processArgs(args))
@@ -40,7 +111,7 @@ class Provider {
     const self = this
     const memoizedMethod = memoize(method, memopts)
 
-    return function() {
+    return function () {
       // XXX: Should be replaced with spread operator if possible.
       return memoizedMethod.apply(this, arguments)
         .catch(err => {
@@ -159,75 +230,3 @@ class Provider {
 
 }
 
-Provider.DefaultFilters = {
-  genres: {
-    all: 'All',
-    action: 'Action',
-    adventure: 'Adventure',
-    animation: 'Animation',
-    biography: 'Biography',
-    comedy: 'Comedy',
-    crime: 'Crime',
-    documentary: 'Documentary',
-    drama: 'Drama',
-    family: 'Family',
-    fantasy: 'Fantasy',
-    filmNoir: 'Film-Noir',
-    history: 'History',
-    horror: 'Horror',
-    music: 'Music',
-    musical: 'Musical',
-    mystery: 'Mystery',
-    romance: 'Romance',
-    sciFi: 'Sci-Fi',
-    short: 'Short',
-    sport: 'Sport',
-    thriller: 'Thriller',
-    war: 'War',
-    western: 'Western'
-  },
-  sorters: {
-    popularity: 'Popularity',
-    trending: 'Trending',
-    lastAdded: 'Last Added',
-    year: 'Year',
-    title: 'Title',
-    rating: 'Rating'
-  }
-}
-
-Provider.ArgType = {
-  ARRAY: 'BUTTER_PROVIDER_ARG_TYPE_ARRAY',
-  OBJECT: 'BUTTER_PROVIDER_ARG_TYPE_OBJECT',
-  STRING: 'BUTTER_PROVIDER_ARG_TYPE_STRING',
-  BOOLEAN: 'BUTTER_PROVIDER_ARG_TYPE_BOOLEAN',
-  NUMBER: 'BUTTER_PROVIDER_ARG_TYPE_NUMBER'
-}
-
-Provider.ItemType = {
-  MOVIE: 'movie',
-  TVSHOW: 'tvshow'
-}
-
-Provider.OrderType = {
-  ASC: 'asc',
-  DESC: 'desc',
-  NULL: null
-}
-
-Provider.SorterType = {
-  NAME: 'name',
-  RATING: 'rating',
-  POPULARITY: 'popularity',
-  NULL: null
-}
-
-Provider.QualityType = {
-  DEFAULT: '0',
-  LOW: '480p',
-  MEDIUM: '720p',
-  HIGH: '1080p',
-  NULL: null
-}
-
-module.exports = Provider
