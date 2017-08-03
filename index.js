@@ -57,16 +57,16 @@ class Provider {
       ? this._parseArgs(argString)
       : undefined
 
-    const { args, defaults } = this.config
-    const argsObject = Object.assign({}, defaults, parsed)
+    const { argTypes, defaults } = this.config
+    const args = Object.assign({}, defaults, parsed)
 
-    Object.keys(args).map(k => {
-      if (!argsObject || !argsObject[k]) {
+    Object.keys(argTypes).map(k => {
+      if (!args || !args[k]) {
         console.error(`Value ${k} was not provided`)
       }
     })
 
-    return argsObject
+    return args
   }
 
   _parseArgs(uri) {
