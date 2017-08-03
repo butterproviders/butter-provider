@@ -16,15 +16,15 @@ if (pkg.butter) {
   config = Object.assign({}, config, pkg.butter)
 }
 
-function load () {
+function load() {
   return require(process.cwd())
 }
 
-function isEmpty (obj) {
+function isEmpty(obj) {
   return Object.keys(obj).length === 0 && obj.constructor === Object
 }
 
-function instanciate (loadFunction) {
+function instanciate(loadFunction) {
   if (isEmpty(loadFunction)) {
     loadFunction = load
   }
@@ -35,24 +35,24 @@ function instanciate (loadFunction) {
   return new P(testArgs)
 }
 
-function isInValues (element, set) {
+function isInValues(element, set) {
   return Object.keys(set).reduce((a, c) => (a || (element === set[c])))
 }
 
-function getRandomKey (array) {
+function getRandomKey(array) {
   return ~~(Math.random() * (array.length))
 }
 
-function getRandom (array) {
+function getRandom(array) {
   return array[getRandomKey(array)]
 }
 
-function runAllTests (loadFunction) {
+function runAllTests(loadFunction) {
   if (isEmpty(loadFunction)) {
     loadFunction = load
   }
 
-  function testDetail (t, d, uniqueId) {
+  function testDetail(t, d, uniqueId) {
     console.log(`Checking details for: ${uniqueId}`)
     t.ok(d, 'we were able to get details')
     t.ok(d[uniqueId] || d.id, 'we have an unique id')
@@ -79,7 +79,7 @@ function runAllTests (loadFunction) {
       t.ok(d.torrents, 'we have a torrents field')
       const quality = getRandom(Object.keys(d.torrents))
       t.ok(isInValues(quality, Provider.QualityType),
-           'we have a quality which is a quality type')
+        'we have a quality which is a quality type')
       t.ok(d.torrents[quality], 'we have a quality object')
       t.ok(d.torrents[quality].url, 'we have an url to stream')
       t.ok(d.torrents[quality].size, 'we have the size')

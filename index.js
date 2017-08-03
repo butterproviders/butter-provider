@@ -21,7 +21,7 @@ const defaultConfig = {
 }
 
 class Provider {
- 
+
   constructor(args = defaultArgs, config = defaultConfig) {
     this.config = config
     this.args = Object.assign({}, args, this._processArgs(args))
@@ -40,7 +40,7 @@ class Provider {
     const self = this
     const memoizedMethod = memoize(method, memopts)
 
-    return function() {
+    return function () {
       // XXX: Should be replaced with spread operator if possible.
       return memoizedMethod.apply(this, arguments)
         .catch(err => {

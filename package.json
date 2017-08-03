@@ -4,6 +4,7 @@
   "description": "A base class for Butter providers",
   "main": "index.js",
   "scripts": {
+    "lint": "./node_modules/.bin/eslint tests/** index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,6 +22,12 @@
   },
   "devDependencies": {
     "debug": "^2.6.8",
+    "eslint": "^4.3.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
     "tape": "^4.8.0"
   }
 }
