@@ -215,9 +215,9 @@ module.exports = class Provider {
     return Promise.resolve(oldData)
   }
 
-  fetch(filters) {
+  fetch(filter) {
     this._warnDefault(
-      `fetch: ${JSON.strigify(filters)}`, 'fetching of the data'
+      `fetch: ${JSON.stringify(filter)}`, 'fetching of the data'
     )
 
     const err = new Error('Implement your own version of the \'fetch\' method')
