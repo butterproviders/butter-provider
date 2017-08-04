@@ -74,7 +74,7 @@ class Provider {
   _parseArgs(uri) {
     // XXX: Reimplement querystring.parse to not escape
     const parsed = {}
-    const [producer, parsed] = uri.split('?')
+    const [ , parsed ] = uri.split('?')
 
     if (parsed) {
       parsed.split('&').map(v => {
