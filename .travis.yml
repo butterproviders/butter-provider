@@ -15,7 +15,7 @@ install:
   - npm i -g npm@latest
   - npm i
 
-scripts:
+script:
   - npm run lint
   - npm run test
 
