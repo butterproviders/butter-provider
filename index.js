@@ -68,18 +68,18 @@ class Provider {
 
   _parseArgs(uri) {
     // XXX: Reimplement querystring.parse to not escape
-    const args = {}
-    const tokenize = uri.split('?')
+    const parsed = {}
+    const [producer, args] = uri.split('?')
 
-    if (tokenize[1]) {
-      tokenize[1].split('&').map(v => {
-        const [ key, value ] = v.split('=')
+    if (args) {
+      args[1].split('&').map(arg => {
+        const [ key, value ] = arg.split('=')
 
-        args[key] = this._parseArgForType(key, value)
+        parsed[key] = this._parseArgForType(key, value)
       })
     }
 
-    return args
+    return parsed
   }
 
   _parseArgForType(type, arg) {
