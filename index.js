@@ -22,15 +22,16 @@ const defaultConfig = {
 }
 
 class Provider {
- 
+
   constructor(args = defaultArgs, config = defaultConfig) {
-    this.config = config
-    this.args = Object.assign({}, args, this._processArgs(args))
-    this.filters = Object.assign(
+    config.filters = Object.assign(
       {},
       Provider.DefaultFilters,
-      this.config.filters
+      config.filters
     )
+
+    this.config = config
+    this.args = Object.assign({}, args, this._processArgs(args))
 
     const { memopts } = this.args
     this.fetch = this._makeCached(this.fetch, memopts)
@@ -60,9 +61,9 @@ class Provider {
 
     debug (`parsed: ${JSON.stringify(parsed)}`)
 
-    const { args, defaults } = this.config
-    Object.keys(args).map(k => {
-      if (!args || !args[k]) {
+    const { argTypes, defaults } = this.config
+    Object.keys(argTypes).map(k => {
+      if (!argTypes || !argTypes[k]) {
         console.error(`Value ${k} was not provided`)
       }
     })
@@ -73,13 +74,13 @@ class Provider {
   _parseArgs(uri) {
     // XXX: Reimplement querystring.parse to not escape
     const parsed = {}
-    const [producer, args] = uri.split('?')
+    const [producer, parsed] = uri.split('?')
 
-    if (args) {
-      args[1].split('&').map(arg => {
-        const [ key, value ] = arg.split('=')
+    if (parsed) {
+      parsed.split('&').map(v => {
+        const [ key, value ] = v.split('=')
 
-        parsed[key] = this._parseArgForType(key, value)
+        parsed[key] = this._parseArgForType(this.config.argTypes[key], value)
       })
     }
 
