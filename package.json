@@ -6,7 +6,7 @@
   "scripts": {
     "coveralls": "cat ./coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls",
     "lint": "./node_modules/.bin/eslint tests/** index.js",
-    "test": "./node_modules/.bin/nyc --reporter=lcov --reporter=text ./node_modules/.bin/mocha test/*.spec.*"
+    "test": "./node_modules/.bin/nyc --reporter=lcov --reporter=text ./node_modules/.bin/mocha tests/*.spec.*"
   },
   "repository": {
     "type": "git",

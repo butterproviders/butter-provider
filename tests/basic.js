@@ -64,7 +64,6 @@ function runAllTests(loadFunction) {
 
     if (type === Provider.ItemType.MOVIE) {
       expect(details.trailer || details.trailer === false, 'we have a trailer')
-
       expect(details.torrents, 'we have a torrents field')
 
       const quality = getRandom(Object.keys(details.torrents))
@@ -84,7 +83,6 @@ function runAllTests(loadFunction) {
       expect(isFinite(episode.episode)).to.exist
       expect(episode.season).to.exist
       expect(episode.tvdb_id).to.exist
-
       expect(episode.torrents).to.exist
 
       const quality = getRandom(Object.keys(details.torrents))
@@ -94,22 +92,13 @@ function runAllTests(loadFunction) {
     }
   }
 
-  describe('Provider', () => {
-    let instance, Provider, fetchRes
+  describe(pkg.name, () => {
+    let fetchRes, instance, key, uniqueIds
     before(() => {
-      Provider = loadFunction()
       instance = instanciate(loadFunction)
     })
 
-    it('Provider', () => {
-      expect(Provider).to.exist
-    })
-
-    it('instance', () => {
-      expect(instance).to.exist
-    })
-
-    it('config', () => {
+    it('should tests the implemented config object', () => {
       const { config } = instance
       expect(config.name).to.exist
       expect(config.uniqueId).to.exist
@@ -117,40 +106,50 @@ function runAllTests(loadFunction) {
       expect(instance.args).to.exist
     })
 
-    it('fetch', done => {
-      instance.fetch().then(res => {
-        fetchRes = res
-        debug(`fetch: ${res}`)
-
-        expect(res).to.exist
-        expect(res.hasMore).to.be.a('boolean')
-        expect(res.results).to.be.an('array')
-        expect(res.results.length).to.be.at.least(0)
-
-        done()
-      }).catch(done)
-    })
-
-    it('extractIds & details', done => {
-      const uniqueIds = instance.extractIds(fetchRes)
-      const key = getRandomKey(uniqueIds)
-
-      expect(uniqueIds).to.be.an('array')
-      instance.detail(uniqueIds[key], fetchRes.results[key])
+    it('should test the implemented fetch method', done => {
+      instance.fetch()
         .then(res => {
-          debug(`detail: ${res}`)
-          testDetail(res, instance.config.uniqueId)
+          fetchRes = res
+          debug(`fetch: ${res}`)
+
+          expect(res).to.exist
+          expect(res.hasMore).to.be.a('boolean')
+          expect(res.results).to.be.an('array')
+          expect(res.results.length).to.be.at.least(0)
+
           done()
         })
         .catch(done)
     })
 
-    it('random', done => {
-      instance.random().then(res => {
-        debug(`random: ${res}`)
-        testDetail(res, instance.config.uniqueId)
-        done()
-      }).catch(done)
+    it('should test the implemented extractIds method', () => {
+      uniqueIds = instance.extractIds(fetchRes)
+      key = getRandomKey(uniqueIds)
+
+      expect(uniqueIds).to.be.an('array')
+      expect(uniqueIds.length).to.be.at.least(0)
+    })
+
+    it('should test the implemented details method', done => {
+      instance.detail(uniqueIds[key], fetchRes.results[key])
+        .then(res => {
+          debug(`detail: ${res}`)
+          testDetail(res, instance.config.uniqueId)
+
+          done()
+        })
+        .catch(done)
+    })
+
+    it('should test the implemented random method', done => {
+      instance.random()
+        .then(res => {
+          debug(`random: ${res}`)
+          testDetail(res, instance.config.uniqueId)
+
+          done()
+        })
+        .catch(done)
     })
   })
 }
