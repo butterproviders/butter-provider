@@ -126,7 +126,7 @@ class Provider {
     this._warnDefault('random', 'faster random')
 
     const uniqueId = this.config.uniqueId
-    return this.fetch()
+    return this.fetch({})
       .then(({ results }) => {
         const random = Math.floor(Math.random() * results.length)
         return results[random]
