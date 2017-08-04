@@ -52,19 +52,21 @@ class Provider {
     }
   }
 
-  _processArgs(args) {
-    const parsed = typeof args === 'string'
-      ? this._parseArgs(args)
+  _processArgs(argString) {
+    const parsed = typeof argString === 'string'
+      ? this._parseArgs(argString)
       : undefined
 
-    const { argTypes, defaults } = this.config
-    Object.keys(argTypes).map(k => {
-      if (!parsed || !parsed[k]) {
+    const { args, defaults } = this.config
+    const argsObject = Object.assign({}, defaults, parsed)
+
+    Object.keys(args).map(k => {
+      if (!argsObject || !argsObject[k]) {
         console.error(`Value ${k} was not provided`)
       }
     })
 
-    return Object.assign({}, defaults, parsed)
+    return argsObject
   }
 
   _parseArgs(uri) {
