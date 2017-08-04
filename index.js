@@ -1,6 +1,7 @@
 'use strict'
 
 const memoize = require('memoizee')
+const debug = require('debug')('butter-provider')
 
 const defaultMemopts = {
   maxAge: 10 * 60 * 1000,
@@ -52,9 +53,12 @@ class Provider {
   }
 
   _processArgs(argString) {
+    debug (`processing arg: ${argString}`)
     const parsed = typeof argString === 'string'
       ? this._parseArgs(argString)
       : undefined
+
+    debug (`parsed: ${JSON.stringify(parsed)}`)
 
     const { args, defaults } = this.config
     Object.keys(args).map(k => {
@@ -83,6 +87,7 @@ class Provider {
   }
 
   _parseArgForType(type, arg) {
+    debug (`parsing ${arg} as ${type}`)
     try {
       switch (type) {
         case Provider.ArgType.NUMBER:
