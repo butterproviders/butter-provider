@@ -54,12 +54,12 @@ class Provider {
   }
 
   _processArgs(argString) {
-    debug (`processing arg: ${argString}`)
+    debug(`processing arg: ${argString}`)
     const parsed = typeof argString === 'string'
       ? this._parseArgs(argString)
       : undefined
 
-    debug (`parsed: ${JSON.stringify(parsed)}`)
+    debug(`parsed: ${JSON.stringify(parsed)}`)
 
     const { argTypes, defaults } = this.config
     Object.keys(argTypes).map(k => {
@@ -88,7 +88,7 @@ class Provider {
   }
 
   _parseArgForType(type, arg) {
-    debug (`parsing ${arg} as ${type}`)
+    debug(`parsing ${arg} as ${type}`)
     try {
       switch (type) {
         case Provider.ArgType.NUMBER:
