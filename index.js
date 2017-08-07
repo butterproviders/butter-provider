@@ -74,10 +74,10 @@ class Provider {
   _parseArgs(uri) {
     // XXX: Reimplement querystring.parse to not escape
     const parsed = {}
-    const [ , parsed ] = uri.split('?')
+    const [ , args ] = uri.split('?')
 
-    if (parsed) {
-      parsed.split('&').map(v => {
+    if (args) {
+      args.split('&').map(v => {
         const [ key, value ] = v.split('=')
 
         parsed[key] = this._parseArgForType(this.config.argTypes[key], value)
