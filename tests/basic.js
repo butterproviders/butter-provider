@@ -1,181 +1,156 @@
 'use strict'
 
+/* eslint-disable no-unused-expressions */
 const debug = require('debug')('butter-provider:tests')
 const path = require('path')
-const Provider = require('butter-provider')
-const tape = require('tape')
+const Provider = require('../')
+const { expect } = require('chai')
 
 const pkg = require(path.join(process.cwd(), 'package.json'))
 
-let config = {
-  args: {},
-  timeout: 1000
-}
-
-if (pkg.butter) {
-  config = Object.assign({}, config, pkg.butter)
-}
-
-function load () {
+function load() {
   return require(process.cwd())
 }
 
-function isEmpty (obj) {
+function isEmpty(obj) {
   return Object.keys(obj).length === 0 && obj.constructor === Object
 }
 
-function instanciate (loadFunction) {
+function instanciate(loadFunction) {
   if (isEmpty(loadFunction)) {
     loadFunction = load
   }
 
   const P = loadFunction()
   const testArgs = pkg.butter ? pkg.butter.testArgs : null
-
   return new P(testArgs)
 }
 
-function isInValues (element, set) {
+function isInValues(element, set) {
   return Object.keys(set).reduce((a, c) => (a || (element === set[c])))
 }
 
-function getRandomKey (array) {
-  return ~~(Math.random() * (array.length))
+function getRandomKey(array) {
+  return Math.floor(Math.random() * (array.length))
 }
 
-function getRandom (array) {
+function getRandom(array) {
   return array[getRandomKey(array)]
 }
 
-function runAllTests (loadFunction) {
+function runAllTests(loadFunction) {
   if (isEmpty(loadFunction)) {
     loadFunction = load
   }
 
-  function testDetail (t, d, uniqueId) {
-    console.log(`Checking details for: ${uniqueId}`)
-    t.ok(d, 'we were able to get details')
-    t.ok(d[uniqueId] || d.id, 'we have an unique id')
-    t.ok(d.title, 'we have a title')
-    t.ok(d.year, 'we have a year')
-    t.ok(d.genres, 'we have a genres field')
-    t.ok(d.genres.length > 0, 'we have at least 1 genre')
-    t.ok(d.rating, 'we have a rating')
-    t.ok(d.backdrop, 'we have a backdrop')
-    t.ok(d.poster, 'we have a poster')
-    t.ok(d.subtitle, 'we have a subtitle')
-    t.ok(d.synopsis, 'we have a synopsis')
-    t.ok(typeof (d.synopsis) === 'string', 'synopsis is a string')
-    t.ok(d.synopsis.length > 16, 'synopsis is at least 16 bytes')
-    t.ok(d.runtime, 'we have a runtime')
+  function testDetail(details, uniqueId) {
+    expect(details).to.exist
+    expect(details[uniqueId] || details.id).to.exist
+    expect(details.title).to.exist
+    expect(details.year).to.exist
+    expect(details.genres).to.exist
+    expect(details.genres.length).to.be.at.least(0)
+    expect(details.rating).to.exist
+    expect(details.backdrop).to.exist
+    expect(details.poster).to.exist
+    expect(details.subtitle).to.exist
+    expect(details.synopsis).to.exist
+    expect(details.synopsis).to.be.a('string')
+    expect(details.synopsis.length).to.be.at.least(16)
+    expect(details.runtime).to.exist
 
-    const type = d.type
-    t.ok(isInValues(type, Provider.ItemType),
-      'we have a type field which is an item type')
+    const type = details.type
+    expect(isInValues(type, Provider.ItemType)).to.exist
 
     if (type === Provider.ItemType.MOVIE) {
-      t.ok(d.trailer || d.trailer === false, 'we have a trailer')
+      expect(details.trailer || details.trailer === false, 'we have a trailer')
+      expect(details.torrents, 'we have a torrents field')
 
-      t.ok(d.torrents, 'we have a torrents field')
-      const quality = getRandom(Object.keys(d.torrents))
-      t.ok(isInValues(quality, Provider.QualityType),
-           'we have a quality which is a quality type')
-      t.ok(d.torrents[quality], 'we have a quality object')
-      t.ok(d.torrents[quality].url, 'we have an url to stream')
-      t.ok(d.torrents[quality].size, 'we have the size')
+      const quality = getRandom(Object.keys(details.torrents))
+      expect(isInValues(quality, Provider.QualityType)).to.exist
+      expect(details.torrents[quality], 'we have a quality object')
+      expect(details.torrents[quality].url, 'we have an url to stream')
+      expect(details.torrents[quality].size, 'we have the size')
     } else if (type === Provider.ItemType.TVSHOW) {
-      t.ok(d.status, 'we have a status')
-      t.ok(d.num_seasons, 'we have a num_seasons field')
-      t.ok(d.episodes, 'we have an episodes field')
-      t.ok(d.episodes.length > 0, 'we have at least 1 episode')
+      expect(details.status).to.exist
+      expect(details.num_seasons).to.exist
+      expect(details.episodes).to.exist
+      expect(details.episodes.length).to.be.at.least(0)
 
-      const episode = getRandom(d.episodes)
-      if (!episode) {
-        console.log(`now d is ${d}`)
-      }
-      t.ok(episode.first_aired, 'we have a first aired field')
-      t.ok(episode.overview, 'we have an overview')
-      t.ok(isFinite(episode.episode), 'we have an episode number')
-      t.ok(episode.season, 'we have a season number')
-      t.ok(episode.tvdb_id, 'we have a tvdb id')
+      const episode = getRandom(details.episodes)
+      expect(episode.first_aired).to.exist
+      expect(episode.overview).to.exist
+      expect(isFinite(episode.episode)).to.exist
+      expect(episode.season).to.exist
+      expect(episode.tvdb_id).to.exist
+      expect(episode.torrents).to.exist
 
-      t.ok(episode.torrents, 'we have a torrents field')
-
-      const quality = getRandom(Object.keys(d.torrents))
-      t.ok(isInValues(quality, Provider.QualityType),
-        'we have a quality which is a quality type')
-      t.ok(episode.torrents[quality], 'we have a quality object')
-      t.ok(episode.torrents[quality].url, 'we have an url to stream')
-    } else {
-      t.notOk(type, 'is not a valid type')
+      const quality = getRandom(Object.keys(details.torrents))
+      expect(isInValues(quality, Provider.QualityType)).to.exist
+      expect(episode.torrents[quality]).to.exist
+      expect(episode.torrents[quality].url).to.exist
     }
   }
 
-  tape.onFinish(() => process.exit(0))
-
-  tape('loads', t => {
-    const P = loadFunction()
-
-    t.ok(P, 'we were able to load')
-
-    const I = instanciate(loadFunction)
-
-    t.ok(I, 'we were able to instanciate')
-
-    t.ok(I.config.name, 'we have a name')
-    t.ok(I.config.uniqueId, 'we have a uniqueId')
-    t.ok(I.config.tabName, 'we have a tabName')
-
-    t.ok(I.args, 'we have an args object')
-
-    t.end()
-  })
-
-  tape('fetch', t => {
-    debug(`fetch timeout: ${config.timeout}`)
-    t.timeoutAfter(config.timeout)
-
-    const I = instanciate(loadFunction)
-
-    I.fetch().then(r => {
-      debug(`fetch: ${r}`)
-      t.ok(r, 'we were able to fetch')
-      t.ok(r.hasMore === true || r.hasMore === false,
-        'we have a hasMore field that is a boolean')
-      t.ok(r.results, 'we have a results field')
-      t.ok(r.results.length > 0, 'we have at least 1 result')
-
-      const uniqueIds = I.extractIds(r)
-      const key = getRandomKey(uniqueIds)
-
-      console.log(`Will try to get details for key: ${key}`)
-
-      t.ok(uniqueIds, 'extractIds')
-      I.detail(uniqueIds[key], r.results[key]).then(d => {
-        debug(`detail: ${d}`)
-        testDetail(t, d, I.config.uniqueId)
-        t.end()
-      }).catch(e => {
-        console.error(`Error in details: ${e}`)
-        t.notOk(e, 'failed detail')
-      })
-    }).catch(e => {
-      console.error(`Error in fetch: ${e}`)
-      t.notOk(e, 'failed fetch')
+  describe(pkg.name, () => {
+    let fetchRes, instance, key, uniqueIds
+    before(() => {
+      instance = instanciate(loadFunction)
     })
-  })
 
-  tape('random', t => {
-    debug(`random timeout: ${config.timeout}`)
-    t.timeoutAfter(config.timeout)
+    it('should tests the implemented config object', () => {
+      const { config } = instance
+      expect(config.name).to.exist
+      expect(config.uniqueId).to.exist
+      expect(config.tabName).to.exist
+      expect(instance.args).to.exist
+    })
 
-    var I = instanciate(loadFunction)
+    it('should test the implemented fetch method', done => {
+      instance.fetch()
+        .then(res => {
+          fetchRes = res
+          debug(`fetch: ${res}`)
 
-    I.random().then(r => {
-      debug(`random: ${r}`)
-      testDetail(t, r, I.config.uniqueId)
-      t.end()
-    }).catch(e => t.notOk(e, 'failed random'))
+          expect(res).to.exist
+          expect(res.hasMore).to.be.a('boolean')
+          expect(res.results).to.be.an('array')
+          expect(res.results.length).to.be.at.least(0)
+
+          done()
+        })
+        .catch(done)
+    })
+
+    it('should test the implemented extractIds method', () => {
+      uniqueIds = instance.extractIds(fetchRes)
+      key = getRandomKey(uniqueIds)
+
+      expect(uniqueIds).to.be.an('array')
+      expect(uniqueIds.length).to.be.at.least(0)
+    })
+
+    it('should test the implemented details method', done => {
+      instance.detail(uniqueIds[key], fetchRes.results[key])
+        .then(res => {
+          debug(`detail: ${res}`)
+          testDetail(res, instance.config.uniqueId)
+
+          done()
+        })
+        .catch(done)
+    })
+
+    it('should test the implemented random method', done => {
+      instance.random()
+        .then(res => {
+          debug(`random: ${res}`)
+          testDetail(res, instance.config.uniqueId)
+
+          done()
+        })
+        .catch(done)
+    })
   })
 }
 

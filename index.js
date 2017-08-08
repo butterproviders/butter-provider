@@ -18,7 +18,8 @@ const defaultArgs = {
 
 const defaultConfig = {
   argTypes: {},
-  filters: {}
+  filters: {},
+  uniqueId: 'id'
 }
 
 class Provider {
@@ -42,13 +43,13 @@ class Provider {
     const self = this
     const memoizedMethod = memoize(method, memopts)
 
-    return function() {
+    return function () {
       // XXX: Should be replaced with spread operator if possible.
       return memoizedMethod.apply(this, arguments)
         .catch(err => {
           // Delete the cached result if we get an error so retry will work
           memoizedMethod.delete(self.filters)
-          return err
+          return Promise.reject(err)
         })
     }
   }
@@ -62,13 +63,15 @@ class Provider {
     debug(`parsed: ${JSON.stringify(parsed)}`)
 
     const { argTypes, defaults } = this.config
+    const args = Object.assign({}, defaults, parsed)
+
     Object.keys(argTypes).map(k => {
-      if (!argTypes || !argTypes[k]) {
+      if (!args || !args[k]) {
         console.error(`Value ${k} was not provided`)
       }
     })
 
-    return Object.assign({}, defaults, parsed)
+    return args
   }
 
   _parseArgs(uri) {
@@ -79,8 +82,9 @@ class Provider {
     if (args) {
       args.split('&').map(v => {
         const [ key, value ] = v.split('=')
+        const type = this.config.argTypes[key]
 
-        parsed[key] = this._parseArgForType(this.config.argTypes[key], value)
+        args[key] = this._parseArgForType(type, value)
       })
     }
 

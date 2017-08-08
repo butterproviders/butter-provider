@@ -4,7 +4,9 @@
   "description": "A base class for Butter providers",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "coveralls": "cat ./coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls",
+    "lint": "./node_modules/.bin/eslint tests/** index.js",
+    "test": "./node_modules/.bin/nyc --reporter=lcov --reporter=text ./node_modules/.bin/mocha tests/*.spec.*"
   },
   "repository": {
     "type": "git",
@@ -20,7 +22,21 @@
     "memoizee": "^0.4.5"
   },
   "devDependencies": {
+    "chai": "^4.1.0",
+    "coveralls": "^2.13.1",
     "debug": "^2.6.8",
-    "tape": "^4.8.0"
+    "eslint": "^4.3.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "mocha": "^3.5.0",
+    "nyc": "^11.1.0"
+  },
+  "nyc": {
+    "exclude": [
+      "tests/**/*.js"
+    ]
   }
 }
