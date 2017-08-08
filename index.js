@@ -84,7 +84,7 @@ class Provider {
         const [ key, value ] = v.split('=')
         const type = this.config.argTypes[key]
 
-        args[key] = this._parseArgForType(type, value)
+        parsed[key] = this._parseArgForType(type, value)
       })
     }
 
