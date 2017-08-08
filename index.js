@@ -1,6 +1,7 @@
 'use strict'
 
 const memoize = require('memoizee')
+const debug = require('debug')('butter-provider')
 
 const defaultMemopts = {
   maxAge: 10 * 60 * 1000,
@@ -21,15 +22,16 @@ const defaultConfig = {
 }
 
 class Provider {
- 
+
   constructor(args = defaultArgs, config = defaultConfig) {
-    this.config = config
-    this.args = Object.assign({}, args, this._processArgs(args))
-    this.filters = Object.assign(
+    config.filters = Object.assign(
       {},
       Provider.DefaultFilters,
-      this.config.filters
+      config.filters
     )
+
+    this.config = config
+    this.args = Object.assign({}, args, this._processArgs(args))
 
     const { memopts } = this.args
     this.fetch = this._makeCached(this.fetch, memopts)
@@ -52,13 +54,16 @@ class Provider {
   }
 
   _processArgs(argString) {
+    debug(`processing arg: ${argString}`)
     const parsed = typeof argString === 'string'
       ? this._parseArgs(argString)
       : undefined
 
-    const { args, defaults } = this.config
-    Object.keys(args).map(k => {
-      if (!args || !args[k]) {
+    debug(`parsed: ${JSON.stringify(parsed)}`)
+
+    const { argTypes, defaults } = this.config
+    Object.keys(argTypes).map(k => {
+      if (!argTypes || !argTypes[k]) {
         console.error(`Value ${k} was not provided`)
       }
     })
@@ -68,21 +73,22 @@ class Provider {
 
   _parseArgs(uri) {
     // XXX: Reimplement querystring.parse to not escape
-    const args = {}
-    const tokenize = uri.split('?')
+    const parsed = {}
+    const [ , args ] = uri.split('?')
 
-    if (tokenize[1]) {
-      tokenize[1].split('&').map(v => {
+    if (args) {
+      args.split('&').map(v => {
         const [ key, value ] = v.split('=')
 
-        args[key] = this._parseArgForType(key, value)
+        parsed[key] = this._parseArgForType(this.config.argTypes[key], value)
       })
     }
 
-    return args
+    return parsed
   }
 
   _parseArgForType(type, arg) {
+    debug(`parsing ${arg} as ${type}`)
     try {
       switch (type) {
         case Provider.ArgType.NUMBER:
@@ -121,7 +127,7 @@ class Provider {
     this._warnDefault('random', 'faster random')
 
     const uniqueId = this.config.uniqueId
-    return this.fetch()
+    return this.fetch({})
       .then(({ results }) => {
         const random = Math.floor(Math.random() * results.length)
         return results[random]
