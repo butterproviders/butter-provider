@@ -152,8 +152,7 @@ function runAllTests(loadFunction) {
           testDetail(res, instance.config.uniqueId)
 
           done()
-        })
-        .catch(done)
+        }).catch(done)
     })
 
     it('should test the implemented random method', done => {
@@ -163,8 +162,7 @@ function runAllTests(loadFunction) {
           testDetail(res, instance.config.uniqueId)
 
           done()
-        })
-        .catch(done)
+        }).catch(done)
     })
   })
 }
