@@ -100,7 +100,7 @@ function runAllTests(loadFunction) {
     }
   }
 
-  describe(pkg.name, () => {
+  describe(pkg.name, function {
     let fetchRes, instance, key, uniqueIds
     this.timeout(config.timeout)
     before(() => {
