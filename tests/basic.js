@@ -8,6 +8,15 @@ const { expect } = require('chai')
 
 const pkg = require(path.join(process.cwd(), 'package.json'))
 
+var config = {
+    args: {},
+    timeout: 1000
+};
+
+if (pkg.butter && pkg.butter.testArgs) {
+    config.args = Object.assign({}, config.args, Provider.prototype.parseArgs(pkg.butter.testArgs).args);
+}
+
 function load() {
   return require(process.cwd())
 }
@@ -22,8 +31,7 @@ function instanciate(loadFunction) {
   }
 
   const P = loadFunction()
-  const testArgs = pkg.butter ? pkg.butter.testArgs : null
-  return new P(testArgs)
+  return new P(config.args)
 }
 
 function isInValues(element, set) {
@@ -94,6 +102,7 @@ function runAllTests(loadFunction) {
 
   describe(pkg.name, () => {
     let fetchRes, instance, key, uniqueIds
+    this.timeout(config.timeout)
     before(() => {
       instance = instanciate(loadFunction)
     })
