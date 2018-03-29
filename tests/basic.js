@@ -13,9 +13,15 @@ var config = {
   timeout: 1000
 }
 
-if (pkg.butter && pkg.butter.testArgs) {
-  config.args = Object.assign({}, config.args, Provider.prototype.parseArgs(pkg.butter.testArgs).args)
+if (pkg.butter) {
+    config = Object.assign({}, config, pkg.butter)
+
+    if (pkg.butter.testArgs) {
+        config.args = Object.assign({}, config.args, Provider.prototype.parseArgs(pkg.butter.testArgs).args)
+    }
 }
+
+debug('starting test with config: ', config)
 
 function load() {
   return require(process.cwd())
@@ -100,7 +106,7 @@ function runAllTests(loadFunction) {
     }
   }
 
-  describe(pkg.name, function {
+  describe(pkg.name, function () {
     let fetchRes, instance, key, uniqueIds
     this.timeout(config.timeout)
     before(() => {
