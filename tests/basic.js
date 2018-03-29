@@ -9,12 +9,12 @@ const { expect } = require('chai')
 const pkg = require(path.join(process.cwd(), 'package.json'))
 
 var config = {
-    args: {},
-    timeout: 1000
-};
+  args: {},
+  timeout: 1000
+}
 
 if (pkg.butter && pkg.butter.testArgs) {
-    config.args = Object.assign({}, config.args, Provider.prototype.parseArgs(pkg.butter.testArgs).args);
+  config.args = Object.assign({}, config.args, Provider.prototype.parseArgs(pkg.butter.testArgs).args)
 }
 
 function load() {
