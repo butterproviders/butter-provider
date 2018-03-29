@@ -22,6 +22,43 @@ const defaultConfig = {
   uniqueId: 'id'
 }
 
+function parseArgs(uri, argTypes) {
+  // XXX: Reimplement querystring.parse to not escape
+  const parsed = {}
+  const [ , args ] = uri.split('?')
+
+  if (args) {
+    args.split('&').map(v => {
+      const [ key, value ] = v.split('=')
+      const type = argTypes[key] || Provider.ArgType.OBJECT
+
+      parsed[key] = parseArgForType(type, value)
+    })
+  }
+
+  return parsed
+}
+
+function parseArgForType(type, arg) {
+  debug(`parsing ${arg} as ${type}`)
+  try {
+    switch (type) {
+      case Provider.ArgType.NUMBER:
+        return Number(arg)
+      case Provider.ArgType.ARRAY:
+      case Provider.ArgType.OBJECT:
+        return JSON.parse(arg)
+      case Provider.ArgType.BOOLEAN:
+        return !!arg
+      case Provider.ArgType.STRING:
+      default:
+        return arg
+    }
+  } catch (err) {
+    console.error(`Error parsing argument: ${arg}, error: ${err}`)
+  }
+}
+
 class Provider {
 
   constructor(args = defaultArgs, config = defaultConfig) {
@@ -54,6 +91,10 @@ class Provider {
     }
   }
 
+  _parseArgs(argString) {
+    return Provider.parseArgs(argString, this.config.argTypes)
+  }
+
   _processArgs(argString) {
     debug(`processing arg: ${JSON.stringify(argString)}`)
     const parsed = typeof argString === 'string'
@@ -72,43 +113,6 @@ class Provider {
     })
 
     return args
-  }
-
-  _parseArgs(uri) {
-    // XXX: Reimplement querystring.parse to not escape
-    const parsed = {}
-    const [ , args ] = uri.split('?')
-
-    if (args) {
-      args.split('&').map(v => {
-        const [ key, value ] = v.split('=')
-        const type = this.config.argTypes[key]
-
-        parsed[key] = this._parseArgForType(type, value)
-      })
-    }
-
-    return parsed
-  }
-
-  _parseArgForType(type, arg) {
-    debug(`parsing ${arg} as ${type}`)
-    try {
-      switch (type) {
-        case Provider.ArgType.NUMBER:
-          return Number(arg)
-        case Provider.ArgType.ARRAY:
-        case Provider.ArgType.OBJECT:
-          return JSON.parse(arg)
-        case Provider.ArgType.BOOLEAN:
-          return !!arg
-        case Provider.ArgType.STRING:
-        default:
-          return arg
-      }
-    } catch (err) {
-      console.error(`Error parsing argument: ${arg}, error: ${err}`)
-    }
   }
 
   _warnDefault(fn, support) {
@@ -238,5 +242,8 @@ Provider.QualityType = {
   HIGH: '1080p',
   NULL: null
 }
+
+Provider.parseArgs = parseArgs
+Provider.parseArgForType = parseArgForType
 
 module.exports = Provider
