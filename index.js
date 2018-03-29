@@ -55,7 +55,7 @@ class Provider {
   }
 
   _processArgs(argString) {
-    debug(`processing arg: ${argString}`)
+    debug(`processing arg: ${JSON.stringify(argString)}`)
     const parsed = typeof argString === 'string'
       ? this._parseArgs(argString)
       : undefined

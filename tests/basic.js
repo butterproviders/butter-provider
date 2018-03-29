@@ -14,11 +14,11 @@ var config = {
 }
 
 if (pkg.butter) {
-    config = Object.assign({}, config, pkg.butter)
+  config = Object.assign({}, config, pkg.butter)
 
-    if (pkg.butter.testArgs) {
-        config.args = Object.assign({}, config.args, Provider.prototype.parseArgs(pkg.butter.testArgs).args)
-    }
+  if (pkg.butter.testArgs) {
+    config.args = Object.assign({}, config.args, Provider.prototype.parseArgs(pkg.butter.testArgs).args)
+  }
 }
 
 debug('starting test with config: ', config)
