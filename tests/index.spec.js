@@ -4,25 +4,7 @@
 const { expect } = require('chai')
 const Provider = require('../')
 
-describe('Provider', () => {
-  let ids, items, provider, tempFetch
-  before(() => {
-    // Reasign the default console.warn function so the output of the test
-    // results do not get cluttered.
-    console.warn = () => {}
-    console.error = () => {}
-
-    provider = new Provider()
-
-    items = {
-      results: []
-    }
-    ids = [1, 2, 3, 4, 5]
-    ids.map(n => items.results.push({
-      [provider.config.uniqueId]: n
-    }))
-  })
-
+describe('Provider Object', function () {
   it('should have static DefaultFilters', () => {
     const { DefaultFilters } = Provider
     expect(DefaultFilters).to.be.an('object')
@@ -48,6 +30,122 @@ describe('Provider', () => {
 
   it('should have static QualityType', () => {
     expect(Provider.QualityType).to.be.an('object')
+  })
+})
+
+describe('Provider.parseArgsForType', () => {
+  before(() => {
+    // Reasign the default console.warn function so the output of the test
+    // results do not get cluttered.
+    console.warn = () => {}
+    console.error = () => {}
+  })
+
+  it('should parse an argument as a number', () => {
+    const string = '1'
+    expect(string).to.be.a('string')
+
+    const parsed = Provider.parseArgForType(Provider.ArgType.NUMBER, string)
+    expect(parsed).to.be.a('number')
+  })
+
+  it('should parse an argumant as an array', () => {
+    const string = '["this is an array"]'
+    expect(string).to.be.a('string')
+
+    const parsed = Provider.parseArgForType(Provider.ArgType.ARRAY, string)
+    expect(parsed).to.be.an('array')
+  })
+
+  it('should parse an argumant as an object', () => {
+    const string = '{"key": "value"}'
+    expect(string).to.be.a('string')
+
+    const parsed = Provider.parseArgForType(Provider.ArgType.OBJECT, string)
+    expect(parsed).to.be.an('object')
+  })
+
+  it('should parse an argumant as a boolean', () => {
+    const string = 'true'
+    expect(string).to.be.a('string')
+
+    const parsed = Provider.parseArgForType(Provider.ArgType.BOOLEAN, string)
+    expect(parsed).to.be.a('boolean')
+  })
+
+  it('should parse an argumant as a string', () => {
+    const string = 'string'
+    expect(string).to.be.a('string')
+
+    const parsed = Provider.parseArgForType(Provider.ArgType.STRING, string)
+    expect(parsed).to.be.a('string')
+  })
+
+  it('should detect that a string is not an object', () => {
+    const string = 'this is not a valid stringified object'
+    expect(string).to.be.a('string')
+
+    const parsed = Provider.parseArgForType(Provider.ArgType.OBJECT, string)
+    expect(parsed).to.be.undefined
+  })
+
+  it('should parse an object back to life', () => {
+    const string = '{"key": {"subkey": 3}}'
+    expect(string).to.be.a('string')
+
+    const parsed = Provider.parseArgForType(Provider.ArgType.OBJECT, string)
+    expect(parsed.key.subkey).to.be.a('number')
+  })
+})
+
+describe('Provider.parseArgs', () => {
+  let argTypes = {
+    key1: Provider.ArgType.ARRAY,
+    key2: Provider.ArgType.STRING
+  }
+  const argString = 'ProviderName?key1=["value1"]&key2=value2'
+
+  it('should parse a string as arguments', () => {
+    const parsed = Provider.parseArgs(argString, argTypes)
+
+    expect(parsed).to.be.an('object')
+    expect(parsed.key1).to.be.an('array')
+    expect(parsed.key1[0]).to.be.a('string')
+    expect(parsed.key2).to.be.a('string')
+  })
+
+  it('should not accept an object as arguments', () => {
+    const args = {
+      key1: ['value1']
+    }
+    expect(Provider.parseArgs.bind(this, args, argTypes)).to.throw()
+  })
+
+  it('should accept a uri with no args', () => {
+    const shortUri = 'ProviderName?'
+    const shortParsed = Provider.parseArgs(shortUri)
+    expect(shortParsed).to.be.an('object')
+    expect(shortParsed).to.deep.equal({})
+  })
+})
+
+describe('Provider Instance', () => {
+  let ids, items, provider, tempFetch
+  before(() => {
+    // Reasign the default console.warn function so the output of the test
+    // results do not get cluttered.
+    console.warn = () => {}
+    console.error = () => {}
+
+    provider = new Provider()
+
+    items = {
+      results: []
+    }
+    ids = [1, 2, 3, 4, 5]
+    ids.map(n => items.results.push({
+      [provider.config.uniqueId]: n
+    }))
   })
 
   it('should process a string as arguments', () => {
@@ -84,54 +182,6 @@ describe('Provider', () => {
     expect(shortParsed).to.deep.equal({})
   })
 
-  it('should parse an argument as a number', () => {
-    const string = '1'
-    expect(string).to.be.a('string')
-
-    const parsed = provider._parseArgForType(Provider.ArgType.NUMBER, string)
-    expect(parsed).to.be.a('number')
-  })
-
-  it('should parse an argumant as an array', () => {
-    const string = '["this is an array"]'
-    expect(string).to.be.a('string')
-
-    const parsed = provider._parseArgForType(Provider.ArgType.ARRAY, string)
-    expect(parsed).to.be.an('array')
-  })
-
-  it('should parse an argumant as an object', () => {
-    const string = '{"key": "value"}'
-    expect(string).to.be.a('string')
-
-    const parsed = provider._parseArgForType(Provider.ArgType.OBJECT, string)
-    expect(parsed).to.be.an('object')
-  })
-
-  it('should parse an argumant as a boolean', () => {
-    const string = 'true'
-    expect(string).to.be.a('string')
-
-    const parsed = provider._parseArgForType(Provider.ArgType.BOOLEAN, string)
-    expect(parsed).to.be.a('boolean')
-  })
-
-  it('should parse an argumant as a boolean', () => {
-    const string = 'string'
-    expect(string).to.be.a('string')
-
-    const parsed = provider._parseArgForType(Provider.ArgType.STRING, string)
-    expect(parsed).to.be.a('string')
-  })
-
-  it('should parse an argumant as a boolean', () => {
-    const string = 'this is not a valid stringified object'
-    expect(string).to.be.a('string')
-
-    const parsed = provider._parseArgForType(Provider.ArgType.OBJECT, string)
-    expect(parsed).to.be.undefined
-  })
-
   it('should not change the given source', () => {
     const src = provider.resolveStream({
       key: 'value'
@@ -145,12 +195,10 @@ describe('Provider', () => {
     tempFetch = provider.fetch
     provider.fetch = () => Promise.resolve(items)
 
-    provider.random()
-      .then(res => {
-        expect(items.results).to.include(res)
-        done()
-      })
-      .catch(done)
+    provider.random().then(res => {
+      expect(items.results).to.include(res)
+      done()
+    }).catch(done)
   })
 
   it('should extract the unique ids', () => {
@@ -173,8 +221,7 @@ describe('Provider', () => {
         expect(res).to.deep.equal(oldData)
 
         done()
-      })
-      .catch(done)
+      }).catch(done)
   })
 
   it('should fail at executing the default fetch method', done => {
