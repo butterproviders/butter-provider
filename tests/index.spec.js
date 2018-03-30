@@ -4,6 +4,15 @@
 const { expect } = require('chai')
 const Provider = require('../')
 
+const defaultConfig = {
+  argTypes: {
+    key1: Provider.ArgType.ARRAY,
+    key2: Provider.ArgType.STRING
+  },
+  filters: {},
+  uniqueId: 'id'
+}
+
 describe('Provider Object', function () {
   it('should have static DefaultFilters', () => {
     const { DefaultFilters } = Provider
@@ -99,10 +108,7 @@ describe('Provider.parseArgsForType', () => {
 })
 
 describe('Provider.parseArgs', () => {
-  let argTypes = {
-    key1: Provider.ArgType.ARRAY,
-    key2: Provider.ArgType.STRING
-  }
+  let argTypes = defaultConfig.argTypes
   const argString = 'ProviderName?key1=["value1"]&key2=value2'
 
   it('should parse a string as arguments', () => {
@@ -129,15 +135,65 @@ describe('Provider.parseArgs', () => {
   })
 })
 
+describe('Provider Arguments', () => {
+  it('should process a string as arguments', () => {
+    let provider = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
+
+    expect(provider.args).to.be.an('object')
+    expect(provider.args.key1).to.be.an('array')
+    expect(provider.args.key2).to.be.a('string')
+  })
+
+  it('should process an object as arguments', () => {
+    let provider = new Provider({
+      key1: ['value1'],
+      key2: 'value2'
+    }, defaultConfig)
+
+    expect(provider.args).to.be.an('object')
+    expect(provider.args.key1).to.be.an('array')
+    expect(provider.args.key2).to.be.a('string')
+  })
+
+  it('should accept an empty config', () => {
+    let provider = new Provider('emptyArgTypes?key1=["value1"]&key2=value2', {})
+
+    expect(provider.args).to.be.an('object')
+    expect(provider.args.key1).to.be.an('array')
+    expect(provider.args.key2).to.be.a('string')
+  })
+
+  it('should accept an empty args', () => {
+    let provider = new Provider({}, {})
+
+    expect(provider.args).to.be.an('object')
+  })
+
+  it('should accept no config', () => {
+    let provider = new Provider('emptyArgTypes?key1=["value1"]&key2=value2')
+
+    expect(provider.args).to.be.an('object')
+    expect(provider.args.key1).to.be.an('array')
+    expect(provider.args.key2).to.be.a('string')
+  })
+
+  it('should accept no config, no args', () => {
+    let provider = new Provider()
+
+    expect(provider.args).to.be.an('object')
+  })
+})
+
 describe('Provider Instance', () => {
-  let ids, items, provider, tempFetch
+  let ids, items, tempFetch
+
+  let provider = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
+
   before(() => {
     // Reasign the default console.warn function so the output of the test
     // results do not get cluttered.
     console.warn = () => {}
     console.error = () => {}
-
-    provider = new Provider()
 
     items = {
       results: []
@@ -148,47 +204,26 @@ describe('Provider Instance', () => {
     }))
   })
 
-  it('should process a string as arguments', () => {
-    provider = new Provider('ProviderName?key1=["value1"]&key2=value2', {
-      argTypes: {
-        key1: Provider.ArgType.ARRAY,
-        key2: Provider.ArgType.STRING
-      },
-      filters: {},
-      uniqueId: 'id'
+  describe('resolveStream', () => {
+    it('should parse a string to an object', () => {
+      const uri = 'ProviderName?key1=["value1"]&key2=value2'
+      const parsed = provider._parseArgs(uri)
+      expect(parsed).to.be.an('object')
+
+      const shortUri = 'ProviderName?'
+      const shortParsed = provider._parseArgs(shortUri)
+      expect(shortParsed).to.be.an('object')
+      expect(shortParsed).to.deep.equal({})
     })
 
-    const args = 'ProviderName?key1=["value1"]'
-    const processed = provider._processArgs(args)
-    expect(processed).to.be.an('object')
-  })
+    it('should not change the given source', () => {
+      const src = provider.resolveStream({
+        key: 'value'
+      })
+      const resolved = provider.resolveStream(src)
 
-  it('should process an object as arguments', () => {
-    const args = {
-      key1: ['value1']
-    }
-    const processed = provider._processArgs(args)
-    expect(processed).to.be.an('object')
-  })
-
-  it('should parse a string to an object', () => {
-    const uri = 'ProviderName?key1=["value1"]&key2=value2'
-    const parsed = provider._parseArgs(uri)
-    expect(parsed).to.be.an('object')
-
-    const shortUri = 'ProviderName?'
-    const shortParsed = provider._parseArgs(shortUri)
-    expect(shortParsed).to.be.an('object')
-    expect(shortParsed).to.deep.equal({})
-  })
-
-  it('should not change the given source', () => {
-    const src = provider.resolveStream({
-      key: 'value'
+      expect(resolved).to.deep.equal(src)
     })
-    const resolved = provider.resolveStream(src)
-
-    expect(resolved).to.deep.equal(src)
   })
 
   it('should fetch a random result', done => {

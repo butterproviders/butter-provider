@@ -22,7 +22,7 @@ const defaultConfig = {
   uniqueId: 'id'
 }
 
-function parseArgs(uri, argTypes) {
+function parseArgs(uri, argTypes = {}) {
   // XXX: Reimplement querystring.parse to not escape
   const parsed = {}
   const [ , args ] = uri.split('?')
@@ -30,7 +30,7 @@ function parseArgs(uri, argTypes) {
   if (args) {
     args.split('&').map(v => {
       const [ key, value ] = v.split('=')
-      const type = argTypes[key] || Provider.ArgType.OBJECT
+      const type = argTypes[key] || Provider.ArgType.UNKNOWN
 
       parsed[key] = parseArgForType(type, value)
     })
@@ -50,6 +50,15 @@ function parseArgForType(type, arg) {
         return JSON.parse(arg)
       case Provider.ArgType.BOOLEAN:
         return !!arg
+      case Provider.ArgType.UNKNOWN:
+        debug ('parsing unknown arg')
+        try {
+          return JSON.parse(arg)
+        } catch (e) {
+          debug(arg, 'is not an object')
+        }
+
+        return arg
       case Provider.ArgType.STRING:
       default:
         return arg
@@ -97,16 +106,17 @@ class Provider {
 
   _processArgs(argString) {
     debug(`processing arg: ${JSON.stringify(argString)}`)
+    const { argTypes, defaults } = this.config
+
     const parsed = typeof argString === 'string'
-      ? this._parseArgs(argString)
+      ? parseArgs(argString, argTypes)
       : undefined
 
     debug(`parsed: ${JSON.stringify(parsed)}`)
 
-    const { argTypes, defaults } = this.config
     const args = Object.assign({}, defaults, parsed)
 
-    Object.keys(argTypes).map(k => {
+    argTypes && Object.keys(argTypes).map(k => {
       if (!args || !args[k]) {
         console.error(`Value ${k} was not provided`)
       }
@@ -214,7 +224,8 @@ Provider.ArgType = {
   OBJECT: 'BUTTER_PROVIDER_ARG_TYPE_OBJECT',
   STRING: 'BUTTER_PROVIDER_ARG_TYPE_STRING',
   BOOLEAN: 'BUTTER_PROVIDER_ARG_TYPE_BOOLEAN',
-  NUMBER: 'BUTTER_PROVIDER_ARG_TYPE_NUMBER'
+  NUMBER: 'BUTTER_PROVIDER_ARG_TYPE_NUMBER',
+  UNKNOWN: 'BUTTER_PROVIDER_ARG_TYPE_UNKNOWN'
 }
 
 Provider.ItemType = {
