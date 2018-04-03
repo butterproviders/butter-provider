@@ -69,7 +69,7 @@ Vodo.prototype.config = {
     defaults: {
         urlList: ['http://butter.vodo.net/popcorn']
     },
-    args: {
+    argTypes: {
        urlList: Provider.ArgTypes.ARRAY
     }
     /* legacy: should be removed */
@@ -125,7 +125,7 @@ Provider.prototype.config = {
      tabName: String,   // will appear as the description of the tab
      filters: [Object], // (optional) a list of the filters supported,
                         // see the documentation below
-     args: Object || String, // (optional) the args this provider supports
+     argTypes: Object || String, // (optional) the args this provider supports
      defaults: Object,  // (optional) default values for the args object
      /* legacy: should be removed */
      subtitle: String,  // (optional) name of the subtitle provider
@@ -154,8 +154,8 @@ We currently support 3 `filterTypes`:
 be used if none are provided.
 
 
-#### args
-The `args` object is a mapping between arg names and `Provider.ArgType` types,
+#### argTypes
+The `argTypes` object is a mapping between arg names and `Provider.ArgType` types,
 currently these are the supported values:
 
 ``` javascript
@@ -188,7 +188,7 @@ kind of queries:
 ```
 
 #### defaults
-You can provide default values for the `args` object. Any JavaScript Object
+You can provide default values for the `argTypes` object. Any JavaScript Object
 will do.
 
 Note that while we currently do not do type checking on those we may very
