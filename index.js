@@ -2,6 +2,7 @@
 
 const memoize = require('memoizee')
 const debug = require('debug')('butter-provider')
+const crypto = require('crypto')
 
 const defaultMemopts = {
   maxAge: 10 * 60 * 1000,
@@ -20,6 +21,13 @@ const defaultConfig = {
   argTypes: {},
   filters: {},
   uniqueId: 'id'
+}
+
+function sha256(text) {
+  const hash = crypto.createHash('sha256')
+
+  hash.update(text)
+  return hash.digest('hex')
 }
 
 function parseArgs(uri, argTypes = {}) {
@@ -79,6 +87,8 @@ class Provider {
 
     this.config = config
     this.args = Object.assign({}, args, this._processArgs(args))
+    const sha = sha256(JSON.stringify(this.args))
+    config.id = `${config.name}_${sha}`
 
     const { memopts } = this.args
     this.fetch = this._makeCached(this.fetch, memopts)
