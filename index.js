@@ -32,8 +32,8 @@ function sha256(text) {
 
 function parseArgs(uri, argTypes = {}) {
   // XXX: Reimplement querystring.parse to not escape
-  const parsed = {}
-  const [ , args ] = uri.split('?')
+  const [name, args] = uri.split('?')
+  const parsed = {name: name}
 
   if (args) {
     args.split('&').map(v => {
@@ -76,6 +76,27 @@ function parseArgForType(type, arg) {
   }
 }
 
+function processArgs(argString, config) {
+  debug(`processing arg: ${JSON.stringify(argString)}`)
+  const { argTypes, defaults } = config
+
+  const parsed = typeof argString === 'string'
+    ? parseArgs(argString, argTypes)
+    : undefined
+
+  debug(`parsed: ${JSON.stringify(parsed)}`)
+
+  const args = Object.assign({}, defaults, parsed)
+
+  argTypes && Object.keys(argTypes).map(k => {
+    if (!args || !args[k]) {
+      console.error(`Value ${k} was not provided`)
+    }
+  })
+
+  return args
+}
+
 class Provider {
 
   constructor(args = defaultArgs, config = defaultConfig) {
@@ -85,10 +106,11 @@ class Provider {
       config.filters
     )
 
-    this.config = config
-    this.args = Object.assign({}, args, this._processArgs(args))
+    this.args = Object.assign({}, args, processArgs(args, config))
     const sha = sha256(JSON.stringify(this.args))
-    config.id = `${config.name}_${sha}`
+
+    this.config = Object.assign({}, {name: this.args.name}, config)
+    this.id = `${config.name}_${sha}`
 
     const { memopts } = this.args
     this.fetch = this._makeCached(this.fetch, memopts)
@@ -115,24 +137,7 @@ class Provider {
   }
 
   _processArgs(argString) {
-    debug(`processing arg: ${JSON.stringify(argString)}`)
-    const { argTypes, defaults } = this.config
-
-    const parsed = typeof argString === 'string'
-      ? parseArgs(argString, argTypes)
-      : undefined
-
-    debug(`parsed: ${JSON.stringify(parsed)}`)
-
-    const args = Object.assign({}, defaults, parsed)
-
-    argTypes && Object.keys(argTypes).map(k => {
-      if (!args || !args[k]) {
-        console.error(`Value ${k} was not provided`)
-      }
-    })
-
-    return args
+    processArgs(argString, this.config)
   }
 
   _warnDefault(fn, support) {

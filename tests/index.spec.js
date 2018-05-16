@@ -131,7 +131,7 @@ describe('Provider.parseArgs', () => {
     const shortUri = 'ProviderName?'
     const shortParsed = Provider.parseArgs(shortUri)
     expect(shortParsed).to.be.an('object')
-    expect(shortParsed).to.deep.equal({})
+    expect(shortParsed).to.deep.equal({name: 'ProviderName'})
   })
 })
 
@@ -139,9 +139,37 @@ describe('Provider Arguments', () => {
   it('should process a string as arguments', () => {
     let provider = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
 
+    expect(provider.config.name).to.be.a('string')
+    expect(provider.config.name).to.be.equal('ProviderName')
     expect(provider.args).to.be.an('object')
     expect(provider.args.key1).to.be.an('array')
     expect(provider.args.key2).to.be.a('string')
+  })
+
+  it('should generate identical ids for identical args', () => {
+    let provider1 = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
+    let provider2 = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
+
+    expect(provider1.config.name).to.be.a('string')
+    expect(provider1.config.name).to.be.equal('ProviderName')
+
+    expect(provider2.config.name).to.be.a('string')
+    expect(provider2.config.name).to.be.equal('ProviderName')
+
+    expect(provider1.id).to.be.equal(provider2.id)
+  })
+
+  it('should generate unique ids', () => {
+    let provider1 = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
+    let provider2 = new Provider('ProviderName?key1=["value1"]&key2=value3', defaultConfig)
+
+    expect(provider1.config.name).to.be.a('string')
+    expect(provider1.config.name).to.be.equal('ProviderName')
+
+    expect(provider2.config.name).to.be.a('string')
+    expect(provider2.config.name).to.be.equal('ProviderName')
+
+    expect(provider1.id).to.not.equal(provider2.id)
   })
 
   it('should process an object as arguments', () => {
@@ -213,7 +241,7 @@ describe('Provider Instance', () => {
       const shortUri = 'ProviderName?'
       const shortParsed = provider._parseArgs(shortUri)
       expect(shortParsed).to.be.an('object')
-      expect(shortParsed).to.deep.equal({})
+      expect(shortParsed).to.deep.equal({name: 'ProviderName'})
     })
 
     it('should not change the given source', () => {
