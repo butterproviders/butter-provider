@@ -64,7 +64,6 @@ inherits(Vodo, Provider);
 ``` javascript
 Vodo.prototype.config = {
     name: 'vodo',
-    uniqueId: 'imdb_id',
     tabName: 'Vodo',
     defaults: {
         urlList: ['http://butter.vodo.net/popcorn']
@@ -121,15 +120,15 @@ following fields:
 ``` javascript
 Provider.prototype.config = {
      name: String,      // will be used in logs to refer to your provider
-     uniqueId: String,  // the name of the field we should use to unify assets
      tabName: String,   // will appear as the description of the tab
      filters: [Object], // (optional) a list of the filters supported,
                         // see the documentation below
      argTypes: Object || String, // (optional) the args this provider supports
      defaults: Object,  // (optional) default values for the args object
-     /* legacy: should be removed */
+     /* DEPRECATED: should be removed */
      subtitle: String,  // (optional) name of the subtitle provider
      metadata: String   // (optional) name of the metadata provider
+     uniqueId: String,  // the name of the field we should use to unify assets
 }
 ```
 
@@ -239,7 +238,7 @@ var fetchReturn = {
 The results items can have any shape but are required to have at least:
 ``` javascript
 var result = {
-    [uniqueId | 'id']: String, // the unique id
+    id: String,                // the unique id
     title: String,             // title of the asset
     year: Number,              // year of release
     genres: [String],          // a free list of genre keywords
@@ -281,7 +280,7 @@ Provider.prototype.detail = function (torrent_id, old_data) {
 The required info is:
 ``` javascript
 var detail = {
-    [uniqueId | 'id']: String, // the unique id
+    id: String,                // the unique id
     title: String,             // title of the asset
     year: Number,              // year of release
     genres: [String],          // a free list of genre keywords
@@ -366,7 +365,7 @@ generic implementation is:
 
 ``` javascript
 Provider.prototype.extractIds = function (items) {
-    return _.pluck(items.results, this.config.uniqueId);
+    return _.pluck(items.results, 'id');
 };
 ```
 

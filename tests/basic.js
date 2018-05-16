@@ -57,9 +57,9 @@ function runAllTests(loadFunction) {
     loadFunction = load
   }
 
-  function testDetail(details, uniqueId) {
+  function testDetail(details) {
     expect(details).to.exist
-    expect(details[uniqueId] || details.id).to.exist
+    expect(details.id).to.exist
     expect(details.title).to.exist
     expect(details.year).to.exist
     expect(details.genres).to.exist
@@ -116,7 +116,6 @@ function runAllTests(loadFunction) {
     it('should tests the implemented config object', () => {
       const { config } = instance
       expect(config.name).to.exist
-      expect(config.uniqueId).to.exist
       expect(config.tabName).to.exist
       expect(instance.args).to.exist
     })
@@ -149,7 +148,7 @@ function runAllTests(loadFunction) {
       instance.detail(uniqueIds[key], fetchRes.results[key])
         .then(res => {
           debug(`detail: ${res}`)
-          testDetail(res, instance.config.uniqueId)
+          testDetail(res)
 
           done()
         }).catch(done)
@@ -159,7 +158,7 @@ function runAllTests(loadFunction) {
       instance.random()
         .then(res => {
           debug(`random: ${res}`)
-          testDetail(res, instance.config.uniqueId)
+          testDetail(res)
 
           done()
         }).catch(done)
