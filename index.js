@@ -59,7 +59,7 @@ function parseArgForType(type, arg) {
       case Provider.ArgType.BOOLEAN:
         return !!arg
       case Provider.ArgType.UNKNOWN:
-        debug ('parsing unknown arg')
+        debug('parsing unknown arg')
         try {
           return JSON.parse(arg)
         } catch (e) {
