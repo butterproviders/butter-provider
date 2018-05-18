@@ -107,7 +107,7 @@ function runAllTests(loadFunction) {
   }
 
   describe(pkg.name, function () {
-    let fetchRes, instance, key, uniqueIds
+    let fetchRes, instance, key, ids
     this.timeout(config.timeout)
     before(() => {
       instance = instanciate(loadFunction)
@@ -137,15 +137,15 @@ function runAllTests(loadFunction) {
     })
 
     it('should test the implemented extractIds method', () => {
-      uniqueIds = instance.extractIds(fetchRes)
-      key = getRandomKey(uniqueIds)
+      ids = instance.extractIds(fetchRes)
+      key = getRandomKey(ids)
 
-      expect(uniqueIds).to.be.an('array')
-      expect(uniqueIds.length).to.be.at.least(0)
+      expect(ids).to.be.an('array')
+      expect(ids.length).to.be.at.least(0)
     })
 
     it('should test the implemented details method', done => {
-      instance.detail(uniqueIds[key], fetchRes.results[key])
+      instance.detail(ids[key], fetchRes.results[key])
         .then(res => {
           debug(`detail: ${res}`)
           testDetail(res)

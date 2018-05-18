@@ -19,8 +19,7 @@ const defaultArgs = {
 
 const defaultConfig = {
   argTypes: {},
-  filters: {},
-  uniqueId: 'id'
+  filters: {}
 }
 
 function sha256(text) {
@@ -159,19 +158,18 @@ class Provider {
   random() {
     this._warnDefault('random', 'faster random')
 
-    const uniqueId = this.config.uniqueId
     return this.fetch({})
       .then(({ results }) => {
         const random = Math.floor(Math.random() * results.length)
         return results[random]
       })
-      .then(data => this.detail(data[uniqueId], data))
+      .then(data => this.detail(data.id, data))
   }
 
   extractIds(items) {
     this._warnDefault('extractIds')
 
-    return items.results.map(r => r[this.config.uniqueId])
+    return items.results.map(r => r.id)
   }
 
   detail(id, oldData) {

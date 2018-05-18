@@ -9,8 +9,7 @@ const defaultConfig = {
     key1: Provider.ArgType.ARRAY,
     key2: Provider.ArgType.STRING
   },
-  filters: {},
-  uniqueId: 'id'
+  filters: {}
 }
 
 describe('Provider Object', function () {
@@ -228,7 +227,7 @@ describe('Provider Instance', () => {
     }
     ids = [1, 2, 3, 4, 5]
     ids.map(n => items.results.push({
-      [provider.config.uniqueId]: n
+      id: n
     }))
   })
 
