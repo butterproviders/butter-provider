@@ -243,7 +243,8 @@ Provider.ArgType = {
 
 Provider.ItemType = {
   MOVIE: 'movie',
-  TVSHOW: 'tvshow'
+  TVSHOW: 'tvshow',
+  TVSHOW2: 'tvshow2' /* newer TVSHOW API  */
 }
 
 Provider.OrderType = {

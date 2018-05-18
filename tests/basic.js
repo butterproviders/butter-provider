@@ -59,6 +59,10 @@ function runAllTests(loadFunction) {
 
   function testDetail(details) {
     expect(details).to.exist
+
+    const type = details.type
+    expect(isInValues(type, Provider.ItemType)).to.exist
+
     expect(details.id).to.exist
     expect(details.title).to.exist
     expect(details.year).to.exist
@@ -68,13 +72,13 @@ function runAllTests(loadFunction) {
     expect(details.backdrop).to.exist
     expect(details.poster).to.exist
     expect(details.subtitle).to.exist
-    expect(details.synopsis).to.exist
-    expect(details.synopsis).to.be.a('string')
-    expect(details.synopsis.length).to.be.at.least(16)
-    expect(details.runtime).to.exist
 
-    const type = details.type
-    expect(isInValues(type, Provider.ItemType)).to.exist
+    if (type !== Provider.ItemType.TVSHOW2) {
+      expect(details.synopsis).to.exist
+      expect(details.synopsis).to.be.a('string')
+      expect(details.synopsis.length).to.be.at.least(16)
+      expect(details.runtime).to.exist
+    }
 
     if (type === Provider.ItemType.MOVIE) {
       expect(details.trailer || details.trailer === false, 'we have a trailer')
@@ -103,6 +107,34 @@ function runAllTests(loadFunction) {
       expect(isInValues(quality, Provider.QualityType)).to.exist
       expect(episode.torrents[quality]).to.exist
       expect(episode.torrents[quality].url).to.exist
+    } else if (type === Provider.ItemType.TVSHOW2) {
+      expect(details.status).to.exist
+      expect(details.num_seasons).to.exist
+      expect(details.seasons).to.exist
+      expect(details.seasons.length).to.be.at.least(0)
+
+      const season = getRandom(details.seasons)
+      expect(season.first_aired).to.exist
+      expect(season.overview).to.exist
+      expect(season.order).to.exist
+      expect(season.id).to.exist
+
+      expect(season.episodes).to.exist
+      expect(season.episodes.length).to.be.at.least(0)
+
+      const episode = getRandom(season.episodes)
+
+      expect(episode.first_aired).to.exist
+      expect(episode.overview).to.exist
+      expect(isFinite(episode.order)).to.exist
+      expect(episode.season).to.exist
+      expect(episode.id).to.exist
+      expect(episode.sources).to.exist
+
+      const quality = getRandom(Object.keys(episode.sources))
+      expect(isInValues(quality, Provider.QualityType)).to.exist
+      expect(episode.sources[quality]).to.exist
+      expect(episode.sources[quality].url).to.exist
     }
   }
 
