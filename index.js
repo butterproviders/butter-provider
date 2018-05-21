@@ -22,14 +22,14 @@ const defaultConfig = {
   filters: {}
 }
 
-function sha256(text) {
+function sha256 (text) {
   const hash = crypto.createHash('sha256')
 
   hash.update(text)
   return hash.digest('hex')
 }
 
-function parseArgs(uri, argTypes = {}) {
+function parseArgs (uri, argTypes = {}) {
   // XXX: Reimplement querystring.parse to not escape
   const [name, args] = uri.split('?')
   const parsed = { name }
@@ -46,7 +46,7 @@ function parseArgs(uri, argTypes = {}) {
   return parsed
 }
 
-function parseArgForType(type, arg) {
+function parseArgForType (type, arg) {
   debug(`parsing ${arg} as ${type}`)
   try {
     switch (type) {
@@ -75,7 +75,7 @@ function parseArgForType(type, arg) {
   }
 }
 
-function processArgs(argString, config) {
+function processArgs (argString, config) {
   debug(`processing arg: ${JSON.stringify(argString)}`)
   const { argTypes, defaults } = config
 
@@ -95,8 +95,7 @@ function processArgs(argString, config) {
 }
 
 class Provider {
-
-  constructor(args = defaultArgs, config = defaultConfig) {
+  constructor (args = defaultArgs, config = defaultConfig) {
     config.filters = Object.assign(
       {},
       Provider.DefaultFilters,
@@ -114,7 +113,7 @@ class Provider {
     this.detail = this._makeCached(this.detail.bind(this), memopts)
   }
 
-  _makeCached(method, memopts) {
+  _makeCached (method, memopts) {
     const memoizedMethod = memoize(method, memopts)
 
     return (...args) => {
@@ -127,7 +126,7 @@ class Provider {
     }
   }
 
-  _warnDefault(fn, support) {
+  _warnDefault (fn, support) {
     let msg = `You are using the default ${fn} implementation`
 
     if (support) {
@@ -137,13 +136,13 @@ class Provider {
     console.warn(msg)
   }
 
-  resolveStream(src) {
+  resolveStream (src) {
     this._warnDefault('resolveStream', 'multiple languages')
 
     return src
   }
 
-  random() {
+  random () {
     this._warnDefault('random', 'faster random')
 
     return this.fetch({})
@@ -154,12 +153,12 @@ class Provider {
       .then(data => this.detail(data.id, data))
   }
 
-  extractIds(items) {
+  extractIds (items) {
     this._warnDefault('extractIds')
     return items.results.map(r => r.id)
   }
 
-  detail(id, oldData) {
+  detail (id, oldData) {
     this._warnDefault(
       `detail: ${id}`, 'better performing fetch and detail calls'
     )
@@ -167,7 +166,7 @@ class Provider {
     return Promise.resolve(oldData)
   }
 
-  fetch(filters) {
+  fetch (filters) {
     this._warnDefault(
       `fetch: ${JSON.stringify(filters)}`, 'fetching of the data'
     )
@@ -176,10 +175,9 @@ class Provider {
     return Promise.reject(err)
   }
 
-  toString() {
+  toString () {
     return JSON.stringify(this)
   }
-
 }
 
 Provider.DefaultFilters = {

@@ -7,8 +7,7 @@ const Provider = require('../')
 const { expect } = require('chai')
 
 const pkg = require(path.join(process.cwd(), 'package.json'))
-
-var config = {
+let config = {
   args: {},
   timeout: 1000
 }
@@ -23,15 +22,15 @@ if (pkg.butter) {
 
 debug('starting test with config: ', config)
 
-function load() {
+function load () {
   return require(process.cwd())
 }
 
-function isEmpty(obj) {
+function isEmpty (obj) {
   return Object.keys(obj).length === 0 && obj.constructor === Object
 }
 
-function instanciate(loadFunction) {
+function instanciate (loadFunction) {
   if (isEmpty(loadFunction)) {
     loadFunction = load
   }
@@ -40,24 +39,24 @@ function instanciate(loadFunction) {
   return new P(config.args)
 }
 
-function isInValues(element, set) {
+function isInValues (element, set) {
   return Object.keys(set).reduce((a, c) => (a || (element === set[c])))
 }
 
-function getRandomKey(array) {
+function getRandomKey (array) {
   return Math.floor(Math.random() * (array.length))
 }
 
-function getRandom(array) {
+function getRandom (array) {
   return array[getRandomKey(array)]
 }
 
-function runAllTests(loadFunction) {
+function runAllTests (loadFunction) {
   if (isEmpty(loadFunction)) {
     loadFunction = load
   }
 
-  function testDetail(details) {
+  function testDetail (details) {
     expect(details).to.exist
 
     const type = details.type
