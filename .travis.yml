@@ -15,9 +15,5 @@ install:
   - npm i -g npm@latest
   - npm i
 
-script:
-  - npm run lint
-  - npm run test
-
 after_success:
   - npm run coveralls
