@@ -32,7 +32,7 @@ function sha256(text) {
 function parseArgs(uri, argTypes = {}) {
   // XXX: Reimplement querystring.parse to not escape
   const [name, args] = uri.split('?')
-  const parsed = {name: name}
+  const parsed = { name }
 
   if (args) {
     args.split('&').map(v => {
