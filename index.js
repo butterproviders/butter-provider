@@ -112,20 +112,18 @@ class Provider {
     this.id = `${config.name}_${sha}`
 
     const { memopts } = this.args
-    this.fetch = this._makeCached(this.fetch, memopts)
-    this.detail = this._makeCached(this.detail, memopts)
+    this.fetch = this._makeCached(this.fetch.bind(this), memopts)
+    this.detail = this._makeCached(this.detail.bind(this), memopts)
   }
 
   _makeCached(method, memopts) {
-    const self = this
     const memoizedMethod = memoize(method, memopts)
 
-    return function () {
-      // XXX: Should be replaced with spread operator if possible.
-      return memoizedMethod.apply(this, arguments)
+    return (...args) => {
+      return memoizedMethod(...args)
         .catch(err => {
           // Delete the cached result if we get an error so retry will work
-          memoizedMethod.delete(self.filters)
+          memoizedMethod.delete(this.filters)
           return Promise.reject(err)
         })
     }
