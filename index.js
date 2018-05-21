@@ -82,9 +82,7 @@ function processArgs(argString, config) {
   const parsed = typeof argString === 'string'
     ? parseArgs(argString, argTypes)
     : undefined
-
   debug(`parsed: ${JSON.stringify(parsed)}`)
-
   const args = Object.assign({}, defaults, parsed)
 
   argTypes && Object.keys(argTypes).map(k => {
@@ -129,14 +127,6 @@ class Provider {
     }
   }
 
-  _parseArgs(argString) {
-    return Provider.parseArgs(argString, this.config.argTypes)
-  }
-
-  _processArgs(argString) {
-    processArgs(argString, this.config)
-  }
-
   _warnDefault(fn, support) {
     let msg = `You are using the default ${fn} implementation`
 
@@ -166,7 +156,6 @@ class Provider {
 
   extractIds(items) {
     this._warnDefault('extractIds')
-
     return items.results.map(r => r.id)
   }
 
