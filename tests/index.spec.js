@@ -234,11 +234,11 @@ describe('Provider Instance', () => {
   describe('resolveStream', () => {
     it('should parse a string to an object', () => {
       const uri = 'ProviderName?key1=["value1"]&key2=value2'
-      const parsed = provider._parseArgs(uri)
+      const parsed = Provider.parseArgs(uri)
       expect(parsed).to.be.an('object')
 
       const shortUri = 'ProviderName?'
-      const shortParsed = provider._parseArgs(shortUri)
+      const shortParsed = Provider.parseArgs(shortUri)
       expect(shortParsed).to.be.an('object')
       expect(shortParsed).to.deep.equal({name: 'ProviderName'})
     })
