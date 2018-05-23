@@ -4,9 +4,10 @@
   "description": "A base class for Butter providers",
   "main": "index.js",
   "scripts": {
-    "coveralls": "cat ./coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls",
-    "lint": "./node_modules/.bin/eslint tests/** index.js",
-    "test": "./node_modules/.bin/nyc --reporter=lcov --reporter=text ./node_modules/.bin/mocha tests/*.spec.*"
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "lint": "standard --env mocha",
+    "pretest": "npm run lint",
+    "test": "nyc -r=lcov -r=text mocha tests/*.spec.*"
   },
   "repository": {
     "type": "git",
@@ -25,13 +26,8 @@
     "chai": "^4.1.0",
     "coveralls": "^3.0.1",
     "debug": "^3.1.0",
-    "eslint": "^4.3.0",
-    "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-node": "^6.0.1",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1",
     "mocha": "^5.1.1",
+    "standard": "^11.0.1",
     "nyc": "^11.1.0"
   },
   "nyc": {
