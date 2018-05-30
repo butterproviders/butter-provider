@@ -157,7 +157,7 @@ class Provider {
       .then(data => this.detail(data.id, data))
   }
 
-  extractIds (items) {
+  extractIds(items = {results: []}) {
     this._warnDefault('extractIds')
     return items.results.map(r => r.id)
   }
