@@ -102,7 +102,7 @@ class Provider {
       config.filters
     )
 
-    this.args = Object.assign({}, args, processArgs(args, config))
+    this.args = Object.assign({}, defaultArgs, args, processArgs(args, config))
     const sha = sha256(JSON.stringify(this.args))
 
     this.config = Object.assign({}, {name: this.args.name}, config)
