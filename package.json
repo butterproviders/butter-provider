@@ -4,7 +4,6 @@
   "description": "A base class for Butter providers",
   "main": "index.js",
   "scripts": {
-    "coveralls": "cat ./coverage/lcov.info | coveralls",
     "lint": "standard --env mocha",
     "pretest": "npm run lint",
     "test": "nyc -r=lcov -r=text mocha tests/*.spec.*"
