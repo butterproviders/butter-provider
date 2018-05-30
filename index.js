@@ -9,8 +9,8 @@ const defaultMemopts = {
   /* 10 minutes */
   preFetch: 0.5,
   /* recache every 5 minutes */
-  primitive: true,
-  promise: true
+  primitive: false,
+  promise: "then"
 }
 
 const defaultArgs = {
@@ -109,8 +109,12 @@ class Provider {
     this.id = `${config.name}_${sha}`
 
     const { memopts } = this.args
-    this.fetch = this._makeCached(this.fetch.bind(this), memopts)
-    this.detail = this._makeCached(this.detail.bind(this), memopts)
+    this.fetch = this._makeCached(
+      this.fetch.bind(this),
+      Object.assign({length: 1, resolvers: [Object]}, memopts))
+    this.detail = this._makeCached(
+      this.detail.bind(this),
+      Object.assign({length: 2, resolvers: [String, Object]}, memopts))
   }
 
   _makeCached (method, memopts) {
