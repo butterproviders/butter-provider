@@ -138,7 +138,8 @@ function runAllTests (loadFunction) {
   }
 
   describe(pkg.name, function () {
-    let fetchRes, instance, key, ids
+    let instance
+
     this.timeout(config.timeout)
     before(() => {
       instance = instanciate(loadFunction)
@@ -151,48 +152,86 @@ function runAllTests (loadFunction) {
       expect(instance.args).to.exist
     })
 
-    it('should test the implemented fetch method', done => {
+    it ('should do a simple fetch', done => {
       instance.fetch()
-        .then(res => {
-          fetchRes = res
-          debug(`fetch: ${res}`)
+              .then(res => {
+                debug('fetch', res)
 
-          expect(res).to.exist
-          expect(res.hasMore).to.be.a('boolean')
-          expect(res.results).to.be.an('array')
-          expect(res.results.length).to.be.at.least(0)
+                expect(res).to.exist
+                expect(res.hasMore).to.be.a('boolean')
+                expect(res.results).to.be.an('array')
+                expect(res.results.length).to.be.at.least(0)
 
-          done()
-        })
-        .catch(done)
+                done()
+              })
+              .catch(done)
     })
 
-    it('should test the implemented extractIds method', () => {
-      ids = instance.extractIds(fetchRes)
-      key = getRandomKey(ids)
+    it ('should be able to fetch multiple pages', done => {
+      let fetchRes
 
-      expect(ids).to.be.an('array')
-      expect(ids.length).to.be.at.least(0)
+      instance.fetch({page: 0})
+              .then(res => {
+                debug('fetch({page:0}): ', res)
+                fetchRes = res
+
+                expect(res).to.exist
+                expect(res.hasMore).to.be.a('boolean')
+                expect(res.results).to.be.an('array')
+                expect(res.results.length).to.be.at.least(0)
+              })
+              .then(() => instance.fetch({page: 1}))
+              .then(res => {
+                debug('fetch({page:1}): ', res)
+
+                expect(res).to.exist
+                expect(res.hasMore).to.be.a('boolean')
+                expect(res.results).to.be.an('array')
+                expect(res.results.length).to.be.at.least(0)
+
+                expect(res.results[0]).to.not.equal(fetchRes.results[0])
+                done()
+              })
+              .catch(done)
+    })
+
+    it('should test the implemented extractIds method', (done) => {
+      instance.fetch()
+              .then(res => {
+                const ids = instance.extractIds(res)
+                const key = getRandomKey(ids)
+
+                expect(ids).to.be.an('array')
+                expect(ids.length).to.be.at.least(0)
+
+                done()
+              })
     })
 
     it('should test the implemented details method', done => {
-      instance.detail(ids[key], fetchRes.results[key])
-        .then(res => {
-          debug(`detail: ${res}`)
-          testDetail(res)
+      instance.fetch()
+              .then(res => {
+                const ids = instance.extractIds(res)
+                const key = getRandomKey(ids)
 
-          done()
-        }).catch(done)
+                return instance.detail(ids[key], res.results[key])
+              })
+              .then(res => {
+                debug('details', res)
+                testDetail(res)
+
+                done()
+              }).catch(done)
     })
 
     it('should test the implemented random method', done => {
       instance.random()
-        .then(res => {
-          debug(`random: ${res}`)
-          testDetail(res)
+              .then(res => {
+                debug('random', res)
+                testDetail(res)
 
-          done()
-        }).catch(done)
+                done()
+              }).catch(done)
     })
   })
 }
