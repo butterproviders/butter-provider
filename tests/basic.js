@@ -152,86 +152,85 @@ function runAllTests (loadFunction) {
       expect(instance.args).to.exist
     })
 
-    it ('should do a simple fetch', done => {
+    it('should do a simple fetch', done => {
       instance.fetch()
-              .then(res => {
-                debug('fetch', res)
+        .then(res => {
+          debug('fetch', res)
 
-                expect(res).to.exist
-                expect(res.hasMore).to.be.a('boolean')
-                expect(res.results).to.be.an('array')
-                expect(res.results.length).to.be.at.least(0)
+          expect(res).to.exist
+          expect(res.hasMore).to.be.a('boolean')
+          expect(res.results).to.be.an('array')
+          expect(res.results.length).to.be.at.least(0)
 
-                done()
-              })
-              .catch(done)
+          done()
+        })
+        .catch(done)
     })
 
-    it ('should be able to fetch multiple pages', done => {
+    it('should be able to fetch multiple pages', done => {
       let fetchRes
 
       instance.fetch({page: 0})
-              .then(res => {
-                debug('fetch({page:0}): ', res)
-                fetchRes = res
+        .then(res => {
+          debug('fetch({page:0}): ', res)
+          fetchRes = res
 
-                expect(res).to.exist
-                expect(res.hasMore).to.be.a('boolean')
-                expect(res.results).to.be.an('array')
-                expect(res.results.length).to.be.at.least(0)
-              })
-              .then(() => instance.fetch({page: 1}))
-              .then(res => {
-                debug('fetch({page:1}): ', res)
+          expect(res).to.exist
+          expect(res.hasMore).to.be.a('boolean')
+          expect(res.results).to.be.an('array')
+          expect(res.results.length).to.be.at.least(0)
+        })
+        .then(() => instance.fetch({page: 1}))
+        .then(res => {
+          debug('fetch({page:1}): ', res)
 
-                expect(res).to.exist
-                expect(res.hasMore).to.be.a('boolean')
-                expect(res.results).to.be.an('array')
-                expect(res.results.length).to.be.at.least(0)
+          expect(res).to.exist
+          expect(res.hasMore).to.be.a('boolean')
+          expect(res.results).to.be.an('array')
+          expect(res.results.length).to.be.at.least(0)
 
-                expect(res.results[0]).to.not.equal(fetchRes.results[0])
-                done()
-              })
-              .catch(done)
+          expect(res.results[0]).to.not.equal(fetchRes.results[0])
+          done()
+        })
+        .catch(done)
     })
 
     it('should test the implemented extractIds method', (done) => {
       instance.fetch()
-              .then(res => {
-                const ids = instance.extractIds(res)
-                const key = getRandomKey(ids)
+        .then(res => {
+          const ids = instance.extractIds(res)
 
-                expect(ids).to.be.an('array')
-                expect(ids.length).to.be.at.least(0)
+          expect(ids).to.be.an('array')
+          expect(ids.length).to.be.at.least(0)
 
-                done()
-              })
+          done()
+        })
     })
 
     it('should test the implemented details method', done => {
       instance.fetch()
-              .then(res => {
-                const ids = instance.extractIds(res)
-                const key = getRandomKey(ids)
+        .then(res => {
+          const ids = instance.extractIds(res)
+          const key = getRandomKey(ids)
 
-                return instance.detail(ids[key], res.results[key])
-              })
-              .then(res => {
-                debug('details', res)
-                testDetail(res)
+          return instance.detail(ids[key], res.results[key])
+        })
+        .then(res => {
+          debug('details', res)
+          testDetail(res)
 
-                done()
-              }).catch(done)
+          done()
+        }).catch(done)
     })
 
     it('should test the implemented random method', done => {
       instance.random()
-              .then(res => {
-                debug('random', res)
-                testDetail(res)
+        .then(res => {
+          debug('random', res)
+          testDetail(res)
 
-                done()
-              }).catch(done)
+          done()
+        }).catch(done)
     })
   })
 }

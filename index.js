@@ -10,7 +10,7 @@ const defaultMemopts = {
   preFetch: 0.5,
   /* recache every 5 minutes */
   primitive: false,
-  promise: "then"
+  promise: 'then'
 }
 
 const defaultArgs = {
@@ -157,7 +157,7 @@ class Provider {
       .then(data => this.detail(data.id, data))
   }
 
-  extractIds(items = {results: []}) {
+  extractIds (items = {results: []}) {
     this._warnDefault('extractIds')
     return items.results.map(r => r.id)
   }
