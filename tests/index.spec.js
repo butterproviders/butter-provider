@@ -135,6 +135,11 @@ describe('Provider.parseArgs', () => {
 })
 
 describe('Provider Arguments', () => {
+  it('should have memopts', () => {
+    let provider = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
+    expect(provider.args.memopts).to.be.an('object')
+  })
+
   it('should process a string as arguments', () => {
     let provider = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
 
