@@ -81,13 +81,13 @@ function runAllTests (loadFunction) {
 
     if (type === Provider.ItemType.MOVIE) {
       expect(details.trailer || details.trailer === false, 'we have a trailer')
-      expect(details.torrents, 'we have a torrents field')
+      expect(details.sources, 'we have a sources field')
 
-      const quality = getRandom(Object.keys(details.torrents))
+      const quality = getRandom(Object.keys(details.sources))
       expect(isInValues(quality, Provider.QualityType)).to.exist
-      expect(details.torrents[quality], 'we have a quality object')
-      expect(details.torrents[quality].url, 'we have an url to stream')
-      expect(details.torrents[quality].size, 'we have the size')
+      expect(details.sources[quality], 'we have a quality object')
+      expect(details.sources[quality].url, 'we have an url to stream')
+      expect(details.sources[quality].size, 'we have the size')
     } else if (type === Provider.ItemType.TVSHOW) {
       expect(details.status).to.exist
       expect(details.num_seasons).to.exist
@@ -100,12 +100,12 @@ function runAllTests (loadFunction) {
       expect(isFinite(episode.episode)).to.exist
       expect(episode.season).to.exist
       expect(episode.tvdb_id).to.exist
-      expect(episode.torrents).to.exist
+      expect(episode.sources).to.exist
 
-      const quality = getRandom(Object.keys(details.torrents))
+      const quality = getRandom(Object.keys(details.sources))
       expect(isInValues(quality, Provider.QualityType)).to.exist
-      expect(episode.torrents[quality]).to.exist
-      expect(episode.torrents[quality].url).to.exist
+      expect(episode.sources[quality]).to.exist
+      expect(episode.sources[quality].url).to.exist
     } else if (type === Provider.ItemType.TVSHOW2) {
       expect(details.status).to.exist
       expect(details.num_seasons).to.exist

@@ -303,7 +303,7 @@ The `Provider.ItemType.MOVIE` has the following additional fields:
 ``` javascript
 var detail = {
 //--- including all the fields of the generic detail object
-    torrents: Object,         // torrents object
+    sources: Object,          // sources object
     trailer: String           // url of the trailer, formatted for butter-streamers
 }
 ```
@@ -321,7 +321,7 @@ var detail = {
 The `episodes` array will have the following shape:
 ``` javascript
 {
-    torrents: Object              // a torrents Object
+    sources: Object               // a sources Object
     watched: Boolean              // indication if an episode has been watched
     first_aired: Number,          // epoch time when the episode was first aired
     overview: String,             // small description of the episode
@@ -331,15 +331,15 @@ The `episodes` array will have the following shape:
 }
 ```
 
-#### torrents Object
-The end goal of these methods is to return `torrents` objects that have the
+#### sources Object
+The end goal of these methods is to return `sources` objects that have the
 following shape:
 
 Note that the 'torrent' name is a bit confusing and really a legacy name, it
 should be called 'resources'.
 
 ``` javascript
-var torrents = {
+var sources = {
     [Provider.QualityType]: {     // the quality of the episode
         url: String,              // the resource's url, formatted for butter-streamers
         size: Number,             // the resource's descriptor size (magnet/torrent/hls playlist)
