@@ -9,7 +9,7 @@ const defaultMemopts = {
   /* 10 minutes */
   preFetch: 0.5,
   /* recache every 5 minutes */
-  primitive: false,
+  primitive: true,
   promise: 'then'
 }
 
@@ -111,20 +111,31 @@ class Provider {
     const { memopts } = this.args
     this.fetch = this._makeCached(
       this.fetch.bind(this),
-      Object.assign({length: 1, resolvers: [Object]}, memopts))
+      Object.assign({
+        length: 1,
+        resolvers: [Object],
+        normalizer: function (args) {
+          return JSON.stringify(args[0])
+        }
+      }, memopts))
+
     this.detail = this._makeCached(
       this.detail.bind(this),
-      Object.assign({length: 2, resolvers: [String, Object]}, memopts))
+      Object.assign({
+        length: 2,
+        resolvers: [String, Object]
+      }, memopts))
   }
 
   _makeCached (method, memopts) {
+    debug('make cached', memopts)
     const memoizedMethod = memoize(method, memopts)
 
     return (...args) => {
       return memoizedMethod(...args)
         .catch(err => {
           // Delete the cached result if we get an error so retry will work
-          memoizedMethod.delete(this.filters)
+          memoizedMethod.delete(...args)
           return Promise.reject(err)
         })
     }
