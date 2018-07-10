@@ -125,6 +125,9 @@ class Provider {
         length: 2,
         resolvers: [String, Object]
       }, memopts))
+
+     this.random = this.random.bind(this)
+     this.update = this.update.bind(this)
   }
 
   _makeCached (method, memopts) {
