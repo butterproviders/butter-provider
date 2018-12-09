@@ -3,7 +3,6 @@
 const shajs = require('sha.js')
 const memoize = require('memoizee')
 const debug = require('debug')('butter-provider')
-const pkg = require(__dirname + '/package.json')
 
 const defaultMemopts = {
   maxAge: 10 * 60 * 1000,
@@ -103,7 +102,6 @@ class Provider {
       config.filters
     )
 
-    this.version = pkg.version
     this.args = Object.assign({}, defaultArgs, args, processArgs(args, config))
     const sha = sha256(JSON.stringify(this.args))
 
