@@ -1,8 +1,8 @@
 'use strict'
 
+const shajs = require('sha.js')
 const memoize = require('memoizee')
 const debug = require('debug')('butter-provider')
-const crypto = require('crypto')
 const pkg = require(__dirname + '/package.json')
 
 const defaultMemopts = {
@@ -24,7 +24,7 @@ const defaultConfig = {
 }
 
 function sha256 (text) {
-  const hash = crypto.createHash('sha256')
+  const hash = shajs('sha256')
 
   hash.update(text)
   return hash.digest('hex')
