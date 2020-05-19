@@ -107,7 +107,7 @@ describe('Provider.parseArgsForType', () => {
 })
 
 describe('Provider.parseArgs', () => {
-  let argTypes = defaultConfig.argTypes
+  const argTypes = defaultConfig.argTypes
   const argString = 'ProviderName?key1=["value1"]&key2=value2'
 
   it('should parse a string as arguments', () => {
@@ -130,18 +130,18 @@ describe('Provider.parseArgs', () => {
     const shortUri = 'ProviderName?'
     const shortParsed = Provider.parseArgs(shortUri)
     expect(shortParsed).to.be.an('object')
-    expect(shortParsed).to.deep.equal({name: 'ProviderName'})
+    expect(shortParsed).to.deep.equal({ name: 'ProviderName' })
   })
 })
 
 describe('Provider Arguments', () => {
   it('should have memopts', () => {
-    let provider = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
+    const provider = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
     expect(provider.args.memopts).to.be.an('object')
   })
 
   it('should process a string as arguments', () => {
-    let provider = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
+    const provider = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
 
     expect(provider.config.name).to.be.a('string')
     expect(provider.config.name).to.be.equal('ProviderName')
@@ -151,8 +151,8 @@ describe('Provider Arguments', () => {
   })
 
   it('should generate identical ids for identical args', () => {
-    let provider1 = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
-    let provider2 = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
+    const provider1 = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
+    const provider2 = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
 
     expect(provider1.config.name).to.be.a('string')
     expect(provider1.config.name).to.be.equal('ProviderName')
@@ -164,8 +164,8 @@ describe('Provider Arguments', () => {
   })
 
   it('should generate unique ids', () => {
-    let provider1 = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
-    let provider2 = new Provider('ProviderName?key1=["value1"]&key2=value3', defaultConfig)
+    const provider1 = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
+    const provider2 = new Provider('ProviderName?key1=["value1"]&key2=value3', defaultConfig)
 
     expect(provider1.config.name).to.be.a('string')
     expect(provider1.config.name).to.be.equal('ProviderName')
@@ -177,7 +177,7 @@ describe('Provider Arguments', () => {
   })
 
   it('should process an object as arguments', () => {
-    let provider = new Provider({
+    const provider = new Provider({
       key1: ['value1'],
       key2: 'value2'
     }, defaultConfig)
@@ -188,7 +188,7 @@ describe('Provider Arguments', () => {
   })
 
   it('should accept an empty config', () => {
-    let provider = new Provider('emptyArgTypes?key1=["value1"]&key2=value2', {})
+    const provider = new Provider('emptyArgTypes?key1=["value1"]&key2=value2', {})
 
     expect(provider.args).to.be.an('object')
     expect(provider.args.key1).to.be.an('array')
@@ -196,13 +196,13 @@ describe('Provider Arguments', () => {
   })
 
   it('should accept an empty args', () => {
-    let provider = new Provider({}, {})
+    const provider = new Provider({}, {})
 
     expect(provider.args).to.be.an('object')
   })
 
   it('should accept no config', () => {
-    let provider = new Provider('emptyArgTypes?key1=["value1"]&key2=value2')
+    const provider = new Provider('emptyArgTypes?key1=["value1"]&key2=value2')
 
     expect(provider.args).to.be.an('object')
     expect(provider.args.key1).to.be.an('array')
@@ -210,7 +210,7 @@ describe('Provider Arguments', () => {
   })
 
   it('should accept no config, no args', () => {
-    let provider = new Provider()
+    const provider = new Provider()
 
     expect(provider.args).to.be.an('object')
   })
@@ -219,7 +219,7 @@ describe('Provider Arguments', () => {
 describe('Provider Instance', () => {
   let ids, items, tempFetch
 
-  let provider = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
+  const provider = new Provider('ProviderName?key1=["value1"]&key2=value2', defaultConfig)
 
   before(() => {
     // Reasign the default console.warn function so the output of the test
@@ -246,7 +246,7 @@ describe('Provider Instance', () => {
       const shortParsed = Provider
         .parseArgs(shortUri, provider.config.argTypes)
       expect(shortParsed).to.be.an('object')
-      expect(shortParsed).to.deep.equal({name: 'ProviderName'})
+      expect(shortParsed).to.deep.equal({ name: 'ProviderName' })
     })
 
     it('should not change the given source', () => {

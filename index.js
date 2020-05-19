@@ -36,7 +36,7 @@ function parseArgs (uri, argTypes = {}) {
 
   if (args) {
     args.split('&').map(v => {
-      const [ key, value ] = v.split('=')
+      const [key, value] = v.split('=')
       const type = argTypes[key] || Provider.ArgType.UNKNOWN
 
       parsed[key] = parseArgForType(type, value)
@@ -171,7 +171,7 @@ class Provider {
       .then(data => this.detail(data.id, data))
   }
 
-  extractIds (items = {results: []}) {
+  extractIds (items = { results: [] }) {
     this._warnDefault('extractIds')
     return items.results.map(r => r.id)
   }

@@ -168,7 +168,7 @@ function runAllTests (loadFunction) {
     })
 
     it('should support limit argument on fetch (or return 50)', done => {
-      instance.fetch({limit: 2})
+      instance.fetch({ limit: 2 })
         .then(res => {
           debug('fetch({limit:2})', res)
 
@@ -182,7 +182,7 @@ function runAllTests (loadFunction) {
     it('should be able to fetch multiple pages', done => {
       let fetchRes
 
-      instance.fetch({limit: 2, page: 0})
+      instance.fetch({ limit: 2, page: 0 })
         .then(res => {
           debug('fetch({limit:2, page:0}): ', res)
           fetchRes = res
@@ -192,7 +192,7 @@ function runAllTests (loadFunction) {
           expect(res.results).to.be.an('array')
           expect(res.results.length).to.be.at.least(0)
         })
-        .then(() => instance.fetch({limit: 2, page: 1}))
+        .then(() => instance.fetch({ limit: 2, page: 1 }))
         .then(res => {
           debug('fetch({page:1}): ', res)
 
@@ -246,7 +246,5 @@ function runAllTests (loadFunction) {
     })
   })
 }
-
-runAllTests.apply(this, arguments)
 
 module.exports = runAllTests
