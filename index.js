@@ -102,13 +102,13 @@ class Provider {
       config.filters
     )
 
-    this.args = Object.assign({}, defaultArgs, args, processArgs(args, config))
-    const sha = sha256(JSON.stringify(this.args))
+    args = Object.assign({}, defaultArgs, args, processArgs(args, config))
+    const sha = sha256(JSON.stringify(args))
 
-    this.config = Object.assign({}, {name: this.args.name}, config)
+    this.config = Object.assign({}, { name: args.name }, config)
     this.id = `${config.name}_${sha}`
 
-    const { memopts } = this.args
+    const { memopts } = args
     this.fetch = this._makeCached(
       this.fetch.bind(this),
       Object.assign({
@@ -125,9 +125,11 @@ class Provider {
         length: 2,
         resolvers: [String, Object]
       }, memopts))
-      
-      if (this.random) this.random = this.random.bind(this)
-      if (this.update) this.update = this.update.bind(this)
+
+    Object.assign(this, args)
+    this.args = args // backward compatibility
+    if (this.random) this.random = this.random.bind(this)
+    if (this.update) this.update = this.update.bind(this)
   }
 
   _makeCached (method, memopts) {
